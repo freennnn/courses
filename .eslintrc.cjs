@@ -29,7 +29,8 @@ module.exports = {
     'import/extentions': 'off',
     'prettier/prettier': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
-    'class-methods-use-this': 'error'
+    'class-methods-use-this': 'error',
+    'no-console': 'warn',
   },
   settings: {
     "react": {
