@@ -46,3 +46,33 @@ The application is powered by CommerceTools. It implements registration integrat
 
 * The page will reload if you make edits. You will also see any lint errors in the console.
 
+***************************
+
+## Available scripts ##
+
+* **npm run build**
+Script to build the app for production to the build folder.
+Your app is ready to be deployed!
+
+* **npm run preview**
+Script to start a local web server that serves the built solution for previewing
+
+* **npm run test**
+Script to launch the test runner in the interactive watch mode.
+See the section about running tests for more information.
+
+* **npm run test:coverage**
+Script to define what percentage of application code is tested and whether the test cases cover all the code.
+
+* **npm run lint**
+Script to launch the eslint runner in the interactive watch mode.
+You will see any lint errors in the console.
+
+* **npm run format**
+Script to format and make your code nice and readable using prettier
+
+* **npm run lint-staged**
+Script to run linters on staged changes only, making the process faster and more efficient
+
+* **npm run prepare**
+Script to launch husky installation, it's launched during the global installation.
