@@ -1,14 +1,19 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  testMatch: ['**/*.test.ts', '**/*.test.js'],
-  moduleFileExtensions: ['ts', 'js', 'json', 'node'],
-  extensionsToTreatAsEsm: ['.ts'],
+  testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'node'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   preset: "ts-jest/presets/default-esm",
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx'],
   coveragePathIgnorePatterns : [
     'd.ts' 
   ],
+  moduleNameMapper: {
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
+    '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@/features/(.*)$': '<rootDir>/scr/features/$1',
+  },
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coverageThreshold: {
     global: {
