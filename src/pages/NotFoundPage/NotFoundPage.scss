@@ -1,0 +1,10 @@
+.not-found-page-content {
+  &__image {
+    height: 475px;
+    width: 412px;
+    font-size: 170px;
+    font-weight: 700;
+    color: #880e4f;
+    background: url(/public/not-found.svg) no-repeat 0 0;
+  }
+}
