@@ -1,10 +1,64 @@
 .not-found-page-content {
+  display: flex;
+  margin: 10% auto 0 auto;
+  justify-content: space-between;
+  max-width: 937px;
+
   &__image {
-    height: 475px;
-    width: 412px;
-    font-size: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 316px;
+    width: 275px;
+    font-size: 113px;
     font-weight: 700;
     color: #880e4f;
-    background: url(/public/not-found.svg) no-repeat 0 0;
+    background: url(/not-found.svg) no-repeat 0 0;
+    background-size: cover;
+
+    &__text {
+      margin: 0;
+      padding: 15px;
+    }
+  }
+
+  &__separator {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 2px;
+  }
+
+  &__info {
+    max-width: 550px;
+    align-self: center;
+
+    &__title {
+      font-weight: 700;
+      font-size: 35px;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    &__text {
+      font-size: 24px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: 15px;
+    width: 270px;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #e91e63;
+    border: 1px solid #e91e63;
+    border-radius: 26px;
+  }
+
+  &__link:hover {
+    background: #e91e63;
+    color: #ffffff;
   }
 }
