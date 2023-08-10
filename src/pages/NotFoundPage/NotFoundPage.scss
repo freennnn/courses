@@ -1,6 +1,9 @@
 .not-found-page-content {
   display: flex;
-  margin: 10% auto 0 auto;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 20% auto 0 auto;
   justify-content: space-between;
   max-width: 937px;
 
@@ -8,9 +11,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 316px;
-    width: 275px;
-    font-size: 113px;
+    height: 158px;
+    width: 137px;
+    font-size: 50px;
     font-weight: 700;
     color: #880e4f;
     background: url(/not-found.svg) no-repeat 0 0;
@@ -23,6 +26,8 @@
   }
 
   &__separator {
+    display: none;
+    height: 300px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     width: 2px;
   }
@@ -33,12 +38,12 @@
 
     &__title {
       font-weight: 700;
-      font-size: 35px;
+      font-size: 25px;
       color: rgba(0, 0, 0, 0.87);
     }
 
     &__text {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 500;
       color: rgba(0, 0, 0, 0.54);
     }
@@ -46,6 +51,7 @@
 
   &__link {
     display: block;
+    margin: 0 auto;
     padding: 15px;
     width: 270px;
     text-align: center;
@@ -60,5 +66,37 @@
   &__link:hover {
     background: #e91e63;
     color: #ffffff;
+  }
+}
+
+@media (min-width: 500px) {
+  .not-found-page-content {
+    margin: 10% auto 0 auto;
+  }
+}
+
+@media (min-width: 950px) {
+  .not-found-page-content {
+    flex-direction: row;
+
+    &__image {
+      height: 316px;
+      width: 275px;
+      font-size: 113px;
+    }
+
+    &__separator {
+      display: block;
+    }
+
+    &__info {
+      &__title {
+        font-size: 35px;
+      }
+
+      &__text {
+        font-size: 24px;
+      }
+    }
   }
 }
