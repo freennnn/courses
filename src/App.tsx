@@ -1,46 +1,26 @@
-import './App.css';
-import { signUp, signIn } from './api/api';
+import { Routes, Route } from 'react-router-dom';
 
-//temporary user for testing
-const customer = {
-  email: 'user6',
-  password: 'password',
-  firstName: 'John',
-  lastName: 'Doe',
-  dateOfBirth: '2000-10-12',
-  addresses: [{ country: 'US' }],
-};
+import Navigation from './features/Navigation/Navigation';
+import MainPage from './pages/MainPage/MainPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
-function App() {
-  //temporary example for testing
-  signIn({ email: 'user4', password: 'password' })
-    .then((response) => {
-      // eslint-disable-next-line no-console
-      console.log('Sign Up Response:', response);
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error('Sign Up Error:', error);
-    });
+import './App.scss';
 
-  //temporary function for testing
-  const handleSignUp = () => {
-    signUp(customer)
-      .then((response) => {
-        // eslint-disable-next-line no-console
-        console.log('Sign Up Response:', response);
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error('Sign Up Error:', error);
-      });
-  };
+const App = () => {
   return (
     <>
-      <p>Here will be App content</p>
-      <button onClick={handleSignUp}>Sign up</button>
+      <Routes>
+        <Route path='/' element={<Navigation />}>
+          <Route index element={<MainPage />} />
+        </Route>
+        <Route path='login' element={<LoginPage />} />
+        <Route path='register' element={<RegistrationPage />} />
+        <Route path='*' element={<NotFoundPage />} />
+      </Routes>
     </>
   );
-}
+};
 
 export default App;

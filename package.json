@@ -45,6 +45,7 @@
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "sass": "^1.64.2",
     "ts-jest": "^29.1.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.5",
