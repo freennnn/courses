@@ -1,5 +1,5 @@
 import './App.css';
-import { signUp } from './api';
+import { signUp } from './api/api';
 
 //temporary user for testing
 const customer = {

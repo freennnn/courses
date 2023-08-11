@@ -1,4 +1,4 @@
-import Loader from './api.ts';
+import Loader from './api.js';
 import {jest} from '@jest/globals';
 
 
