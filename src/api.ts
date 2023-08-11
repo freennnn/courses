@@ -2,58 +2,68 @@ import {
   ClientBuilder,
   Client,
   HttpMiddlewareOptions,
-  PasswordAuthMiddlewareOptions,
+  AuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
 import {
   createApiBuilderFromCtpClient,
   ApiRoot,
   CustomerSignin,
+  CustomerDraft,
 } from '@commercetools/platform-sdk';
 
-const projectKey = 'rs-final';
+const projectKey: string =
+  typeof import.meta.env.VITE_CTP_PROJECT_KEY === 'string'
+    ? import.meta.env.VITE_CTP_PROJECT_KEY
+    : '';
+
+const clientId: string =
+  typeof import.meta.env.VITE_CTP_CLIENT_ID === 'string' ? import.meta.env.VITE_CTP_CLIENT_ID : '';
+
+const clientSecret: string =
+  typeof import.meta.env.VITE_CTP_CLIENT_SECRET === 'string'
+    ? import.meta.env.VITE_CTP_CLIENT_SECRET
+    : '';
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: 'https://api.us-central1.gcp.commercetools.com',
   fetch,
 };
 
-const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
+const authMiddlewareOptions: AuthMiddlewareOptions = {
   host: 'https://auth.us-central1.gcp.commercetools.com',
   projectKey,
   credentials: {
-    clientId: 'HdvN8dBxrWuKQrvKMBDClG29',
-    clientSecret: 'oBAc24vfn5Bhnr4Xa0u4MAkvyqgWzdcp',
-    user: {
-      username: 'example@example.com',
-      password: 'your-password',
-    },
+    clientId,
+    clientSecret,
   },
-  scopes: ['manage_customers:rs-final'],
+  scopes: [`manage_customers:${projectKey}`],
   fetch,
 };
 
 const client: Client = new ClientBuilder()
   .withHttpMiddleware(httpMiddlewareOptions)
-  .withPasswordFlow(passwordAuthMiddlewareOptions)
+  .withClientCredentialsFlow(authMiddlewareOptions)
   .build();
 
-const getApiRoot: () => ApiRoot = () => {
-  return createApiBuilderFromCtpClient(client);
+const apiRoot: ApiRoot = createApiBuilderFromCtpClient(client);
+
+export const signIn = async (loginRequest: CustomerSignin) => {
+  const response = await apiRoot
+    .withProjectKey({ projectKey })
+    .login()
+    .post({ body: loginRequest })
+    .execute();
+
+  return response;
 };
 
-export const loginUser = async (loginRequest: CustomerSignin) => {
-  try {
-    const response = await getApiRoot()
-      .withProjectKey({ projectKey })
-      .login()
-      .post({ body: loginRequest })
-      .execute();
+export const signUp = async (customer: CustomerDraft) => {
+  const response = await apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .post({ body: customer })
+    .execute();
 
-    // eslint-disable-next-line no-console
-    console.log('Logged In Customer:', response.body);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Login Error:', error);
-  }
+  return response;
 };
