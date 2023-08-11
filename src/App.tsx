@@ -1,9 +1,9 @@
 import './App.css';
-import { signUp } from './api/api';
+import { signUp, signIn } from './api/api';
 
 //temporary user for testing
 const customer = {
-  email: 'user5',
+  email: 'user6',
   password: 'password',
   firstName: 'John',
   lastName: 'Doe',
@@ -12,6 +12,17 @@ const customer = {
 };
 
 function App() {
+  //temporary example for testing
+  signIn({ email: 'user4', password: 'password' })
+    .then((response) => {
+      // eslint-disable-next-line no-console
+      console.log('Sign Up Response:', response);
+    })
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Sign Up Error:', error);
+    });
+
   //temporary function for testing
   const handleSignUp = () => {
     signUp(customer)
