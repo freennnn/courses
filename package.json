@@ -15,9 +15,12 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.2"
+    "react-hook-form": "^7.45.4",
+    "react-router-dom": "^6.14.2",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@commercetools/platform-sdk": "^4.11.0",
