@@ -1,0 +1,91 @@
+.reg-form {
+  text-align: left;
+
+  &__input {
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin-bottom: 10px;
+
+    &:placeholder {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    &:hover {
+      border: 1px solid #304ffe;
+      outline: 1px solid #304ffe;
+    }
+  }
+
+  select {
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  &__flex {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    & > div {
+      width: 50%;
+    }
+  }
+
+  &__btn {
+    font-size: 18px;
+    width: 210px;
+    padding: 5px 10px;
+    color: white;
+    background-color: #304ffe;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 10px;
+  }
+
+  &__error {
+    color: red;
+    position: relative;
+  }
+
+  &__error:before {
+    position: absolute;
+    content: '!';
+    color: red;
+    top: -35px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  &__label-pass {
+    position: relative;
+  }
+
+  &__view {
+    position: absolute;
+    bottom: -3px;
+    right: 5px;
+  }
+
+  input[type='password'] + .reg-form__view:before {
+    content: '';
+    border-bottom: 3px solid red;
+    position: absolute;
+    width: 24px;
+    height: 50%;
+    top: -2px;
+    left: -4px;
+    transform: rotate(-45deg);
+  }
+
+  input[type='text'] + .reg-form__view:before {
+    display: none;
+  }
+}
