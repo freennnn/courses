@@ -18,6 +18,24 @@
     }
   }
 
+  .reg-form__error--zip {
+    display: none;
+    color: red;
+  }
+
+  input:invalid {
+    border-color: red;
+    outline: 1px solid red;
+  }
+
+  .reg-form__error ~ input {
+    border: 1px solid red;
+  }
+
+  input:invalid + .reg-form__error--zip {
+    display: block;
+  }
+
   select {
     width: 100%;
     border-radius: 5px;
@@ -54,16 +72,6 @@
     position: relative;
   }
 
-  &__error:before {
-    position: absolute;
-    content: '!';
-    color: red;
-    top: -35px;
-    right: 10px;
-    font-size: 24px;
-    font-weight: 600;
-  }
-
   &__label-pass {
     position: relative;
   }
@@ -72,6 +80,7 @@
     position: absolute;
     bottom: -3px;
     right: 5px;
+    cursor: pointer;
   }
 
   input[type='password'] + .reg-form__view:before {
