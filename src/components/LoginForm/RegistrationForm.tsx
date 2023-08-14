@@ -370,7 +370,7 @@ export default function Form() {
               type={passStyle}
               id='password'
               className='reg-form__input'
-              placeholder='********'
+              
             />
             <div onClick={togglePass} className='reg-form__view'>
               👁️
@@ -383,7 +383,7 @@ export default function Form() {
             Confirm Password:
             <input
               type={passStyleConfirm}
-              placeholder='Confirm password'
+              
               {...register('confirmPassword')}
               id='conformPassword'
               className='reg-form__input'
