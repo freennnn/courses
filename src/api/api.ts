@@ -1,10 +1,12 @@
 import { CustomerSignin, CustomerDraft } from '@commercetools/platform-sdk';
 
-import { apiRoot } from './apiHelpers';
+import { apiRoot, getAuthApiRoot } from './apiHelpers';
 import { projectKey } from './apiConfig';
 
 export const signIn = async (loginRequest: CustomerSignin) => {
-  const response = await apiRoot
+  const authApiRoot = getAuthApiRoot(loginRequest);
+
+  const response = await authApiRoot
     .withProjectKey({ projectKey })
     .login()
     .post({ body: loginRequest })
