@@ -68,7 +68,7 @@ export default function Form() {
             type={passStyle}
             id='password'
             className='reg-form__input'
-            placeholder='********'
+            
           />
           <div onClick={togglePass} className='reg-form__view'>
             👁️
