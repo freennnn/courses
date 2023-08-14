@@ -7,8 +7,7 @@ function LoginPage() {
       <div className='reg__wrapper'>
         <div className='reg__decor'>
           <a className='reg__main-link' href='/'></a>
-          <p>
-            <img src='src/assets/images/logo.svg' alt='logo' width='115' height='115' />
+          <p className='reg__logo'>
           </p>
           <h2 className='reg__subtitle'>Welcome back</h2>
           <p className='reg__text'>Please login to continue</p>
