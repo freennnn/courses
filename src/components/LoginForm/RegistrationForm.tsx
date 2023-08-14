@@ -12,35 +12,38 @@ const FormSchema = z
   .object({
     firstName: z
       .string()
-      .nonempty(' is required')
       .min(1, { message: ' must be 1 characters or more' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters latin alphabet'),
+      .regex(
+        /^[a-zA-Z0-9_]+$/,
+        'The username must contain only letters, numbers and underscore (_)',
+      ),
     lastName: z
       .string()
-      .nonempty(' is required')
       .min(1, { message: ' must be 1 characters or more' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters latin alphabet'),
-    email: z.string().nonempty(' is required').email({
-      message: ' is invalid. Please enter a valid email address',
+      .regex(
+        /^[a-zA-Z0-9_]+$/,
+        'The username must contain only letters, numbers and underscore (_)',
+      ),
+    email: z.string().email({
+      message: 'Invalid email. Please enter a valid email address',
     }),
     isChecked: z.boolean(),
-    num: z.number(),
-    street: z.string().nonempty(' is required'),
-    street2: z.string().nonempty(' is required'),
-    city: z.string().nonempty(' is required'),
+    street: z.string().nonempty('Street is required'),
+    street2: z.string().nonempty('Street is required'),
+    city: z.string().nonempty('City is required'),
+    city2: z.string().nonempty('City is required'),
+    state: z.string().nonempty('State is required'),
+    state2: z.string().nonempty('State is required'),
+    zip: z.string().nonempty('Postal code is required'),
+    zip2: z.string().nonempty('Postal code is required'),
     addressDefault: z.boolean(),
-    city2: z.string().nonempty(' is required'),
-    state: z.string().nonempty('Country is required'),
-    state2: z.string().nonempty('Country is required'),
     addressDefault2: z.boolean(),
-    zip: z.string().nonempty(' is required'),
-    zip2: z.string().nonempty(' is required'),
     dateOfBirth: z.coerce
       .date()
       .min(new Date(1920, 0, 1), {
-        message: ' cannot go past January 1 1923',
+        message: 'Date cannot go past January 1 1923',
       })
-      .max(new Date(), { message: ' is requierd' })
+      .max(new Date(), { message: 'Date must be in the past' })
       .refine(
         (date: Date) => {
           const ageTime = new Date(Date.now() - date.getTime());
@@ -51,12 +54,12 @@ const FormSchema = z
       ),
     password: z
       .string()
-      .min(8, ' must have at least 8 characters')
-      .regex(/[0-9]/, ' must have at least 1 digit character')
-      .regex(/[a-z]/, ' must have at least 1 lowercase letter')
-      .regex(/[A-Z]/, ' must have at least 1 uppercase letter'),
+      .min(8, 'Password must have at least 8 characters')
+      .regex(/[0-9]/, 'Your password must have at least 1 digit character')
+      .regex(/[a-z]/, 'Your password must have at least 1 lowercase character')
+      .regex(/[A-Z]/, 'Your password must have at least 1 uppercasecharacter'),
 
-    confirmPassword: z.string().min(8, { message: ' must be at least 8 characters' }),
+    confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -85,6 +88,10 @@ interface Customer {
   lastName: string;
   dateOfBirth: string;
   addresses: Address[];
+  shippingAddresses: number[];
+  billingAddresses: number[];
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
 }
 
 export default function Form() {
@@ -123,15 +130,6 @@ export default function Form() {
 
   const [passStyleConfirm, setPassConfirmStyle] = React.useState('password');
 
-  const [activeCountry, setActiveCountry] = React.useState('US');
-
-  const countriesList = countries;
-
-  const getZip = (): string => {
-    const act: Country = countriesList.filter((item) => item.id === activeCountry)[0];
-    return act.postCode;
-  };
-
   const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
     const customer: Customer = {
       email: data.email,
@@ -153,6 +151,10 @@ export default function Form() {
           postalCode: data.zip2,
         },
       ],
+      billingAddresses: [1],
+      shippingAddresses: [0],
+      defaultShippingAddress: data.addressDefault ? 0 : undefined,
+      defaultBillingAddress: data.addressDefault2 ? 1 : undefined,
     };
     console.log(customer);
     await signUp(customer);
@@ -181,6 +183,15 @@ export default function Form() {
 
   const togglePassConfirm = (): void => {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
+  };
+
+  const [activeCountry, setActiveCountry] = React.useState('US');
+
+  const countriesList = countries;
+
+  const getZip = (): string => {
+    const act: Country = countriesList.filter((item) => item.id === activeCountry)[0];
+    return act.postCode;
   };
 
   return (
@@ -248,7 +259,6 @@ export default function Form() {
             {errors.city && <span className='reg-form__error'>{errors.city.message}</span>}
             <input id='city' type='text' {...register('city')} className='reg-form__input' />
           </div>
-
           <div>
             {errors.state && <p className='reg-form__error'>{errors.state.message}</p>}
             <select
@@ -269,7 +279,7 @@ export default function Form() {
 
           <div>
             <label htmlFor='zip'>
-              Zip:
+              Postal code:
               {errors.zip && <span className='reg-form__error'>{errors.zip.message}</span>}
             </label>
             <input
@@ -279,9 +289,10 @@ export default function Form() {
               className='reg-form__input'
               pattern={getZip()}
             />
-            <p className='reg-form__error--zip'>Zip change</p>
+            <p className='reg-form__error--zip'>
+              Enter the code according to the rules of the selected country
+            </p>
           </div>
-
           <label htmlFor='defaultAd'>
             <input id='defaultAd' type='checkbox' {...register('addressDefault')} />
             Use as a default address
@@ -305,7 +316,11 @@ export default function Form() {
 
           <div>
             {errors.state2 && <p className='reg-form__error'>{errors.state2.message}</p>}
-            <select id='state2' {...register('state2')}>
+            <select
+              id='state2'
+              {...register('state2')}
+              onChange={(event) => setActiveCountry(event.target.value)}
+            >
               <option value=''>Country</option>
               {countriesList.map((item: Country, index) => {
                 return (
@@ -318,8 +333,10 @@ export default function Form() {
           </div>
 
           <div>
-            <label htmlFor='zip2'>Zip</label>
-            {errors.zip2 && <span className='reg-form__error'>{errors.zip2.message}</span>}
+            <label htmlFor='zip2'>
+              Postal code:
+              {errors.zip2 && <span className='reg-form__error'>{errors.zip2.message}</span>}
+            </label>
             <input
               id='zip2'
               type='text'
@@ -327,6 +344,9 @@ export default function Form() {
               className='reg-form__input'
               pattern={getZip()}
             />
+            <p className='reg-form__error--zip'>
+              Enter the code according to the rules of the selected country
+            </p>
           </div>
           <label htmlFor='defaultAd2'>
             <input id='defaultAd2' type='checkbox' {...register('addressDefault2')} />
@@ -345,7 +365,6 @@ export default function Form() {
         <div>
           <label htmlFor='password' className='reg-form__label-pass'>
             Password
-            {errors.password && <span className='reg-form__error'>{errors.password.message}</span>}
             <input
               {...register('password')}
               type={passStyle}
@@ -357,13 +376,11 @@ export default function Form() {
               👁️
             </div>
           </label>
+          {errors.password && <p className='reg-form__error'>{errors.password.message}</p>}
         </div>
         <div>
           <label htmlFor='confirmPassword' className='reg-form__label-pass'>
-            Confirm Password:{' '}
-            {errors.confirmPassword && (
-              <span className='reg-form__error'>{errors.confirmPassword?.message}</span>
-            )}
+            Confirm Password:
             <input
               type={passStyleConfirm}
               placeholder='Confirm password'
@@ -375,6 +392,9 @@ export default function Form() {
               👁️
             </div>
           </label>
+          {errors.confirmPassword && (
+            <span className='reg-form__error'>{errors.confirmPassword?.message}</span>
+          )}
         </div>
       </div>
 

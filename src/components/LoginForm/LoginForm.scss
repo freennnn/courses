@@ -65,6 +65,11 @@
     align-items: center;
     border: none;
     border-radius: 10px;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+    &:hover {
+      background-color: #e91e63;
+    }
   }
 
   &__error {
@@ -78,7 +83,7 @@
 
   &__view {
     position: absolute;
-    bottom: -3px;
+    bottom: 0;
     right: 5px;
     cursor: pointer;
   }
@@ -89,7 +94,7 @@
     position: absolute;
     width: 24px;
     height: 50%;
-    top: -2px;
+    top: 2px;
     left: -4px;
     transform: rotate(-45deg);
   }
