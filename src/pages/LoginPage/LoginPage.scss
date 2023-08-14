@@ -10,6 +10,14 @@
     border-radius: 30px;
     min-height: 95vh;
   }
+  
+  &__logo {
+      background-image: url('../../assets/images/logo.svg');
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 115px;
+      height: 115px;
+  }
 
   &__link {
     position: relative;
