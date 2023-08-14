@@ -88,7 +88,7 @@
     cursor: pointer;
   }
 
-  input[type='password'] + .reg-form__view:before {
+  input[type='text'] + .reg-form__view:before {
     content: '';
     border-bottom: 3px solid red;
     position: absolute;
@@ -99,7 +99,7 @@
     transform: rotate(-45deg);
   }
 
-  input[type='text'] + .reg-form__view:before {
+  input[type='password'] + .reg-form__view:before {
     display: none;
   }
 }
