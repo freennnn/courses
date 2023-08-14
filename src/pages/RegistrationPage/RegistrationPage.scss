@@ -11,6 +11,14 @@
     border-radius: 30px;
   }
 
+  &__logo {
+      background-image: url('../../assets/images/logo.svg');
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 115px;
+      height: 115px;
+  }
+
   &__link {
     position: relative;
     color: #304ffe;
