@@ -12,30 +12,30 @@ const FormSchema = z
   .object({
     firstName: z
       .string()
-      .min(1, { message: ' must be 1 characters or more' })
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        'The username must contain only letters, numbers and underscore (_)',
-      ),
+      .min(1, { message: '  must contain at least one character' })
+      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
     lastName: z
       .string()
-      .min(1, { message: ' must be 1 characters or more' })
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        'The username must contain only letters, numbers and underscore (_)',
-      ),
-    email: z.string().email({
-      message: 'Invalid email. Please enter a valid email address',
+      .min(1, { message: ' must contain at least one character' })
+      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+    email: z.string().nonempty(' is required to complete').email({
+      message: ' is invalid. Please enter a valid email address',
     }),
     isChecked: z.boolean(),
-    street: z.string().nonempty('Street is required'),
-    street2: z.string().nonempty('Street is required'),
-    city: z.string().nonempty('City is required'),
-    city2: z.string().nonempty('City is required'),
-    state: z.string().nonempty('State is required'),
-    state2: z.string().nonempty('State is required'),
-    zip: z.string().nonempty('Postal code is required'),
-    zip2: z.string().nonempty('Postal code is required'),
+    street: z.string().nonempty(' is required to complete'),
+    street2: z.string().nonempty(' is required to complete'),
+    city: z
+      .string()
+      .min(1, { message: ' must contain at least one character' })
+      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+    city2: z
+      .string()
+      .min(1, { message: ' must contain at least one character' })
+      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+    state: z.string().nonempty(' is required to complete'),
+    state2: z.string().nonempty(' is required to complete'),
+    zip: z.string().nonempty(' is required to complete'),
+    zip2: z.string().nonempty(' is required to complete'),
     addressDefault: z.boolean(),
     addressDefault2: z.boolean(),
     dateOfBirth: z.coerce
@@ -55,9 +55,9 @@ const FormSchema = z
     password: z
       .string()
       .min(8, 'Password must have at least 8 characters')
-      .regex(/[0-9]/, 'Your password must have at least 1 digit character')
-      .regex(/[a-z]/, 'Your password must have at least 1 lowercase character')
-      .regex(/[A-Z]/, 'Your password must have at least 1 uppercasecharacter'),
+      .regex(/[0-9]/, 'Password must have at least 1 digit character')
+      .regex(/[a-z]/, 'Password must have at least 1 lowercase character')
+      .regex(/[A-Z]/, 'Password must have at least 1 uppercase character'),
 
     confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   })
@@ -345,7 +345,7 @@ export default function Form() {
               pattern={getZip()}
             />
             <p className='reg-form__error--zip'>
-              Enter the code according to the rules of the selected country
+              Enter the postal code according to the rules of the selected country
             </p>
           </div>
           <label htmlFor='defaultAd2'>
@@ -370,7 +370,6 @@ export default function Form() {
               type={passStyle}
               id='password'
               className='reg-form__input'
-              
             />
             <div onClick={togglePass} className='reg-form__view'>
               👁️
@@ -383,7 +382,6 @@ export default function Form() {
             Confirm Password:
             <input
               type={passStyleConfirm}
-              
               {...register('confirmPassword')}
               id='conformPassword'
               className='reg-form__input'

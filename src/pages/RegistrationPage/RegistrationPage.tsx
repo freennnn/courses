@@ -7,8 +7,7 @@ function RegistrationPage() {
       <div className='reg__wrapper'>
         <div className='reg__decor'>
           <a className='reg__main-link' href='/'></a>
-          <p className='reg__logo'>
-          </p>
+          <p className='reg__logo'></p>
           <h2 className='reg__subtitle'>Nice to meet you :)</h2>
           <p className='reg__text'>Just register to join with us</p>
         </div>
