@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable no-console */
 import * as React from 'react';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import './LoginForm.scss';
 import { signIn } from '../../api/api.ts';
+import { toast } from 'react-toastify';
+import { ApiErrorResponse } from '../../types.ts';
 
 const FormSchema = z.object({
   email: z.string().nonempty(' is required').email({
@@ -36,10 +37,38 @@ export default function Form() {
   });
 
   const [passStyle, setPassStyle] = React.useState('password');
+  const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
 
   const onSubmit: SubmitHandler<FormInput> = async (data): Promise<void> => {
-    console.log(data);
-    await signIn(data);
+    try {
+      if (!navigator.onLine) {
+        toast.error('No internet connection. Please check your network.');
+        return;
+      }
+
+      setSignInError(null);
+
+      await toast.promise(signIn(data), {
+        pending: 'Signing in...',
+        success: 'Sign in successful!',
+        error: {
+          render(error) {
+            const apiError = error as ApiErrorResponse;
+
+            if (apiError.data.body.statusCode === 400) {
+              setSignInError(apiError);
+              return 'Incorrect login or password. Please try again!';
+            } else {
+              return 'Internal server error. Please try again!';
+            }
+          },
+        },
+      });
+    } catch (error) {
+      const apiError = error as ApiErrorResponse;
+      /* eslint-disable-next-line no-console */
+      console.error(apiError);
+    }
   };
 
   const togglePass = (): void => {
@@ -54,7 +83,7 @@ export default function Form() {
         <input
           id='email'
           {...register('email')}
-          className='reg-form__input'
+          className={`reg-form__input ${signInError ? 'server-error' : ''}`}
           placeholder='email@gmail.com'
         />
       </div>
@@ -67,7 +96,7 @@ export default function Form() {
             {...register('password')}
             type={passStyle}
             id='password'
-            className='reg-form__input'
+            className={`reg-form__input ${signInError ? 'server-error' : ''}`}
           />
           <div onClick={togglePass} className='reg-form__view'>
             👁️

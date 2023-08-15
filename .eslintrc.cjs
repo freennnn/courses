@@ -31,6 +31,11 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
     'class-methods-use-this': 'error',
     'no-console': 'warn',
+    "@typescript-eslint/no-misused-promises": [2, {
+      "checksVoidReturn": {
+        "attributes": false
+      }
+    }]
   },
   settings: {
     "react": {
