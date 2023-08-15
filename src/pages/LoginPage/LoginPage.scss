@@ -38,6 +38,7 @@
     color: #304ffe;
     font-size: 1rem;
     cursor: pointer;
+    transition: all ease-in-out 0.3s;
 
     @media (max-width: 680px) {
       font-size: 0.75rem;
@@ -53,6 +54,8 @@
       background-size: contain;
       right: 12rem;
       bottom: 0.3rem;
+
+      transition: all ease-in-out 0.3s;
 
       @media (max-width: 680px) {
         display: none;

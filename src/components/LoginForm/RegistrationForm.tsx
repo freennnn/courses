@@ -32,8 +32,8 @@ const FormSchema = z
       .string()
       .min(1, { message: ' must contain at least one character' })
       .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
-    state: z.string().nonempty(' is required to complete'),
-    state2: z.string().nonempty(' is required to complete'),
+    state: z.string().nonempty('Country is required to complete'),
+    state2: z.string().nonempty('Country is required to complete'),
     zip: z.string().nonempty(' is required to complete'),
     zip2: z.string().nonempty(' is required to complete'),
     addressDefault: z.boolean(),
@@ -41,9 +41,9 @@ const FormSchema = z
     dateOfBirth: z.coerce
       .date()
       .min(new Date(1920, 0, 1), {
-        message: 'Date cannot go past January 1 1923',
+        message: ' cannot go past January 1 1923',
       })
-      .max(new Date(), { message: 'Date must be in the past' })
+      .max(new Date(), { message: ' must be in the past' })
       .refine(
         (date: Date) => {
           const ageTime = new Date(Date.now() - date.getTime());
@@ -279,7 +279,7 @@ export default function Form() {
 
           <div>
             <label htmlFor='zip'>
-              Postal code:
+              Postal code
               {errors.zip && <span className='reg-form__error'>{errors.zip.message}</span>}
             </label>
             <input
@@ -334,7 +334,7 @@ export default function Form() {
 
           <div>
             <label htmlFor='zip2'>
-              Postal code:
+              Postal code
               {errors.zip2 && <span className='reg-form__error'>{errors.zip2.message}</span>}
             </label>
             <input
@@ -375,7 +375,7 @@ export default function Form() {
               👁️
             </div>
           </label>
-          {errors.password && <p className='reg-form__error'>{errors.password.message}</p>}
+          {errors.password && <span className='reg-form__error'>{errors.password.message}</span>}
         </div>
         <div>
           <label htmlFor='confirmPassword' className='reg-form__label-pass'>

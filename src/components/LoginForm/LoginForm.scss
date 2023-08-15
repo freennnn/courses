@@ -1,12 +1,16 @@
 .reg-form {
   text-align: left;
 
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+
   &__input {
     width: 100%;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 0.6rem;
+    border-radius: 0.3125rem;
     border: 1px solid rgba(0, 0, 0, 0.4);
-    margin-bottom: 10px;
+    margin: 0.6rem 0;
 
     &:placeholder {
       color: rgba(0, 0, 0, 0.6);
@@ -38,25 +42,34 @@
 
   select {
     width: 100%;
-    border-radius: 5px;
-    padding: 5px;
+    border-radius: 0.3125rem;
+    padding: 0.6rem;
+    margin: 0.6rem 0;
   }
 
   &__flex {
     display: flex;
-    gap: 10px;
+    gap: 0.6rem;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin: 0.6rem 0;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
 
     & > div {
       width: 50%;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
     }
   }
 
   &__btn {
-    font-size: 18px;
-    width: 210px;
-    padding: 5px 10px;
+    font-size: 1.2rem;
+    width: 33%;
+    padding: 0.3rem 0.6rem;
     color: white;
     background-color: #304ffe;
     text-transform: uppercase;
@@ -64,11 +77,16 @@
     justify-content: center;
     align-items: center;
     border: none;
-    border-radius: 10px;
+    border-radius: 0.5rem;
     transition: all ease-in-out 0.3s;
     cursor: pointer;
+
     &:hover {
       background-color: #e91e63;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
     }
   }
 
@@ -90,16 +108,37 @@
 
   input[type='text'] + .reg-form__view:before {
     content: '';
-    border-bottom: 3px solid red;
+    border-bottom: 2px solid #000;
     position: absolute;
-    width: 24px;
+    width: 1.5rem;
     height: 50%;
     top: 2px;
     left: -4px;
     transform: rotate(-45deg);
+
+    @media (max-width: 768px) {
+      width: 1.2rem;
+      height: 40%;
+      top: 4px;
+      left: -2px;
+    }
   }
 
   input[type='password'] + .reg-form__view:before {
     display: none;
+  }
+
+  input[type='checkbox'] {
+    margin-right: 0.6rem;
+  }
+
+  fieldset {
+    width: 50%;
+    border-radius: 0.3125rem;
+    margin: 0.6rem 0;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 }
