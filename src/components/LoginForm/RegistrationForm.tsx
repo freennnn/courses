@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable no-console */
 import * as React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,30 +11,34 @@ const FormSchema = z
   .object({
     firstName: z
       .string()
+      .trim()
       .min(1, { message: '  must contain at least one character' })
       .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     lastName: z
       .string()
+      .trim()
       .min(1, { message: ' must contain at least one character' })
       .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     email: z.string().nonempty(' is required to complete').email({
       message: ' is invalid. Please enter a valid email address',
     }),
     isChecked: z.boolean(),
-    street: z.string().nonempty(' is required to complete'),
-    street2: z.string().nonempty(' is required to complete'),
+    street: z.string().trim().nonempty(' is required to complete'),
+    street2: z.string().trim().nonempty(' is required to complete'),
     city: z
       .string()
+      .trim()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
+      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
     city2: z
       .string()
+      .trim()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
+      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
     state: z.string().nonempty('Country is required to complete'),
     state2: z.string().nonempty('Country is required to complete'),
-    zip: z.string().nonempty(' is required to complete'),
-    zip2: z.string().nonempty(' is required to complete'),
+    zip: z.string().trim().nonempty(' is required to complete'),
+    zip2: z.string().trim().nonempty(' is required to complete'),
     addressDefault: z.boolean(),
     addressDefault2: z.boolean(),
     dateOfBirth: z.coerce
@@ -54,6 +57,7 @@ const FormSchema = z
       ),
     password: z
       .string()
+      .trim()
       .min(8, 'Password must have at least 8 characters')
       .regex(/[0-9]/, 'Password must have at least 1 digit character')
       .regex(/[a-z]/, 'Password must have at least 1 lowercase character')
@@ -156,7 +160,6 @@ export default function Form() {
       defaultShippingAddress: data.addressDefault ? 0 : undefined,
       defaultBillingAddress: data.addressDefault2 ? 1 : undefined,
     };
-    console.log(customer);
     await signUp(customer);
     reset();
   };
@@ -186,11 +189,17 @@ export default function Form() {
   };
 
   const [activeCountry, setActiveCountry] = React.useState('US');
+  const [activeCountry2, setActiveCountry2] = React.useState('US');
 
   const countriesList = countries;
 
   const getZip = (): string => {
     const act: Country = countriesList.filter((item) => item.id === activeCountry)[0];
+    return act.postCode;
+  };
+
+  const getZip2 = (): string => {
+    const act: Country = countriesList.filter((item) => item.id === activeCountry2)[0];
     return act.postCode;
   };
 
@@ -319,7 +328,7 @@ export default function Form() {
             <select
               id='state2'
               {...register('state2')}
-              onChange={(event) => setActiveCountry(event.target.value)}
+              onChange={(event) => setActiveCountry2(event.target.value)}
             >
               <option value=''>Country</option>
               {countriesList.map((item: Country, index) => {
@@ -342,7 +351,7 @@ export default function Form() {
               type='text'
               {...register('zip2')}
               className='reg-form__input'
-              pattern={getZip()}
+              pattern={getZip2()}
             />
             <p className='reg-form__error--zip'>
               Enter the postal code according to the rules of the selected country
