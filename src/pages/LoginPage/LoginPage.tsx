@@ -1,12 +1,13 @@
 import './LoginPage.scss';
 import LoginForm from '../../components/LoginForm/LoginForm';
+import { Link } from 'react-router-dom';
 
 function LoginPage() {
   return (
     <div className='reg'>
       <div className='reg__wrapper'>
         <div className='reg__decor'>
-          <a className='reg__main-link' href='/'></a>
+          <Link className='reg__main-link' to={'/'}></Link>
           <p className='reg__logo'></p>
           <h2 className='reg__subtitle'>Welcome back</h2>
           <p className='reg__text'>Please login to continue</p>
@@ -14,9 +15,9 @@ function LoginPage() {
         <section className='reg__inner'>
           <div className='reg__flex'>
             <h1>Login</h1>
-            <a className='reg__link' href='/register'>
+            <Link className='reg__link' to={'/register'}>
               Create a new account
-            </a>
+            </Link>
           </div>
           <LoginForm />
         </section>

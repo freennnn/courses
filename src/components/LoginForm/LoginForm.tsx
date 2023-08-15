@@ -9,7 +9,7 @@ import { signIn } from '../../api/api.ts';
 
 const FormSchema = z.object({
   email: z.string().nonempty(' is required').email({
-    message: 'Invalid email. Please enter a valid email address',
+    message: ' is invalid. Please enter a valid email address',
   }),
   password: z
     .string()
