@@ -13,11 +13,11 @@ const FormSchema = z
     firstName: z
       .string()
       .min(1, { message: '  must contain at least one character' })
-      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     lastName: z
       .string()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     email: z.string().nonempty(' is required to complete').email({
       message: ' is invalid. Please enter a valid email address',
     }),
@@ -27,11 +27,11 @@ const FormSchema = z
     city: z
       .string()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     city2: z
       .string()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Zа-яА-ЯёЁ]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
     state: z.string().nonempty('Country is required to complete'),
     state2: z.string().nonempty('Country is required to complete'),
     zip: z.string().nonempty(' is required to complete'),
