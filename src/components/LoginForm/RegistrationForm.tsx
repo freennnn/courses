@@ -1,13 +1,14 @@
-import * as React from 'react';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import './LoginForm.scss';
+
 import countries from './CountryData';
 import { signUp } from '../../api/api.ts';
-import { toast } from 'react-toastify';
 import { ApiErrorResponse } from '../../types.ts';
+import { toastForNoConnection, toastSignUp } from './toasts.ts';
+
+import './LoginForm.scss';
 
 const FormSchema = z
   .object({
@@ -132,11 +133,18 @@ export default function Form() {
     },
   });
 
-  const [passStyle, setPassStyle] = React.useState('password');
-
-  const [passStyleConfirm, setPassConfirmStyle] = React.useState('password');
-
+  const [passStyle, setPassStyle] = useState('password');
+  const [passStyleConfirm, setPassConfirmStyle] = useState('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
+
+  const onRenderError = (error: ApiErrorResponse) => {
+    if (error.data.body.statusCode === 400) {
+      setSignUpError(error);
+      return 'This email already exists. Please log in or use another email address!';
+    } else {
+      return 'Internal server error. Please try again!';
+    }
+  };
 
   const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
     const customer: Customer = {
@@ -164,30 +172,15 @@ export default function Form() {
       defaultShippingAddress: data.addressDefault ? 0 : undefined,
       defaultBillingAddress: data.addressDefault2 ? 1 : undefined,
     };
+
     try {
-      if (!navigator.onLine) {
-        toast.error('No internet connection. Please check your network.');
+      if (toastForNoConnection()) {
         return;
       }
 
       setSignUpError(null);
 
-      await toast.promise(signUp(customer), {
-        pending: 'Signing up...',
-        success: 'Sign up successful!',
-        error: {
-          render(error) {
-            const apiError = error as ApiErrorResponse;
-
-            if (apiError.data.body.statusCode === 400) {
-              setSignUpError(apiError);
-              return 'This email already exists. Please log in or use another email address!';
-            } else {
-              return 'Internal server error. Please try again!';
-            }
-          },
-        },
-      });
+      await toastSignUp(onRenderError, () => signUp(customer));
       reset();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
@@ -220,8 +213,8 @@ export default function Form() {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
   };
 
-  const [activeCountry, setActiveCountry] = React.useState('US');
-  const [activeCountry2, setActiveCountry2] = React.useState('US');
+  const [activeCountry, setActiveCountry] = useState('US');
+  const [activeCountry2, setActiveCountry2] = useState('US');
 
   const countriesList = countries;
 

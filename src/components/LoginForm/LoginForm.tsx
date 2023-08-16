@@ -1,12 +1,13 @@
-import * as React from 'react';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import './LoginForm.scss';
+
 import { signIn } from '../../api/api.ts';
-import { toast } from 'react-toastify';
 import { ApiErrorResponse } from '../../types.ts';
+import { toastForNoConnection, toastSignIn } from './toasts.ts';
+
+import './LoginForm.scss';
 
 const FormSchema = z.object({
   email: z.string().nonempty(' is required').email({
@@ -21,7 +22,7 @@ const FormSchema = z.object({
     .regex(/[A-Z]/, 'Your password must have at least 1 uppercasecharacter'),
 });
 
-type FormInput = z.infer<typeof FormSchema>;
+export type FormInput = z.infer<typeof FormSchema>;
 
 export default function Form() {
   const {
@@ -37,34 +38,26 @@ export default function Form() {
     },
   });
 
-  const [passStyle, setPassStyle] = React.useState('password');
+  const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
+
+  const onRenderError = (error: ApiErrorResponse) => {
+    if (error.data.body.statusCode === 400) {
+      setSignInError(error);
+      return 'Incorrect login or password. Please try again!';
+    } else {
+      return 'Internal server error. Please try again!';
+    }
+  };
 
   const onSubmit: SubmitHandler<FormInput> = async (data): Promise<void> => {
     try {
-      if (!navigator.onLine) {
-        toast.error('No internet connection. Please check your network.');
+      if (toastForNoConnection()) {
         return;
       }
 
       setSignInError(null);
-
-      await toast.promise(signIn(data), {
-        pending: 'Signing in...',
-        success: 'Sign in successful!',
-        error: {
-          render(error) {
-            const apiError = error as ApiErrorResponse;
-
-            if (apiError.data.body.statusCode === 400) {
-              setSignInError(apiError);
-              return 'Incorrect login or password. Please try again!';
-            } else {
-              return 'Internal server error. Please try again!';
-            }
-          },
-        },
-      });
+      await toastSignIn(onRenderError, () => signIn(data));
       reset();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
