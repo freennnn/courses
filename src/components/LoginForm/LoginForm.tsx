@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
 
 import { signIn } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
@@ -40,6 +41,19 @@ export default function Form() {
 
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      const redirectTimeout = setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 2000);
+
+      return () => clearTimeout(redirectTimeout);
+    }
+  }, [shouldRedirect, navigate]);
 
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
@@ -59,6 +73,7 @@ export default function Form() {
       setSignInError(null);
       await toastSignIn(onRenderError, () => signIn(data));
       reset();
+      setShouldRedirect(true);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */
