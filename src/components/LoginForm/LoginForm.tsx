@@ -27,6 +27,7 @@ export default function Form() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormInput>({
     resolver: zodResolver(FormSchema),
@@ -64,6 +65,7 @@ export default function Form() {
           },
         },
       });
+      reset();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */
