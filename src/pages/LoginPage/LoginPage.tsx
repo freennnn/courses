@@ -1,8 +1,10 @@
-import './LoginPage.scss';
-import LoginForm from '../../components/LoginForm/LoginForm';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+
+import LoginForm from '../../components/LoginForm/LoginForm';
+
 import 'react-toastify/dist/ReactToastify.css';
+import './LoginPage.scss';
 
 function LoginPage() {
   return (
