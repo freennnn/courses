@@ -1,10 +1,10 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
-import { AppContext } from '../../contexts/AppContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Navigation = () => {
-  const { isSignedIn } = useContext(AppContext);
+  const { isSignedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
 

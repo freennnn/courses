@@ -4,9 +4,7 @@ import { ApiErrorResponse, SignInOrSignUpFunction } from '../../types.ts';
 import {
   TOAST_NO_CONNECTION,
   TOAST_SIGN_IN_PENDING,
-  TOAST_SIGN_IN_SUCCESS,
   TOAST_SIGN_UP_PENDING,
-  TOAST_SIGN_UP_SUCCESS,
 } from '../../constants.ts';
 
 export const toastForNoConnection = () => {
@@ -22,7 +20,6 @@ export const toastSignIn = async (
 ) => {
   await toast.promise(signIn(), {
     pending: TOAST_SIGN_IN_PENDING,
-    success: TOAST_SIGN_IN_SUCCESS,
     error: {
       render(error) {
         const apiError = error as ApiErrorResponse;
@@ -38,7 +35,6 @@ export const toastSignUp = async (
 ) => {
   await toast.promise(signUp(), {
     pending: TOAST_SIGN_UP_PENDING,
-    success: TOAST_SIGN_UP_SUCCESS,
     error: {
       render(error) {
         const apiError = error as ApiErrorResponse;

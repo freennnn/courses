@@ -6,19 +6,19 @@ import MainPage from './pages/MainPage/MainPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import { AppContext, defaultContextValues } from './contexts/AppContext';
+import { AuthContext, defaultContextValues } from './contexts/AuthContext';
 
 import './App.scss';
 
 const App = () => {
-  const [appContext, setAppContext] = useState(defaultContextValues);
+  const [appContext, setAuthContext] = useState(defaultContextValues);
 
   return (
     <>
-      <AppContext.Provider
+      <AuthContext.Provider
         value={{
           ...appContext,
-          setAppContext,
+          setAuthContext,
         }}
       >
         <Routes>
@@ -29,7 +29,7 @@ const App = () => {
           <Route path='register' element={<RegistrationPage />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
-      </AppContext.Provider>
+      </AuthContext.Provider>
     </>
   );
 };

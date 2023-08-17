@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { signIn } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
-import { AppContext, updateAppContext } from '../../contexts/AppContext.ts';
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 
 import './LoginForm.scss';
 
@@ -39,21 +39,11 @@ export default function Form() {
       password: '',
     },
   });
-  const appContext = useContext(AppContext);
+  const authContext = useContext(AuthContext);
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
 
   const navigate = useNavigate();
-
-  let redirectTimeoutId: NodeJS.Timeout | null = null;
-  useEffect(() => {
-    // Clear timeouts when the component is unmounted
-    return () => {
-      if (redirectTimeoutId) {
-        clearTimeout(redirectTimeoutId);
-      }
-    };
-  }, [redirectTimeoutId]);
 
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
@@ -73,10 +63,8 @@ export default function Form() {
       setSignInError(null);
       await toastSignIn(onRenderError, () => signIn(data));
       reset();
-      updateAppContext(appContext, { isSignedIn: true });
-      redirectTimeoutId = setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 2000);
+      updateAuthContext(authContext, { isSignedIn: true });
+      navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */
