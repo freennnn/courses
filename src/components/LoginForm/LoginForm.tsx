@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable no-console */
 import * as React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,8 +25,10 @@ export default function Form() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormInput>({
+    mode: 'onChange',
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: '',
@@ -38,8 +39,8 @@ export default function Form() {
   const [passStyle, setPassStyle] = React.useState('password');
 
   const onSubmit: SubmitHandler<FormInput> = async (data): Promise<void> => {
-    console.log(data);
     await signIn(data);
+    reset();
   };
 
   const togglePass = (): void => {
@@ -47,7 +48,7 @@ export default function Form() {
   };
 
   return (
-    <form className='reg-form' onSubmit={handleSubmit(onSubmit)}>
+    <form className='reg-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label htmlFor='email'>Email</label>
         {errors?.email?.message && <span className='reg-form__error'>{errors.email.message}</span>}
