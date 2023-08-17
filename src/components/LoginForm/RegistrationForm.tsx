@@ -130,9 +130,11 @@ export default function Form() {
     },
   });
 
-  const [passStyle, setPassStyle] = React.useState('password');
+  type PasswordView = 'text' | 'password';
 
-  const [passStyleConfirm, setPassConfirmStyle] = React.useState('password');
+  const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
+
+  const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
 
   const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
     const customer: Customer = {
