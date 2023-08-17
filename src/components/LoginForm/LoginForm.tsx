@@ -42,19 +42,18 @@ export default function Form() {
   const appContext = useContext(AppContext);
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const navigate = useNavigate();
 
+  let redirectTimeoutId: NodeJS.Timeout | null = null;
   useEffect(() => {
-    if (shouldRedirect) {
-      const redirectTimeout = setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 2000);
-
-      return () => clearTimeout(redirectTimeout);
-    }
-  }, [shouldRedirect, navigate]);
+    // Clear timeouts when the component is unmounted
+    return () => {
+      if (redirectTimeoutId) {
+        clearTimeout(redirectTimeoutId);
+      }
+    };
+  }, [redirectTimeoutId]);
 
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
@@ -75,7 +74,9 @@ export default function Form() {
       await toastSignIn(onRenderError, () => signIn(data));
       reset();
       updateAppContext(appContext, { isSignedIn: true });
-      setShouldRedirect(true);
+      redirectTimeoutId = setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 2000);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */
