@@ -278,7 +278,9 @@ export default function Form() {
               {...register('country')}
               onChange={(event) => setActiveCountry(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
@@ -333,7 +335,9 @@ export default function Form() {
               {...register('country2')}
               onChange={(event) => setActiveCountry2(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
