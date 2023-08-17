@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { signIn } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
+import { AppContext, updateAppContext } from '../../contexts/AppContext.ts';
 
 import './LoginForm.scss';
 
@@ -38,7 +39,7 @@ export default function Form() {
       password: '',
     },
   });
-
+  const appContext = useContext(AppContext);
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -73,6 +74,7 @@ export default function Form() {
       setSignInError(null);
       await toastSignIn(onRenderError, () => signIn(data));
       reset();
+      updateAppContext(appContext, { isSignedIn: true });
       setShouldRedirect(true);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
