@@ -36,4 +36,11 @@ export default defineConfig({
       plugins: [rollupNodePolyFill()],
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/sass/styles.scss";`
+      }
+    }
+  },
 })
