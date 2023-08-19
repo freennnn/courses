@@ -7,7 +7,7 @@ export enum NavigationState {
   UserProfile = 'Hey, ',
   LogOut = 'Log out',
   //AuthorizationState = 'Auth',
-  Cart = 'Cart',
+  Basket = 'Basket',
 }
 
 // export enum AuthorizationState {

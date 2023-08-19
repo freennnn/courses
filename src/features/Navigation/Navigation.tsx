@@ -21,8 +21,8 @@ function getPathForState(state: NavigationState): string {
       return '/login';
     case NavigationState.UserProfile:
       return '/profile';
-    case NavigationState.Cart:
-      return '/cart';
+    case NavigationState.Basket:
+      return '/basket';
   }
 }
 
@@ -34,7 +34,7 @@ export default function Navigation({
     NavigationState.Sale,
     NavigationState.SignIn,
     NavigationState.SignUp,
-    NavigationState.Cart,
+    NavigationState.Basket,
   ],
   user,
 }: NavigationPropsType) {
