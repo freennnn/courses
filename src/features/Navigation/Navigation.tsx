@@ -1,8 +1,8 @@
 import { NavigationState, NavigationPropsType } from './Navigation.types';
-import Button from '@/components/Button/Button';
-import { ButtonType, ButtonBackgroundColor } from '@/components/Button/Button.types';
-import { Link } from 'react-router-dom';
-
+//import { ButtonType, ButtonBackgroundColor } from '@/components/Button/Button.types';
+import CustomLink from '@/components/CustomLink/CustomLink';
+//import { useState, useContext } from 'react';
+//import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 import './Navigation.scss';
 
 function getPathForState(state: NavigationState): string {
@@ -27,37 +27,57 @@ function getPathForState(state: NavigationState): string {
 }
 
 export default function Navigation({
-  activeState = NavigationState.Featured,
   states = [
     NavigationState.Featured,
-    NavigationState.TopCategories,
-    NavigationState.Sale,
+    // NavigationState.TopCategories,
+    // NavigationState.Sale,
     NavigationState.SignIn,
     NavigationState.SignUp,
     NavigationState.Basket,
   ],
-  user,
 }: NavigationPropsType) {
+  const user = { name: 'Friend' }; // TODO: add basic user information to Auth Context
+  // const authContext = useContext(AuthContext);
+  // updateAuthContext(authContext, { isSignedIn: true });
+
+  // const { isSignedIn } = useContext(AuthContext); //TODO: when AuthContext code will be pushed
+
+  const { isSignedIn } = { isSignedIn: true };
+  states = [];
+  if (!isSignedIn) {
+    states = [
+      NavigationState.Featured,
+      // NavigationState.TopCategories,
+      // NavigationState.Sale,
+      NavigationState.SignIn,
+      NavigationState.SignUp,
+      NavigationState.Basket,
+    ];
+  } else {
+    states = [
+      NavigationState.Featured,
+      // NavigationState.TopCategories,
+      // NavigationState.Sale,
+      NavigationState.UserProfile,
+      NavigationState.LogOut,
+      NavigationState.Basket,
+    ];
+  }
+
   return (
     <nav className='navigation'>
       {states.map((state) => {
-        let type = ButtonType.text;
-        let color = ButtonBackgroundColor.transparent;
-        if (state === activeState) {
-          type = ButtonType.contained;
-          color = ButtonBackgroundColor.accented;
-        }
-
         let buttonText: string = state;
         if (state === NavigationState.UserProfile) {
           buttonText += user?.name ?? 'Anonimous';
         }
         return (
-          <Link key={state} to={getPathForState(state)}>
-            <Button key={state} type={type} color={color}>
-              {buttonText}
-            </Button>
-          </Link>
+          <CustomLink
+            key={state}
+            state={state}
+            pathTo={getPathForState(state)}
+            buttonText={buttonText}
+          />
         );
       })}
     </nav>
