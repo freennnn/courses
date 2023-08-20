@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
 
 import { signIn } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
 
 import './LoginForm.scss';
 
@@ -38,16 +41,18 @@ export default function Form() {
       password: '',
     },
   });
-
+  const authContext = useContext(AuthContext);
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
+
+  const navigate = useNavigate();
 
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
       setSignInError(error);
-      return 'Incorrect login or password. Please try again!';
+      return TOAST_SIGN_IN_ERROR;
     } else {
-      return 'Internal server error. Please try again!';
+      return TOAST_INTERNAL_SERVER_ERROR;
     }
   };
 
@@ -61,6 +66,8 @@ export default function Form() {
       setSignInError(null);
       await toastSignIn(onRenderError, () => signIn(data));
       reset();
+      updateAuthContext(authContext, { isSignedIn: true });
+      navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */

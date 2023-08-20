@@ -1,13 +1,16 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useNavigate } from 'react-router-dom';
 
 import countries from './CountryData';
-import { signUp } from '../../api/api.ts';
+import { signIn, signUp } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignUp } from './toasts.ts';
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
 
 import './LoginForm.scss';
 
@@ -133,6 +136,8 @@ export default function Form() {
       addressDefault2: false,
     },
   });
+  
+  const authContext = useContext(AuthContext);
 
   type PasswordView = 'text' | 'password';
         
@@ -140,12 +145,14 @@ export default function Form() {
   const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
 
+  const navigate = useNavigate();
+
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
       setSignUpError(error);
-      return 'This email already exists. Please log in or use another email address!';
+      return TOAST_SIGN_UP_ERROR;
     } else {
-      return 'Internal server error. Please try again!';
+      return TOAST_INTERNAL_SERVER_ERROR;
     }
   };
 
@@ -184,7 +191,10 @@ export default function Form() {
       setSignUpError(null);
 
       await toastSignUp(onRenderError, () => signUp(customer));
+      await signIn({ email: customer.email, password: customer.password });
       reset();
+      updateAuthContext(authContext, { isSignedIn: true });
+      navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       /* eslint-disable-next-line no-console */
