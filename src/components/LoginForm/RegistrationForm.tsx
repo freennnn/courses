@@ -38,8 +38,8 @@ const FormSchema = z
       .trim()
       .min(1, { message: ' must contain at least one character' })
       .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
-    state: z.string().nonempty('Country is required to complete'),
-    state2: z.string().nonempty('Country is required to complete'),
+    country: z.string().nonempty('Country is required to complete'),
+    country2: z.string().nonempty('Country is required to complete'),
     zip: z.string().trim().nonempty(' is required to complete'),
     zip2: z.string().trim().nonempty(' is required to complete'),
     addressDefault: z.boolean(),
@@ -120,12 +120,12 @@ export default function Form() {
       dateOfBirth: new Date(),
       password: '',
       confirmPassword: '',
-      state: '',
+      country: '',
       city: '',
       zip: '',
       street: '',
       addressDefault: false,
-      state2: '',
+      country2: '',
       city2: '',
       zip2: '',
       street2: '',
@@ -133,6 +133,8 @@ export default function Form() {
     },
   });
 
+  type PasswordView = 'text' | 'password';
+        
   const [passStyle, setPassStyle] = useState('password');
   const [passStyleConfirm, setPassConfirmStyle] = useState('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
@@ -155,13 +157,13 @@ export default function Form() {
       dateOfBirth: data.dateOfBirth.toISOString().slice(0, 10),
       addresses: [
         {
-          country: data.state,
+          country: data.country,
           city: data.city,
           streetName: data.street,
           postalCode: data.zip,
         },
         {
-          country: data.state2,
+          country: data.country2,
           city: data.city2,
           streetName: data.street2,
           postalCode: data.zip2,
@@ -193,15 +195,18 @@ export default function Form() {
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.checked) {
-      setValue('state2', watchState.state);
+      setValue('country2', watchState.country);
+      setActiveCountry2(activeCountry);
       setValue('city2', watchState.city);
       setValue('street2', watchState.street);
       setValue('zip2', watchState.zip);
+      setValue('isChecked', true);
     } else {
-      setValue('state2', '');
+      setValue('country2', '');
       setValue('city2', '');
       setValue('street2', '');
       setValue('zip2', '');
+      setValue('isChecked', false);
     }
   };
 
@@ -229,7 +234,7 @@ export default function Form() {
   };
 
   return (
-    <form className='reg-form' onSubmit={handleSubmit(onSubmit)}>
+    <form className='reg-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label htmlFor='firstname'>First Name</label>
         {errors?.firstName?.message && (
@@ -294,13 +299,15 @@ export default function Form() {
             <input id='city' type='text' {...register('city')} className='reg-form__input' />
           </div>
           <div>
-            {errors.state && <p className='reg-form__error'>{errors.state.message}</p>}
+            {errors.country && <p className='reg-form__error'>{errors.country.message}</p>}
             <select
-              id='state'
-              {...register('state')}
+              id='country'
+              {...register('country')}
               onChange={(event) => setActiveCountry(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
@@ -349,13 +356,15 @@ export default function Form() {
           </div>
 
           <div>
-            {errors.state2 && <p className='reg-form__error'>{errors.state2.message}</p>}
+            {errors.country2 && <p className='reg-form__error'>{errors.country2.message}</p>}
             <select
-              id='state2'
-              {...register('state2')}
+              id='country2'
+              {...register('country2')}
               onChange={(event) => setActiveCountry2(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
