@@ -1,11 +1,15 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import * as React from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import './LoginForm.scss';
+
 import countries from './CountryData';
 import { signUp } from '../../api/api.ts';
+import { ApiErrorResponse } from '../../types.ts';
+import { toastForNoConnection, toastSignUp } from './toasts.ts';
+
+import './LoginForm.scss';
 
 const FormSchema = z
   .object({
@@ -131,10 +135,19 @@ export default function Form() {
   });
 
   type PasswordView = 'text' | 'password';
-
+        
   const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
-
   const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
+  const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
+
+  const onRenderError = (error: ApiErrorResponse) => {
+    if (error.data.body.statusCode === 400) {
+      setSignUpError(error);
+      return 'This email already exists. Please log in or use another email address!';
+    } else {
+      return 'Internal server error. Please try again!';
+    }
+  };
 
   const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
     const customer: Customer = {
@@ -162,8 +175,21 @@ export default function Form() {
       defaultShippingAddress: data.addressDefault ? 0 : undefined,
       defaultBillingAddress: data.addressDefault2 ? 1 : undefined,
     };
-    await signUp(customer);
-    reset();
+
+    try {
+      if (toastForNoConnection()) {
+        return;
+      }
+
+      setSignUpError(null);
+
+      await toastSignUp(onRenderError, () => signUp(customer));
+      reset();
+    } catch (error) {
+      const apiError = error as ApiErrorResponse;
+      /* eslint-disable-next-line no-console */
+      console.error(apiError);
+    }
   };
 
   const watchState = watch();
@@ -193,8 +219,8 @@ export default function Form() {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
   };
 
-  const [activeCountry, setActiveCountry] = React.useState('US');
-  const [activeCountry2, setActiveCountry2] = React.useState('US');
+  const [activeCountry, setActiveCountry] = useState('US');
+  const [activeCountry2, setActiveCountry2] = useState('US');
 
   const countriesList = countries;
 
@@ -241,7 +267,7 @@ export default function Form() {
         <input
           id='email'
           {...register('email')}
-          className='reg-form__input'
+          className={`reg-form__input ${signUpError ? 'server-error' : ''}`}
           placeholder='email@gmail.com'
         />
       </div>
