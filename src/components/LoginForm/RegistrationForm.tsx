@@ -9,6 +9,7 @@ import { signIn, signUp } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignUp } from './toasts.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
 
 import './LoginForm.scss';
 
@@ -144,9 +145,9 @@ export default function Form() {
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
       setSignUpError(error);
-      return 'This email already exists. Please log in or use another email address!';
+      return TOAST_SIGN_UP_ERROR;
     } else {
-      return 'Internal server error. Please try again!';
+      return TOAST_INTERNAL_SERVER_ERROR;
     }
   };
 

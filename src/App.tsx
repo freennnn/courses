@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import Navigation from './features/Navigation/Navigation';
 import MainPage from './pages/MainPage/MainPage';
@@ -15,6 +16,7 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer />
       <AuthContext.Provider
         value={{
           ...appContext,

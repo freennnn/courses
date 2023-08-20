@@ -8,6 +8,7 @@ import { signIn } from '../../api/api.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
 
 import './LoginForm.scss';
 
@@ -48,9 +49,9 @@ export default function Form() {
   const onRenderError = (error: ApiErrorResponse) => {
     if (error.data.body.statusCode === 400) {
       setSignInError(error);
-      return 'Incorrect login or password. Please try again!';
+      return TOAST_SIGN_IN_ERROR;
     } else {
-      return 'Internal server error. Please try again!';
+      return TOAST_INTERNAL_SERVER_ERROR;
     }
   };
 
