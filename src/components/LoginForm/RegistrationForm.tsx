@@ -135,8 +135,8 @@ export default function Form() {
 
   type PasswordView = 'text' | 'password';
         
-  const [passStyle, setPassStyle] = useState('password');
-  const [passStyleConfirm, setPassConfirmStyle] = useState('password');
+  const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
+  const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
 
   const onRenderError = (error: ApiErrorResponse) => {
