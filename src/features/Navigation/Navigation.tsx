@@ -1,4 +1,4 @@
-import { NavigationState, NavigationPropsType } from './Navigation.types';
+import { NavigationState } from './Navigation.types';
 import CustomLink from '@/components/CustomLink/CustomLink';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
@@ -25,21 +25,12 @@ function getPathForState(state: NavigationState): string {
   }
 }
 
-export default function Navigation({
-  states = [
-    NavigationState.Featured,
-    // NavigationState.TopCategories,
-    // NavigationState.Sale,
-    NavigationState.SignIn,
-    NavigationState.SignUp,
-    NavigationState.Basket,
-  ],
-}: NavigationPropsType) {
+export default function Navigation() {
   const user = { name: 'Friend' }; // TODO: add basic user information to Auth Context
   const { isSignedIn } = useContext(AuthContext);
   // console.log(`isSignedIn in Navigation: ${isSignedIn}`);
 
-  states = [];
+  let states: NavigationState[] = [];
   if (!isSignedIn) {
     states = [
       NavigationState.Featured,
