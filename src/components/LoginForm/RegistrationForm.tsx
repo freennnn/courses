@@ -136,11 +136,11 @@ export default function Form() {
       addressDefault2: false,
     },
   });
-  
+
   const authContext = useContext(AuthContext);
 
   type PasswordView = 'text' | 'password';
-        
+
   const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
   const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
