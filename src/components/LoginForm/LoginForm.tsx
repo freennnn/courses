@@ -14,7 +14,7 @@ import './LoginForm.scss';
 
 const FormSchema = z.object({
   email: z.string().nonempty(' is required').email({
-    message: ' is invalid. Please enter a valid email address',
+    message: ' is invalid. Please enter a valid email address(e.g., user@example.com)',
   }),
   password: z
     .string()

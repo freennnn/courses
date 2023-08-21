@@ -20,14 +20,14 @@ const FormSchema = z
       .string()
       .trim()
       .min(1, { message: '  must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
     lastName: z
       .string()
       .trim()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters'),
+      .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
     email: z.string().nonempty(' is required to complete').email({
-      message: ' is invalid. Please enter a valid email address',
+      message: ' is invalid. Please enter a valid email address(e.g., user@example.com)',
     }),
     isChecked: z.boolean(),
     street: z.string().trim().nonempty(' is required to complete'),
@@ -36,12 +36,12 @@ const FormSchema = z
       .string()
       .trim()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
+      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
     city2: z
       .string()
       .trim()
       .min(1, { message: ' must contain at least one character' })
-      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
+      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
     country: z.string().nonempty('Country is required to complete'),
     country2: z.string().nonempty('Country is required to complete'),
     zip: z.string().trim().nonempty(' is required to complete'),
@@ -141,8 +141,8 @@ export default function Form() {
 
   type PasswordView = 'text' | 'password';
 
-  const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
-  const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
+  const [passStyle, setPassStyle] = useState<PasswordView>('password');
+  const [passStyleConfirm, setPassConfirmStyle] = useState<PasswordView>('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
 
   const navigate = useNavigate();
@@ -202,8 +202,12 @@ export default function Form() {
     }
   };
 
+  const [activeCountry, setActiveCountry] = useState('US');
+  const [activeCountry2, setActiveCountry2] = useState('US');
+
   const watchState = watch();
 
+  watchState.country = activeCountry;
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.checked) {
       setValue('country2', watchState.country);
@@ -228,9 +232,6 @@ export default function Form() {
   const togglePassConfirm = (): void => {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
   };
-
-  const [activeCountry, setActiveCountry] = useState('US');
-  const [activeCountry2, setActiveCountry2] = useState('US');
 
   const countriesList = countries;
 
