@@ -21,5 +21,6 @@ export interface ButtonPropsType {
   type?: ButtonType;
   size?: ButtonSize;
   color?: ButtonBackgroundColor;
+  onClick?: () => void;
   children: React.ReactNode;
 }
