@@ -1,0 +1,10 @@
+.navigation-container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.child-overlay {
+  //margin-top: 0px;
+  grid-row-start: 1;
+  grid-column-start: 1;
+}

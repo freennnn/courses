@@ -1,0 +1,18 @@
+@mixin media-tablet-and-down {
+  @media (max-width: $desktop-start-width) {
+    @content;
+  }
+}
+
+@mixin media-mobile-only {
+  @media (max-width: $tablet-start-width) {
+    @content;
+  }
+}
+
+@mixin font($size, $weight, $line-height, $style: normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  font-style: $style;
+}
