@@ -141,8 +141,8 @@ export default function Form() {
 
   type PasswordView = 'text' | 'password';
 
-  const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
-  const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
+  const [passStyle, setPassStyle] = useState<PasswordView>('password');
+  const [passStyleConfirm, setPassConfirmStyle] = useState<PasswordView>('password');
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
 
   const navigate = useNavigate();
@@ -202,8 +202,8 @@ export default function Form() {
     }
   };
 
-  const [activeCountry, setActiveCountry] = React.useState('US');
-  const [activeCountry2, setActiveCountry2] = React.useState('US');
+  const [activeCountry, setActiveCountry] = useState('US');
+  const [activeCountry2, setActiveCountry2] = useState('US');
 
   const watchState = watch();
 
