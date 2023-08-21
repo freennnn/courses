@@ -1,8 +1,8 @@
 import { NavigationState, NavigationPropsType } from './Navigation.types';
 //import { ButtonType, ButtonBackgroundColor } from '@/components/Button/Button.types';
 import CustomLink from '@/components/CustomLink/CustomLink';
-//import { useState, useContext } from 'react';
-//import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { useContext } from 'react';
+import { AuthContext /*, updateAuthContext*/ } from '../../contexts/AuthContext.ts';
 import './Navigation.scss';
 
 function getPathForState(state: NavigationState): string {
@@ -39,10 +39,9 @@ export default function Navigation({
   const user = { name: 'Friend' }; // TODO: add basic user information to Auth Context
   // const authContext = useContext(AuthContext);
   // updateAuthContext(authContext, { isSignedIn: true });
+  const { isSignedIn } = useContext(AuthContext);
+  console.log(`isSignedIn in Navigation: ${isSignedIn}`);
 
-  // const { isSignedIn } = useContext(AuthContext); //TODO: when AuthContext code will be pushed
-
-  const { isSignedIn } = { isSignedIn: true };
   states = [];
   if (!isSignedIn) {
     states = [
@@ -74,7 +73,7 @@ export default function Navigation({
   function customLinkForState(state: NavigationState) {
     let buttonText: string = state;
     if (state === NavigationState.UserProfile) {
-      buttonText += user?.name ?? 'Anonimous';
+      buttonText += user.name;
     }
     return (
       <CustomLink

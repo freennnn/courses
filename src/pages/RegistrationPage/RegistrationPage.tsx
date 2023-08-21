@@ -1,6 +1,9 @@
-import './RegistrationPage.scss';
-import RegistrationForm from '../../components/LoginForm/RegistrationForm';
 import { Link } from 'react-router-dom';
+
+import RegistrationForm from '../../components/LoginForm/RegistrationForm';
+
+import 'react-toastify/dist/ReactToastify.css';
+import './RegistrationPage.scss';
 
 function RegistrationPage() {
   return (

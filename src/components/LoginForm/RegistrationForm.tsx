@@ -1,11 +1,18 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import * as React from 'react';
+import React from 'react';
+import { useState, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import './LoginForm.scss';
+import { useNavigate } from 'react-router-dom';
+
 import countries from './CountryData';
-import { signUp } from '../../api/api.ts';
+import { signIn, signUp } from '../../api/api.ts';
+import { ApiErrorResponse } from '../../types.ts';
+import { toastForNoConnection, toastSignUp } from './toasts.ts';
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
+
+import './LoginForm.scss';
 
 const FormSchema = z
   .object({
@@ -35,8 +42,8 @@ const FormSchema = z
       .trim()
       .min(1, { message: ' must contain at least one character' })
       .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters'),
-    state: z.string().nonempty('Country is required to complete'),
-    state2: z.string().nonempty('Country is required to complete'),
+    country: z.string().nonempty('Country is required to complete'),
+    country2: z.string().nonempty('Country is required to complete'),
     zip: z.string().trim().nonempty(' is required to complete'),
     zip2: z.string().trim().nonempty(' is required to complete'),
     addressDefault: z.boolean(),
@@ -117,12 +124,12 @@ export default function Form() {
       dateOfBirth: new Date(),
       password: '',
       confirmPassword: '',
-      state: '',
+      country: '',
       city: '',
       zip: '',
       street: '',
       addressDefault: false,
-      state2: '',
+      country2: '',
       city2: '',
       zip2: '',
       street2: '',
@@ -130,9 +137,24 @@ export default function Form() {
     },
   });
 
-  const [passStyle, setPassStyle] = React.useState('password');
+  const authContext = useContext(AuthContext);
 
-  const [passStyleConfirm, setPassConfirmStyle] = React.useState('password');
+  type PasswordView = 'text' | 'password';
+
+  const [passStyle, setPassStyle] = React.useState<PasswordView>('password');
+  const [passStyleConfirm, setPassConfirmStyle] = React.useState<PasswordView>('password');
+  const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
+
+  const navigate = useNavigate();
+
+  const onRenderError = (error: ApiErrorResponse) => {
+    if (error.data.body.statusCode === 400) {
+      setSignUpError(error);
+      return TOAST_SIGN_UP_ERROR;
+    } else {
+      return TOAST_INTERNAL_SERVER_ERROR;
+    }
+  };
 
   const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
     const customer: Customer = {
@@ -143,13 +165,13 @@ export default function Form() {
       dateOfBirth: data.dateOfBirth.toISOString().slice(0, 10),
       addresses: [
         {
-          country: data.state,
+          country: data.country,
           city: data.city,
           streetName: data.street,
           postalCode: data.zip,
         },
         {
-          country: data.state2,
+          country: data.country2,
           city: data.city2,
           streetName: data.street2,
           postalCode: data.zip2,
@@ -160,23 +182,42 @@ export default function Form() {
       defaultShippingAddress: data.addressDefault ? 0 : undefined,
       defaultBillingAddress: data.addressDefault2 ? 1 : undefined,
     };
-    await signUp(customer);
-    reset();
+
+    try {
+      if (toastForNoConnection()) {
+        return;
+      }
+
+      setSignUpError(null);
+
+      await toastSignUp(onRenderError, () => signUp(customer));
+      await signIn({ email: customer.email, password: customer.password });
+      reset();
+      updateAuthContext(authContext, { isSignedIn: true });
+      navigate('/', { replace: true });
+    } catch (error) {
+      const apiError = error as ApiErrorResponse;
+      /* eslint-disable-next-line no-console */
+      console.error(apiError);
+    }
   };
 
   const watchState = watch();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.checked) {
-      setValue('state2', watchState.state);
+      setValue('country2', watchState.country);
+      setActiveCountry2(activeCountry);
       setValue('city2', watchState.city);
       setValue('street2', watchState.street);
       setValue('zip2', watchState.zip);
+      setValue('isChecked', true);
     } else {
-      setValue('state2', '');
+      setValue('country2', '');
       setValue('city2', '');
       setValue('street2', '');
       setValue('zip2', '');
+      setValue('isChecked', false);
     }
   };
 
@@ -188,8 +229,8 @@ export default function Form() {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
   };
 
-  const [activeCountry, setActiveCountry] = React.useState('US');
-  const [activeCountry2, setActiveCountry2] = React.useState('US');
+  const [activeCountry, setActiveCountry] = useState('US');
+  const [activeCountry2, setActiveCountry2] = useState('US');
 
   const countriesList = countries;
 
@@ -204,7 +245,7 @@ export default function Form() {
   };
 
   return (
-    <form className='reg-form' onSubmit={handleSubmit(onSubmit)}>
+    <form className='reg-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label htmlFor='firstname'>First Name</label>
         {errors?.firstName?.message && (
@@ -236,7 +277,7 @@ export default function Form() {
         <input
           id='email'
           {...register('email')}
-          className='reg-form__input'
+          className={`reg-form__input ${signUpError ? 'server-error' : ''}`}
           placeholder='email@gmail.com'
         />
       </div>
@@ -269,13 +310,15 @@ export default function Form() {
             <input id='city' type='text' {...register('city')} className='reg-form__input' />
           </div>
           <div>
-            {errors.state && <p className='reg-form__error'>{errors.state.message}</p>}
+            {errors.country && <p className='reg-form__error'>{errors.country.message}</p>}
             <select
-              id='state'
-              {...register('state')}
+              id='country'
+              {...register('country')}
               onChange={(event) => setActiveCountry(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
@@ -324,13 +367,15 @@ export default function Form() {
           </div>
 
           <div>
-            {errors.state2 && <p className='reg-form__error'>{errors.state2.message}</p>}
+            {errors.country2 && <p className='reg-form__error'>{errors.country2.message}</p>}
             <select
-              id='state2'
-              {...register('state2')}
+              id='country2'
+              {...register('country2')}
               onChange={(event) => setActiveCountry2(event.target.value)}
             >
-              <option value=''>Country</option>
+              <option value='' disabled={true}>
+                Country
+              </option>
               {countriesList.map((item: Country, index) => {
                 return (
                   <option key={index} value={item.id}>
