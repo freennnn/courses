@@ -64,22 +64,40 @@ export default function Navigation({
     ];
   }
 
+  function isLayoutGroupOneLink(state: NavigationState) {
+    if (state === NavigationState.Featured) {
+      return true;
+    }
+    return false;
+  }
+
+  function customLinkForState(state: NavigationState) {
+    let buttonText: string = state;
+    if (state === NavigationState.UserProfile) {
+      buttonText += user?.name ?? 'Anonimous';
+    }
+    return (
+      <CustomLink
+        key={state}
+        state={state}
+        pathTo={getPathForState(state)}
+        buttonText={buttonText}
+      />
+    );
+  }
+
+  const layoutGroupOneStates = states.filter((state) => isLayoutGroupOneLink(state));
+  const layoutGroupTwoStates = states.filter((state) => !isLayoutGroupOneLink(state));
+
   return (
     <nav className='navigation'>
-      {states.map((state) => {
-        let buttonText: string = state;
-        if (state === NavigationState.UserProfile) {
-          buttonText += user?.name ?? 'Anonimous';
-        }
-        return (
-          <CustomLink
-            key={state}
-            state={state}
-            pathTo={getPathForState(state)}
-            buttonText={buttonText}
-          />
-        );
-      })}
+      <div className='navigation__group-one'>
+        {layoutGroupOneStates.map((state) => customLinkForState(state))}
+      </div>
+      <hr className='navigation__divider'></hr>
+      <div className='navigation__gropu-two'>
+        {layoutGroupTwoStates.map((state) => customLinkForState(state))}
+      </div>
     </nav>
   );
 }

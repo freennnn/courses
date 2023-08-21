@@ -1,5 +1,13 @@
 .navigation {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-end;
+}
+
+.navigation__divider {
+  height: 20px;
+  width: 0px;
+  border-left: 1px solid $color-primary;
+  //border-right:1px solid #16222c;
+  margin: 0 20px 0 40px;
 }
