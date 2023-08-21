@@ -95,7 +95,7 @@ export default function Navigation({
         {layoutGroupOneStates.map((state) => customLinkForState(state))}
       </div>
       <hr className='navigation__divider'></hr>
-      <div className='navigation__gropu-two'>
+      <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
       </div>
     </nav>
