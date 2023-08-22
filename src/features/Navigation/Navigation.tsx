@@ -1,6 +1,7 @@
 import { NavigationState } from './Navigation.types';
 import CustomLink from '@/components/CustomLink/CustomLink';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import './Navigation.scss';
 
@@ -76,6 +77,16 @@ export default function Navigation() {
   const layoutGroupOneStates = states.filter((state) => isLayoutGroupOneLink(state));
   const layoutGroupTwoStates = states.filter((state) => !isLayoutGroupOneLink(state));
 
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    if (isSignedIn) {
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <nav className='navigation'>
       <div className='navigation__group-one'>
@@ -84,6 +95,14 @@ export default function Navigation() {
       <hr className='navigation__divider'></hr>
       <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
+        {isSignedIn ? (
+          <button
+            className='button button_text button_medium button_transparent'
+            onClick={handleLoginClick}
+          >
+            Sign In
+          </button>
+        ) : null}
       </div>
     </nav>
   );

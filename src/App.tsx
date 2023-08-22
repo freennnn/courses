@@ -8,6 +8,7 @@ import MainOrLoginRoute from '@/features/Navigation/MainOrLoginRoute';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import BasketPage from '@/pages/BasketPage/BasketPage';
+import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
 import { AuthContext, defaultContextValues } from './contexts/AuthContext';
 
 import './App.scss';
@@ -27,6 +28,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<NavigationLayout />}>
             <Route path='basket' element={<BasketPage />} />
+            <Route path='profile' element={<UserProfilePage />} />
             <Route index element={<MainPage />} />
           </Route>
           <Route path='login' element={<MainOrLoginRoute />} />
