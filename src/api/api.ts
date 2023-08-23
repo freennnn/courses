@@ -24,3 +24,8 @@ export const signUp = async (customer: CustomerDraft) => {
 
   return response;
 };
+
+export const getProducts = async () => {
+  const response = await apiRoot.withProjectKey({ projectKey }).products().get().execute();
+  return response;
+};
