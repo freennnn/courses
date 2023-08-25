@@ -1,22 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-  Attribute,
-  Image,
-  Product,
-  LocalizedString,
-  CategoryReference,
-} from '@commercetools/platform-sdk';
+import { Product } from '@commercetools/platform-sdk';
 
 import { getProducts } from 'api/api';
+import ProductList from '@/features/ProductList/ProductList';
+import { ProductItem } from 'types';
 
-interface ProductItem {
-  id: string;
-  name: LocalizedString;
-  categories: CategoryReference[];
-  description: LocalizedString | undefined;
-  images: Image[] | undefined;
-  attributes: Attribute[] | undefined;
-}
+import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[] | null | undefined>(null);
@@ -50,10 +39,14 @@ const CatalogProductPage = () => {
       return productList;
     }
   };
-  /* eslint-disable-next-line no-console */
-  console.log(productList);
 
-  return <div>Catalog Product Page</div>;
+  return (
+    <div className='catalog-page'>
+      <div className='container catalog-page__content'>
+        {productList ? <ProductList productList={productList} /> : null}
+      </div>
+    </div>
+  );
 };
 
 export default CatalogProductPage;
