@@ -1,7 +1,9 @@
 .catalog-page {
-  background-color: #e91e630d;
+  background-color: #303030;
+
   &__content {
-    background: url('../../assets/images/Rectangle.jpg');
+    padding-top: 100px !important;
+    background-image: url('../../assets/images/Rectangle.png');
     background-size: cover;
   }
 }

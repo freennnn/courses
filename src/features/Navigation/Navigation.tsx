@@ -9,7 +9,7 @@ function getPathForState(state: NavigationState): string {
   switch (state) {
     case NavigationState.Featured:
       return '/';
-    case NavigationState.TopCategories:
+    case NavigationState.Catalog:
       return '/products';
     case NavigationState.Sale:
       return '/products';
@@ -35,7 +35,7 @@ export default function Navigation() {
   if (!isSignedIn) {
     states = [
       NavigationState.Featured,
-      // NavigationState.TopCategories,
+      NavigationState.Catalog,
       // NavigationState.Sale,
       NavigationState.SignIn,
       NavigationState.SignUp,
@@ -44,7 +44,7 @@ export default function Navigation() {
   } else {
     states = [
       NavigationState.Featured,
-      // NavigationState.TopCategories,
+      NavigationState.Catalog,
       // NavigationState.Sale,
       NavigationState.UserProfile,
       NavigationState.LogOut,

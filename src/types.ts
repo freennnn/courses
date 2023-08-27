@@ -24,4 +24,11 @@ export interface ProductItem {
   description: LocalizedString | undefined;
   images: Image[] | undefined;
   attributes: Attribute[] | undefined;
+  discount: DiscountsType | undefined | number;
+  price: number | undefined;
+}
+
+export interface DiscountsType {
+  sortOrder: string;
+  discount: number;
 }

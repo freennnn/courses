@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Product } from '@commercetools/platform-sdk';
+import { Product, ProductDiscount, ClientResponse } from '@commercetools/platform-sdk';
 
-import { getProducts } from 'api/api';
+import { getDiscounts, getProducts } from 'api/api';
 import ProductList from '@/features/ProductList/ProductList';
-import { ProductItem } from 'types';
+import { ProductItem, DiscountsType } from 'types';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
@@ -19,13 +19,60 @@ const CatalogProductPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
+    if (
+      discount.references[0]?.typeId === 'category' &&
+      discount.references[0]?.id === product.masterData.current.categories?.[0]?.id
+    ) {
+      return {
+        sortOrder: discount.sortOrder,
+        discount: discount.value.type == 'absolute' ? discount.value.money[0]?.centAmount : 0,
+      };
+    }
+    return { sortOrder: '0', discount: 0 };
+  };
+
+  const getFinalDiscountValue = (product: Product, discounts: ProductDiscount[]) => {
+    const { discount } = discounts.reduce(
+      (acc: DiscountsType, val: ProductDiscount): DiscountsType => {
+        const { sortOrder, discount } = getSingleDiscountValue(product, val);
+        if (Number(sortOrder) > Number(acc.sortOrder)) {
+          return { sortOrder, discount };
+        }
+        return acc;
+      },
+      { sortOrder: '0', discount: 0 },
+    );
+
+    return discount;
+  };
+
   const createProductList = async () => {
-    const response = await getProducts();
+    let response: ClientResponse<{ results: Product[] }> | null = null;
+    let discounts: ProductDiscount[] = [];
+
+    try {
+      response = await getProducts();
+      const discountsResponse = await getDiscounts();
+      discounts = discountsResponse.body.results;
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
+    }
 
     if (response) {
       const productList = response.body.results.map((product: Product) => {
+        let price: number | undefined = undefined;
+
+        if (product.masterData.current.masterVariant.prices) {
+          if (product.masterData.current.masterVariant.prices[0]) {
+            price = product.masterData.current.masterVariant.prices[0].value.centAmount;
+          }
+        }
+
         return {
           id: product.id,
           name: product.masterData.current.name,
@@ -33,6 +80,8 @@ const CatalogProductPage = () => {
           description: product.masterData.current.description,
           images: product.masterData.current.masterVariant.images,
           attributes: product.masterData.current.masterVariant.attributes,
+          price,
+          discount: getFinalDiscountValue(product, discounts),
         };
       });
 

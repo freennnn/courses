@@ -29,3 +29,8 @@ export const getProducts = async () => {
   const response = await apiRoot.withProjectKey({ projectKey }).products().get().execute();
   return response;
 };
+
+export const getDiscounts = async () => {
+  const response = await apiRoot.withProjectKey({ projectKey }).productDiscounts().get().execute();
+  return response;
+};
