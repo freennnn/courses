@@ -75,3 +75,30 @@ export const updateCustomerInfo = (userId: string, userInfo: userInfo, version: 
     })
     .execute();
 };
+
+interface userPassword {
+  password: string;
+  oldpassword: string;
+}
+
+export const customerChangePassword = (
+  customerID: string,
+  userPassword: userPassword,
+  version: number,
+) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .password()
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        id: customerID,
+        version: version,
+        currentPassword: userPassword.oldpassword,
+        newPassword: userPassword.password,
+      },
+    })
+    .execute();
+};
