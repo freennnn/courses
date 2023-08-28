@@ -28,9 +28,9 @@ const App = () => {
         <Routes>
           <Route path='/' element={<NavigationLayout />}>
             <Route path='basket' element={<BasketPage />} />
-            <Route path='profile' element={<UserProfilePage />} />
             <Route index element={<MainPage />} />
           </Route>
+          <Route path='profile' element={<UserProfilePage />} />
           <Route path='login' element={<MainOrLoginRoute />} />
           <Route path='register' element={<RegistrationPage />} />
           <Route path='*' element={<NotFoundPage />} />

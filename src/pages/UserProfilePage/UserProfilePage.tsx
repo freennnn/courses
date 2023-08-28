@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import './UserProfilePage.scss';
+import UserInfo from './UserInfo';
 
 function UserProfilePage() {
   return (
@@ -18,6 +19,7 @@ function UserProfilePage() {
               Create a new account
             </Link>
           </div>
+          <UserInfo />
         </section>
       </div>
     </div>

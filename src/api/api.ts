@@ -24,3 +24,54 @@ export const signUp = async (customer: CustomerDraft) => {
 
   return response;
 };
+
+export const queryCustomer = async (customerID: string) => {
+  const response = await apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .get()
+    .execute();
+
+  return response;
+};
+
+interface userInfo {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+}
+
+export const updateCustomerInfo = (userId: string, userInfo: userInfo, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: userId })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'setFirstName',
+            firstName: userInfo.firstName,
+          },
+          {
+            action: 'setLastName',
+            lastName: userInfo.lastName,
+          },
+          {
+            action: 'changeEmail',
+            email: userInfo.email,
+          },
+          {
+            action: 'setDateOfBirth',
+            dateOfBirth: userInfo.dateOfBirth,
+          },
+        ],
+      },
+    })
+    .execute();
+};

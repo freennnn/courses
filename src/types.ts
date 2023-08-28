@@ -1,4 +1,4 @@
-import { CustomerSignInResult, ClientResponse } from '@commercetools/platform-sdk';
+import { CustomerSignInResult, ClientResponse, Customer } from '@commercetools/platform-sdk';
 
 export interface ApiErrorResponse {
   data: {
@@ -9,3 +9,4 @@ export interface ApiErrorResponse {
 }
 
 export type SignInOrSignUpFunction = () => Promise<ClientResponse<CustomerSignInResult>>;
+export type UpdateFunction = () => Promise<ClientResponse<Customer>>;
