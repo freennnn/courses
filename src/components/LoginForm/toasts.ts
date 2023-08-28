@@ -20,7 +20,7 @@ export const toastSignIn = async (
   onRenderError: (error: ApiErrorResponse) => string,
   signIn: SignInOrSignUpFunction,
 ) => {
-  await toast.promise(signIn(), {
+  const response = await toast.promise(signIn(), {
     pending: TOAST_SIGN_IN_PENDING,
     success: TOAST_SIGN_IN_SUCCESS,
     error: {
@@ -30,13 +30,15 @@ export const toastSignIn = async (
       },
     },
   });
+
+  return response;
 };
 
 export const toastSignUp = async (
   onRenderError: (error: ApiErrorResponse) => string,
   signUp: SignInOrSignUpFunction,
 ) => {
-  await toast.promise(signUp(), {
+  const response = await toast.promise(signUp(), {
     pending: TOAST_SIGN_UP_PENDING,
     success: TOAST_SIGN_UP_SUCCESS,
     error: {
@@ -46,4 +48,5 @@ export const toastSignUp = async (
       },
     },
   });
+  return response;
 };
