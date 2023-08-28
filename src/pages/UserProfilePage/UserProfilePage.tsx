@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import './UserProfilePage.scss';
 import UserInfo from './UserInfo';
 import UserPassword from './UserPassword';
+import UserAddress from './UserAddress';
 
 function UserProfilePage() {
   return (
@@ -22,6 +23,7 @@ function UserProfilePage() {
           </div>
           <UserInfo />
           <UserPassword />
+          <UserAddress />
         </section>
       </div>
     </div>
