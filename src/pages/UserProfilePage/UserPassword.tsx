@@ -152,9 +152,9 @@ export default function UserPassword() {
     <>
       <div className='user__person user__flex'>
         <div className='user__info'>
-          <h2>Password infomation</h2>
+          <h2>Password information</h2>
           <p>password: {oldPassword}</p>
-          <button onClick={openModal}>Edit</button>
+          <button onClick={openModal}>Change password</button>
         </div>
 
         <div>

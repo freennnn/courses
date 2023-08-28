@@ -177,7 +177,7 @@ export default function UserInfo() {
     <>
       <div className='user__person user__flex'>
         <div className='user__info'>
-          <h2>Person infomation</h2>
+          <h2>Person information</h2>
           <p>firtsName: {firstName1}</p>
           <p>lastName: {lastName1}</p>
           <p>email: {email1}</p>
