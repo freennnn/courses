@@ -204,3 +204,80 @@ export const addDefaultBilling = (customerID: string, id: string, version: numbe
     })
     .execute();
 };
+
+interface NewAddress {
+  country: string;
+  city: string;
+  streetName: string;
+  postalCode: string;
+  key: string;
+}
+
+export const addAddress = (customerID: string, address: NewAddress, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'addAddress',
+            address: {
+              key: address.key,
+              streetName: address.streetName,
+              postalCode: address.postalCode,
+              city: address.city,
+              country: address.country,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+export const addShipAddress = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: (version = version + 1),
+        actions: [
+          {
+            action: 'addShippingAddressId',
+            addressKey: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+export const addBillAddress = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: (version = version + 1),
+        actions: [
+          {
+            action: 'addBillingAddressId',
+            addressKey: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};
