@@ -1,10 +1,16 @@
-.navigation-container {
-  display: grid;
-  grid-template-columns: 1fr;
+.logo {
+  display: none;
+  width: 40px;
+  height: 40px;
+  background: url('../../assets/images/logo.svg') no-repeat;
+  background-size: cover;
 }
 
-.child-overlay {
-  //margin-top: 0px;
-  grid-row-start: 1;
-  grid-column-start: 1;
+@media (min-width: 650px) {
+  .logo {
+    display: block;
+    margin-right: 20px;
+    width: 70px;
+    height: 70px;
+  }
 }

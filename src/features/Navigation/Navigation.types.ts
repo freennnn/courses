@@ -1,5 +1,5 @@
 export enum NavigationState {
-  Featured = 'Featured',
+  Home = 'Home',
   Catalog = 'Catalog',
   Sale = 'Sale',
   SignIn = 'Sign In',
