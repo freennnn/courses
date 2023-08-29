@@ -8,7 +8,7 @@ interface HeaderPropsType {
 
 export default function Header({ children }: HeaderPropsType) {
   return (
-    <div className='header'>
+    <div className='header container'>
       <Navigation />
       {children}
     </div>

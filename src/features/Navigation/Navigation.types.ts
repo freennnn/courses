@@ -1,6 +1,6 @@
 export enum NavigationState {
-  Featured = 'Featured',
-  TopCategories = 'Top Categories',
+  Home = 'Home',
+  Catalog = 'Catalog',
   Sale = 'Sale',
   SignIn = 'Sign In',
   SignUp = 'Sign Up',

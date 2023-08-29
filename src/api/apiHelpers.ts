@@ -17,8 +17,8 @@ import {
   projectKey,
   clientId,
   clientSecret,
-  manageCustomersScope,
-  scopes,
+  apiRootScopes,
+  authApiRootscopes,
 } from './apiConfig';
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -33,7 +33,7 @@ const authMiddlewareOptions: AuthMiddlewareOptions = {
     clientId,
     clientSecret,
   },
-  scopes: manageCustomersScope,
+  scopes: apiRootScopes,
   fetch,
 };
 
@@ -56,7 +56,7 @@ export const getAuthApiRoot = (loginRequest: CustomerSignin) => {
         password: loginRequest.password,
       },
     },
-    scopes,
+    scopes: authApiRootscopes,
     fetch,
   };
 

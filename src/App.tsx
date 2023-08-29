@@ -9,6 +9,7 @@ import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import BasketPage from '@/pages/BasketPage/BasketPage';
 import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
+import CatalogProductPage from './pages/CatalogProductPage/CatalogProductPage';
 import { AuthContext, defaultContextValues } from './contexts/AuthContext';
 
 import './App.scss';
@@ -30,6 +31,7 @@ const App = () => {
             <Route path='basket' element={<BasketPage />} />
             <Route path='profile' element={<UserProfilePage />} />
             <Route index element={<MainPage />} />
+            <Route path='products' element={<CatalogProductPage />} />
           </Route>
           <Route path='login' element={<MainOrLoginRoute />} />
           <Route path='register' element={<RegistrationPage />} />
