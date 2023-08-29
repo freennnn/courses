@@ -2,6 +2,7 @@
   background-color: #303030;
 
   &__content {
+    min-height: calc(0.664 * 100vw);
     padding-top: 100px !important;
     background-image: url('../../assets/images/Rectangle.png');
     background-size: cover;

@@ -25,7 +25,7 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
-export const getProducts = async (year: string | null, price: string | null) => {
+export const getProducts = async (year: string, price: string) => {
   let response: ClientResponse | null = null;
 
   if (year && price) {

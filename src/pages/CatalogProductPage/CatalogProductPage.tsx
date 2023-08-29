@@ -55,7 +55,7 @@ const CatalogProductPage = () => {
     return discount;
   };
 
-  const createProductList = async (year: string | null, price: string | null) => {
+  const createProductList = async (year: string, price: string) => {
     let response: ClientResponse<{ results: Product[] }> | null = null;
     let discounts: ProductDiscount[] = [];
 
