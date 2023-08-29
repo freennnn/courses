@@ -78,7 +78,7 @@ export default function UserNewAddress() {
         }
       })
       .catch(console.error);
-  });
+  }, [userId]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

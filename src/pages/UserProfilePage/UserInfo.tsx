@@ -106,7 +106,7 @@ export default function UserInfo() {
         }
       })
       .catch(console.error);
-  });
+  }, [userId]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

@@ -87,7 +87,7 @@ export default function UserPassword() {
         }
       })
       .catch(console.error);
-  });
+  }, [userId]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

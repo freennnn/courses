@@ -126,7 +126,7 @@ export default function UserAddress() {
         }
       })
       .catch(console.error);
-  });
+  }, [userId]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
