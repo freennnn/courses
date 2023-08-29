@@ -9,9 +9,11 @@ import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[] | null | undefined>(null);
+  const [selectedYear, setSelectedYear] = useState<string>('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState<string>('');
 
   useEffect(() => {
-    createProductList()
+    createProductList(selectedYear, selectedPriceRange)
       .then((productList) => {
         setProductList(productList);
       })
@@ -21,6 +23,9 @@ const CatalogProductPage = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const availableYears = ['2020', '2021', '2022', '2023'];
+  const availablePriceRanges = ['<10', '10-20', '>20'];
 
   const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
     if (
@@ -50,12 +55,12 @@ const CatalogProductPage = () => {
     return discount;
   };
 
-  const createProductList = async () => {
+  const createProductList = async (year: string | null, price: string | null) => {
     let response: ClientResponse<{ results: Product[] }> | null = null;
     let discounts: ProductDiscount[] = [];
 
     try {
-      response = await getProducts();
+      response = await getProducts(year, price);
       const discountsResponse = await getDiscounts();
       discounts = discountsResponse.body.results;
     } catch (error) {
@@ -89,9 +94,57 @@ const CatalogProductPage = () => {
     }
   };
 
+  const handleFilterChange = (year: string, price: string) => {
+    setSelectedYear(year);
+    setSelectedPriceRange(price);
+
+    createProductList(year, price)
+      .then((productList) => {
+        setProductList(productList);
+      })
+      .catch((error) => {
+        /* eslint-disable-next-line no-console */
+        console.error('Error fetching products:', error);
+      });
+  };
+
   return (
     <div className='catalog-page'>
       <div className='container catalog-page__content'>
+        <div className='filters'>
+          <div className='filters__container'>
+            <div className='filters__item'>
+              <h5 className='filters__subtitle'>Year:</h5>
+              <select
+                className='filters__input'
+                value={selectedYear}
+                onChange={(e) => handleFilterChange(e.target.value, selectedPriceRange)}
+              >
+                <option value=''>All</option>
+                {availableYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='filters__item'>
+              <h5 className='filters__subtitle'>Price: $</h5>
+              <select
+                className='filters__input'
+                value={selectedPriceRange}
+                onChange={(e) => handleFilterChange(selectedYear, e.target.value)}
+              >
+                <option value=''>All</option>
+                {availablePriceRanges.map((range) => (
+                  <option key={range} value={range}>
+                    {range}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
         {productList ? <ProductList productList={productList} /> : null}
       </div>
     </div>

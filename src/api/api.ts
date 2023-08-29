@@ -1,4 +1,4 @@
-import { CustomerSignin, CustomerDraft } from '@commercetools/platform-sdk';
+import { CustomerSignin, CustomerDraft, ClientResponse } from '@commercetools/platform-sdk';
 
 import { apiRoot, getAuthApiRoot } from './apiHelpers';
 import { projectKey } from './apiConfig';
@@ -25,8 +25,43 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
-export const getProducts = async () => {
-  const response = await apiRoot.withProjectKey({ projectKey }).products().get().execute();
+export const getProducts = async (year: string | null, price: string | null) => {
+  let response: ClientResponse | null = null;
+
+  if (year && price) {
+    response = await apiRoot
+      .withProjectKey({ projectKey })
+      .products()
+      .get({
+        queryArgs: {
+          where: `masterData(current(masterVariant(attributes(name="year" and value="${year}")))) and masterData(current(masterVariant(attributes(name="price-range" and value="${price}"))))`,
+        },
+      })
+      .execute();
+  } else if (year) {
+    response = await apiRoot
+      .withProjectKey({ projectKey })
+      .products()
+      .get({
+        queryArgs: {
+          where: `masterData(current(masterVariant(attributes(name="year" and value="${year}"))))`,
+        },
+      })
+      .execute();
+  } else if (price) {
+    response = await apiRoot
+      .withProjectKey({ projectKey })
+      .products()
+      .get({
+        queryArgs: {
+          where: `masterData(current(masterVariant(attributes(name="price-range" and value="${price}"))))`,
+        },
+      })
+      .execute();
+  } else {
+    response = await apiRoot.withProjectKey({ projectKey }).products().get().execute();
+  }
+
   return response;
 };
 
