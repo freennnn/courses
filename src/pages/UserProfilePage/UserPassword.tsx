@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { customerChangePassword } from '../../api/api';
+import { apiRoot } from '../../api/apiHelpers';
+import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -69,22 +70,24 @@ export default function UserPassword() {
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
 
-  queryCustomer(userId)
-    .then(({ body }) => {
-      if (body?.version) {
-        let data: number = body.version;
-        setVersion(data++);
-      }
-      if (body?.password) {
-        const data: string = body.password;
-        setOldPassword(data);
-      }
-      if (body?.email) {
-        const data: string = body.email;
-        setEmail(data);
-      }
-    })
-    .catch(console.error);
+  useEffect(() => {
+    queryCustomer(userId)
+      .then(({ body }) => {
+        if (body?.version) {
+          let data: number = body.version;
+          setVersion(data++);
+        }
+        if (body?.password) {
+          const data: string = body.password;
+          setOldPassword(data);
+        }
+        if (body?.email) {
+          const data: string = body.email;
+          setEmail(data);
+        }
+      })
+      .catch(console.error);
+  });
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -231,3 +234,25 @@ export default function UserPassword() {
     </>
   );
 }
+
+const customerChangePassword = (
+  customerID: string,
+  userPassword: userPassword,
+  version: number,
+) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .password()
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        id: customerID,
+        version: version,
+        currentPassword: userPassword.oldpassword,
+        newPassword: userPassword.password,
+      },
+    })
+    .execute();
+};

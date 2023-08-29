@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer, removeAddress, addDefaultShipping, addDefaultBilling } from '../../api/api';
+import { queryCustomer } from '../../api/api';
 import { apiRoot } from '../../api/apiHelpers';
 import { projectKey } from '../../api/apiConfig';
 
@@ -41,7 +41,6 @@ const FormSchema = z.object({
     .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
   country: z.string().nonempty('Country is required to complete'),
   zip: z.string().trim().nonempty(' is required to complete'),
-  addressDefault: z.boolean(),
 });
 
 type FormRegistr = z.infer<typeof FormSchema>;
@@ -101,31 +100,33 @@ export default function UserAddress() {
 
   const [changeAddress, setChangeAddress] = useState<Address>(tempAddress);
 
-  queryCustomer(userId)
-    .then(({ body }) => {
-      if (body?.version) {
-        let data: number = body.version;
-        setVersion(data++);
-      }
-      if (body?.addresses) {
-        setAddresses(body.addresses);
-      }
-      if (body?.billingAddressIds) {
-        setBillingAddress(body.billingAddressIds);
-      }
+  useEffect(() => {
+    queryCustomer(userId)
+      .then(({ body }) => {
+        if (body?.version) {
+          let data: number = body.version;
+          setVersion(data++);
+        }
+        if (body?.addresses) {
+          setAddresses(body.addresses);
+        }
+        if (body?.billingAddressIds) {
+          setBillingAddress(body.billingAddressIds);
+        }
 
-      if (body?.shippingAddressIds) {
-        setShippingAddress(body.shippingAddressIds);
-      }
-      if (body?.defaultBillingAddressId) {
-        setDefaultBilling(body.defaultBillingAddressId);
-      }
+        if (body?.shippingAddressIds) {
+          setShippingAddress(body.shippingAddressIds);
+        }
+        if (body?.defaultBillingAddressId) {
+          setDefaultBilling(body.defaultBillingAddressId);
+        }
 
-      if (body?.defaultShippingAddressId) {
-        setDefaultShipping(body.defaultShippingAddressId);
-      }
-    })
-    .catch(console.error);
+        if (body?.defaultShippingAddressId) {
+          setDefaultShipping(body.defaultShippingAddressId);
+        }
+      })
+      .catch(console.error);
+  });
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -436,6 +437,69 @@ const updateAddress = (
               country: address.country,
               postalCode: address.postalCode,
             },
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const removeAddress = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'removeAddress',
+            addressId: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const addDefaultShipping = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'setDefaultShippingAddress',
+            addressId: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const addDefaultBilling = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'setDefaultBillingAddress',
+            addressId: id,
           },
         ],
       },

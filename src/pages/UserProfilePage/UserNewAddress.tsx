@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
 import { apiRoot } from '../../api/apiHelpers';
@@ -69,14 +69,16 @@ export default function UserNewAddress() {
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
 
-  queryCustomer(userId)
-    .then(({ body }) => {
-      if (body?.version) {
-        let data: number = body.version;
-        setVersion(data++);
-      }
-    })
-    .catch(console.error);
+  useEffect(() => {
+    queryCustomer(userId)
+      .then(({ body }) => {
+        if (body?.version) {
+          let data: number = body.version;
+          setVersion(data++);
+        }
+      })
+      .catch(console.error);
+  });
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

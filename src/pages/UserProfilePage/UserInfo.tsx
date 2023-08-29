@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { updateCustomerInfo } from '../../api/api';
+import { apiRoot } from '../../api/apiHelpers';
+import { projectKey } from '../../api/apiConfig';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -79,31 +80,33 @@ export default function UserInfo() {
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
 
-  queryCustomer(userId)
-    .then(({ body }) => {
-      if (body?.version) {
-        let data: number = body.version;
-        setVersion(data++);
-      }
+  useEffect(() => {
+    queryCustomer(userId)
+      .then(({ body }) => {
+        if (body?.version) {
+          let data: number = body.version;
+          setVersion(data++);
+        }
 
-      if (body?.firstName) {
-        const data: string = body.firstName;
-        setFirstName(data);
-      }
-      if (body?.lastName) {
-        setLastName(body.lastName);
-      }
-      if (body?.email) {
-        setEmail(body.email);
-      }
-      if (body?.dateOfBirth) {
-        setdateOfBirth(body.dateOfBirth);
-      }
-      if (body?.password) {
-        setPassword(body.password);
-      }
-    })
-    .catch(console.error);
+        if (body?.firstName) {
+          const data: string = body.firstName;
+          setFirstName(data);
+        }
+        if (body?.lastName) {
+          setLastName(body.lastName);
+        }
+        if (body?.email) {
+          setEmail(body.email);
+        }
+        if (body?.dateOfBirth) {
+          setdateOfBirth(body.dateOfBirth);
+        }
+        if (body?.password) {
+          setPassword(body.password);
+        }
+      })
+      .catch(console.error);
+  });
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -261,3 +264,36 @@ export default function UserInfo() {
     </>
   );
 }
+
+const updateCustomerInfo = (userId: string, userInfo: userInfo, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: userId })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'setFirstName',
+            firstName: userInfo.firstName,
+          },
+          {
+            action: 'setLastName',
+            lastName: userInfo.lastName,
+          },
+          {
+            action: 'changeEmail',
+            email: userInfo.email,
+          },
+          {
+            action: 'setDateOfBirth',
+            dateOfBirth: userInfo.dateOfBirth,
+          },
+        ],
+      },
+    })
+    .execute();
+};
