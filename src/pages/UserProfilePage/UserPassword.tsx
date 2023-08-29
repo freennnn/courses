@@ -150,75 +150,83 @@ export default function UserPassword() {
 
   return (
     <>
-      <div className='user__person user__flex'>
-        <div className='user__info'>
-          <h2>Password information</h2>
-          <p>password: {oldPassword}</p>
-          <button onClick={openModal}>Change password</button>
-        </div>
+      <div className='user__info'>
+        <h2>Password information</h2>
+        <p>password: {oldPassword}</p>
+        <button className='user__btn' onClick={openModal}>
+          Change password
+        </button>
+      </div>
 
-        <div>
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel='Example Modal'
-          >
-            <button onClick={closeModal}>close</button>
-            <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-              <div className='reg-form__flex'>
-                <div>
-                  <label htmlFor='password' className='reg-form__label-pass'>
-                    Old Password
-                    <input
-                      {...register('oldpassword')}
-                      type={passStyle}
-                      id='oldpassword'
-                      className={`reg-form__input ${signUpError ? 'server-error' : ''}`}
-                    />
-                    <div onClick={togglePass} className='reg-form__view'>
-                      👁️
-                    </div>
-                  </label>
-                  <label htmlFor='password' className='reg-form__label-pass'>
-                    Password
-                    <input
-                      {...register('password')}
-                      type={passStyle}
-                      id='password'
-                      className='reg-form__input'
-                    />
-                    <div onClick={togglePass} className='reg-form__view'>
-                      👁️
-                    </div>
-                  </label>
-                  {errors.password && (
-                    <span className='reg-form__error'>{errors.password.message}</span>
-                  )}
-                </div>
-                <div>
-                  <label htmlFor='confirmPassword' className='reg-form__label-pass'>
-                    Confirm Password:
-                    <input
-                      type={passStyleConfirm}
-                      {...register('confirmPassword')}
-                      id='conformPassword'
-                      className='reg-form__input'
-                    />
-                    <div onClick={togglePassConfirm} className='reg-form__view'>
-                      👁️
-                    </div>
-                  </label>
-                  {errors.confirmPassword && (
-                    <span className='reg-form__error'>{errors.confirmPassword?.message}</span>
-                  )}
-                </div>
+      <div>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel='Example Modal'
+        >
+          <button className='user__btn' onClick={closeModal}>
+            x
+          </button>
+          <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <div>
+                <label htmlFor='password' className='user-form__label-pass'>
+                  Old Password
+                  <input
+                    {...register('oldpassword')}
+                    type={passStyle}
+                    id='oldpassword'
+                    className={`user-form__input ${signUpError ? 'server-error' : ''}`}
+                  />
+                  <div onClick={togglePass} className='user-form__view'>
+                    👁️
+                  </div>
+                </label>
+                <label htmlFor='password' className='user-form__label-pass'>
+                  Password
+                  <input
+                    {...register('password')}
+                    type={passStyle}
+                    id='password'
+                    className='user-form__input'
+                  />
+                  <div onClick={togglePass} className='user-form__view'>
+                    👁️
+                  </div>
+                </label>
+                {errors.password && (
+                  <span className='user-form__error'>{errors.password.message}</span>
+                )}
               </div>
-
-              <button type='submit'>Submit</button>
-            </form>
-          </Modal>
-        </div>
+              <div>
+                <label htmlFor='confirmPassword' className='user-form__label-pass'>
+                  Confirm Password:
+                  <input
+                    type={passStyleConfirm}
+                    {...register('confirmPassword')}
+                    id='conformPassword'
+                    className='user-form__input'
+                  />
+                  <div onClick={togglePassConfirm} className='user-form__view'>
+                    👁️
+                  </div>
+                </label>
+                {errors.confirmPassword && (
+                  <span className='user-form__error'>{errors.confirmPassword?.message}</span>
+                )}
+              </div>
+            </div>
+            <div className='user__flex'>
+              <button className='user__btn' onClick={closeModal}>
+                Cancel
+              </button>
+              <button className='user__btn' type='submit'>
+                Save
+              </button>
+            </div>
+          </form>
+        </Modal>
       </div>
     </>
   );

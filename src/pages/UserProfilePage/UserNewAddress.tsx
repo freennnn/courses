@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
 import { useState } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer, addAddress, addShipAddress, addBillAddress } from '../../api/api';
+import { queryCustomer } from '../../api/api';
+import { apiRoot } from '../../api/apiHelpers';
+import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -137,7 +139,9 @@ export default function UserNewAddress() {
 
   return (
     <>
-      <button onClick={openModal}>add address</button>
+      <button className='user__btn' onClick={openModal}>
+        add address
+      </button>
       <div>
         <Modal
           isOpen={modalIsOpen}
@@ -145,26 +149,28 @@ export default function UserNewAddress() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button onClick={closeModal}>close</button>
-          <form className='reg-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+          <button className='user__btn' onClick={closeModal}>
+            x
+          </button>
+          <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <div>
                 <label htmlFor='street'>Street</label>
-                {errors.street && <span className='reg-form__error'>{errors.street.message}</span>}
+                {errors.street && <span className='user-form__error'>{errors.street.message}</span>}
                 <input
                   id='street'
                   type='text'
                   {...register('street')}
-                  className='reg-form__input'
+                  className='user-form__input'
                 />
               </div>
               <div>
                 <label htmlFor='city'>City</label>
-                {errors.city && <span className='reg-form__error'>{errors.city.message}</span>}
-                <input id='city' type='text' {...register('city')} className='reg-form__input' />
+                {errors.city && <span className='user-form__error'>{errors.city.message}</span>}
+                <input id='city' type='text' {...register('city')} className='user-form__input' />
               </div>
               <div>
-                {errors.country && <p className='reg-form__error'>{errors.country.message}</p>}
+                {errors.country && <p className='user-form__error'>{errors.country.message}</p>}
                 <select
                   id='country'
                   {...register('country')}
@@ -185,16 +191,16 @@ export default function UserNewAddress() {
               <div>
                 <label htmlFor='zip'>
                   Postal code
-                  {errors.zip && <span className='reg-form__error'>{errors.zip.message}</span>}
+                  {errors.zip && <span className='user-form__error'>{errors.zip.message}</span>}
                 </label>
                 <input
                   id='zip'
                   type='text'
                   {...register('zip')}
-                  className='reg-form__input'
+                  className='user-form__input'
                   pattern={getZip()}
                 />
-                <p className='reg-form__error--zip'>
+                <p className='user-form__error--zip'>
                   Enter the code according to the rules of the selected country
                 </p>
               </div>
@@ -206,14 +212,88 @@ export default function UserNewAddress() {
                 <input id='billing' type='radio' value='billing' {...register('typeadr')} />
                 Use as a billing address
               </label>
-              {errors.typeadr && <span className='reg-form__error'>{errors.typeadr.message}</span>}
+              {errors.typeadr && <span className='user-form__error'>{errors.typeadr.message}</span>}
             </fieldset>
-            <button type='submit' className='reg-form__btn'>
-              Continue
-            </button>
+            <div className='user__flex'>
+              <button className='user__btn' onClick={closeModal}>
+                Cancel
+              </button>
+              <button className='user__btn' type='submit'>
+                Save
+              </button>
+            </div>
           </form>
         </Modal>
       </div>
     </>
   );
 }
+
+const addAddress = (customerID: string, address: Address, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'addAddress',
+            address: {
+              key: address.key,
+              streetName: address.streetName,
+              postalCode: address.postalCode,
+              city: address.city,
+              country: address.country,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const addShipAddress = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: (version = version + 1),
+        actions: [
+          {
+            action: 'addShippingAddressId',
+            addressKey: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};
+
+const addBillAddress = (customerID: string, id: string, version: number) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: (version = version + 1),
+        actions: [
+          {
+            action: 'addBillingAddressId',
+            addressKey: id,
+          },
+        ],
+      },
+    })
+    .execute();
+};

@@ -175,15 +175,15 @@ export default function UserInfo() {
 
   return (
     <>
-      <div className='user__person user__flex'>
-        <div className='user__info'>
-          <h2>Person information</h2>
-          <p>firtsName: {firstName1}</p>
-          <p>lastName: {lastName1}</p>
-          <p>email: {email1}</p>
-          <p>date of Birth: {dateOfBirth1}</p>
-        </div>
-        <button onClick={openModal}>Edit</button>
+      <div className='user__info'>
+        <h2>Person information</h2>
+        <p>First name: {firstName1}</p>
+        <p>Last name: {lastName1}</p>
+        <p>Email: {email1}</p>
+        <p>Date of birth: {dateOfBirth1}</p>
+        <button className='user__btn' onClick={openModal}>
+          Edit
+        </button>
       </div>
 
       <div>
@@ -193,29 +193,31 @@ export default function UserInfo() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button onClick={closeModal}>close</button>
+          <button className='user__btn' onClick={closeModal}>
+            x
+          </button>
           <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor='firstname'>First Name</label>
               {errors?.firstName?.message && (
-                <span className='reg-form__error'>{errors.firstName.message}</span>
+                <span className='user-form__error'>{errors.firstName.message}</span>
               )}
               <input
                 id='firstname'
                 {...register('firstName')}
-                className='reg-form__input'
+                className='user-form__input'
                 placeholder=''
               />
             </div>
             <div>
               <label htmlFor='lastname'>Last Name</label>
               {errors?.lastName?.message && (
-                <span className='reg-form__error'>{errors.lastName.message}</span>
+                <span className='user-form__error'>{errors.lastName.message}</span>
               )}
               <input
                 id='lastname'
                 {...register('lastName')}
-                className='reg-form__input'
+                className='user-form__input'
                 placeholder=''
               />
             </div>
@@ -223,12 +225,12 @@ export default function UserInfo() {
             <div>
               <label htmlFor='email'>Email</label>
               {errors?.email?.message && (
-                <span className='reg-form__error'>{errors.email.message}</span>
+                <span className='user-form__error'>{errors.email.message}</span>
               )}
               <input
                 id='email'
                 {...register('email')}
-                className={`reg-form__input ${signUpError ? 'server-error' : ''}`}
+                className={`user-form__input ${signUpError ? 'server-error' : ''}`}
                 placeholder=''
               />
             </div>
@@ -236,16 +238,23 @@ export default function UserInfo() {
             <div>
               <label htmlFor='dateOfBirth'>Date of birth</label>
               {errors?.dateOfBirth?.message && (
-                <span className='reg-form__error'>{errors.dateOfBirth.message}</span>
+                <span className='user-form__error'>{errors.dateOfBirth.message}</span>
               )}
               <input
                 id='dateOfBirth'
                 type='date'
                 {...register('dateOfBirth')}
-                className='reg-form__input'
+                className='user-form__input'
               />
             </div>
-            <button type='submit'>Submit</button>
+            <div className='user__flex'>
+              <button className='user__btn' onClick={closeModal}>
+                Cancel
+              </button>
+              <button className='user__btn' type='submit'>
+                Save
+              </button>
+            </div>
           </form>
         </Modal>
       </div>

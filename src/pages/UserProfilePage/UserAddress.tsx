@@ -1,13 +1,9 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import {
-  queryCustomer,
-  updateAddress,
-  removeAddress,
-  addDefaultShipping,
-  addDefaultBilling,
-} from '../../api/api';
+import { queryCustomer, removeAddress, addDefaultShipping, addDefaultBilling } from '../../api/api';
+import { apiRoot } from '../../api/apiHelpers';
+import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -245,55 +241,91 @@ export default function UserAddress() {
 
   return (
     <>
-      <div>
-        <div>
-          Shipping addresses
+      <div className='user__flex'>
+        <div className='user__col'>
+          <h2>Shipping addresses</h2>
           {addresses
             ?.filter((item) => item.id && shippingAddressIds?.includes(item?.id))
             .map((item, index) => {
               return (
-                <div key={index}>
-                  <p>{item.country !== undefined && getName(item.country)}</p>
-                  <p>{item.city}</p>
-                  <p>{item.streetName}</p>
-                  <p>{item.postalCode}</p>
-                  {defaultShippingAddress === item.id && <p>Shipping default address</p>}
-                  <button
-                    onClick={() => {
-                      setChangeAddress(item);
-                      openModal();
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => deleteAddress(item)}>Delete</button>
-                  <button onClick={() => defaultShipping(item)}>Default</button>
+                <div key={index} className='user__address'>
+                  {defaultShippingAddress === item.id && (
+                    <h4 className='user__default'>Shipping default address</h4>
+                  )}
+                  <p>
+                    Country: <span>{item.country !== undefined && getName(item.country)}</span>
+                  </p>
+                  <p>
+                    City: <span>{item.city}</span>
+                  </p>
+                  <p>
+                    Street: <span>{item.streetName}</span>
+                  </p>
+                  <p>
+                    Postal code: <span>{item.postalCode}</span>
+                  </p>
+                  <div className='user__flex'>
+                    <button
+                      className='user__btn'
+                      onClick={() => {
+                        setChangeAddress(item);
+                        if (item.country) setActiveCountry(item.country);
+                        openModal();
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button className='user__btn' onClick={() => deleteAddress(item)}>
+                      Delete
+                    </button>
+                    <button className='user__btn' onClick={() => defaultShipping(item)}>
+                      Default
+                    </button>
+                  </div>
                 </div>
               );
             })}
         </div>
-        <div>
-          Billing addresses
+        <div className='user__col'>
+          <h2>Billing addresses</h2>
           {addresses
             ?.filter((item) => item.id && billingAddressIds?.includes(item?.id))
             .map((item, index) => {
               return (
-                <div key={index}>
-                  <p>{item.country !== undefined && getName(item.country)}</p>
-                  <p>{item.city}</p>
-                  <p>{item.streetName}</p>
-                  <p>{item.postalCode}</p>
-                  {defaultBillingAddress === item.id && <p>Billing default address</p>}
-                  <button
-                    onClick={() => {
-                      setChangeAddress(item);
-                      openModal();
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => deleteAddress(item)}>Delete</button>
-                  <button onClick={() => defaultBilling(item)}>Default</button>
+                <div key={index} className='user__address'>
+                  {defaultBillingAddress === item.id && (
+                    <h4 className='user__default'>Billing default address</h4>
+                  )}
+                  <p>
+                    Country: <span>{item.country !== undefined && getName(item.country)}</span>
+                  </p>
+                  <p>
+                    City: <span>{item.city}</span>
+                  </p>
+                  <p>
+                    Street: <span>{item.streetName}</span>
+                  </p>
+                  <p>
+                    Postal code: <span>{item.postalCode}</span>
+                  </p>
+                  <div className='user__flex'>
+                    <button
+                      className='user__btn'
+                      onClick={() => {
+                        setChangeAddress(item);
+                        if (item.country) setActiveCountry(item.country);
+                        openModal();
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button className='user__btn' onClick={() => deleteAddress(item)}>
+                      Delete
+                    </button>
+                    <button className='user__btn' onClick={() => defaultBilling(item)}>
+                      Default
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -306,27 +338,29 @@ export default function UserAddress() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button onClick={closeModal}>close</button>
-          <form className='reg-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+          <button className='user__btn' onClick={closeModal}>
+            x
+          </button>
+          <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <div>
                 <label htmlFor='street'>Street</label>
-                {errors.street && <span className='reg-form__error'>{errors.street.message}</span>}
+                {errors.street && <span className='user-form__error'>{errors.street.message}</span>}
                 <input
                   id='street'
                   type='text'
                   {...register('street')}
-                  className='reg-form__input'
+                  className='user-form__input'
                 />
               </div>
 
               <div>
                 <label htmlFor='city'>City</label>
-                {errors.city && <span className='reg-form__error'>{errors.city.message}</span>}
-                <input id='city' type='text' {...register('city')} className='reg-form__input' />
+                {errors.city && <span className='user-form__error'>{errors.city.message}</span>}
+                <input id='city' type='text' {...register('city')} className='user-form__input' />
               </div>
               <div>
-                {errors.country && <p className='reg-form__error'>{errors.country.message}</p>}
+                {errors.country && <p className='user-form__error'>{errors.country.message}</p>}
                 <select
                   id='country'
                   {...register('country')}
@@ -348,30 +382,63 @@ export default function UserAddress() {
               <div>
                 <label htmlFor='zip'>
                   Postal code
-                  {errors.zip && <span className='reg-form__error'>{errors.zip.message}</span>}
+                  {errors.zip && <span className='user-form__error'>{errors.zip.message}</span>}
                 </label>
                 <input
                   id='zip'
                   type='text'
                   {...register('zip')}
-                  className='reg-form__input'
+                  className='user-form__input'
                   pattern={getZip()}
                 />
-                <p className='reg-form__error--zip'>
+                <p className='user-form__error--zip'>
                   Enter the code according to the rules of the selected country
                 </p>
               </div>
-              <label htmlFor='defaultAd'>
-                <input id='defaultAd' type='checkbox' {...register('addressDefault')} />
-                Use as a default address
-              </label>
             </fieldset>
-            <button type='submit' className='reg-form__btn'>
-              Continue
-            </button>
+            <div className='user__flex'>
+              <button className='user__btn' onClick={closeModal}>
+                Cancel
+              </button>
+              <button className='user__btn' type='submit'>
+                Save
+              </button>
+            </div>
           </form>
         </Modal>
       </div>
     </>
   );
 }
+
+const updateAddress = (
+  customerID: string,
+  address: Address2,
+  addressId: string,
+  version: number,
+) => {
+  return apiRoot
+    .withProjectKey({ projectKey })
+    .customers()
+    .withId({ ID: customerID })
+    .post({
+      // The CustomerUpdate is the object within the body
+      body: {
+        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
+        version: version,
+        actions: [
+          {
+            action: 'changeAddress',
+            addressId: addressId,
+            address: {
+              streetName: address.streetName,
+              city: address.city,
+              country: address.country,
+              postalCode: address.postalCode,
+            },
+          },
+        ],
+      },
+    })
+    .execute();
+};
