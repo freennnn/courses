@@ -14,7 +14,6 @@ import Modal from 'react-modal';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastUpdate } from './toasts.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_PASSWORD_ERROR } from '../../constants.ts';
-import { signIn } from '../../api/api.ts';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 
@@ -88,7 +87,7 @@ export default function UserPassword() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [email, oldPassword, version, queryCustomer(userId)]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -137,7 +136,6 @@ export default function UserPassword() {
       setSignUpError(null);
       await toastUpdate(onRenderError, () => customerChangePassword(userId, userPassword, version));
       closeModal();
-      await signIn({ email: email, password: userPassword.password });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);

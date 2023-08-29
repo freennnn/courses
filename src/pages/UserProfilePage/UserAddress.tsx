@@ -127,7 +127,16 @@ export default function UserAddress() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    addresses,
+    billingAddressIds,
+    shippingAddressIds,
+    defaultBillingAddress,
+    defaultShippingAddress,
+    version,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    queryCustomer(userId),
+  ]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

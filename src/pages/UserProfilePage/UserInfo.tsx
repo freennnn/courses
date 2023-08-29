@@ -12,7 +12,6 @@ import Modal from 'react-modal';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastUpdate } from './toasts.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
-import { signIn } from '../../api/api.ts';
 
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
@@ -107,7 +106,7 @@ export default function UserInfo() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [firstName1, lastName1, dateOfBirth1, email1, password, version, queryCustomer(userId)]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -170,7 +169,6 @@ export default function UserInfo() {
       setSignUpError(null);
       await toastUpdate(onRenderError, () => updateCustomerInfo(userId, userInfo, version));
       closeModal();
-      await signIn({ email: userInfo.email, password: password });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);
