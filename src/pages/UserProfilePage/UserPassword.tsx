@@ -87,7 +87,8 @@ export default function UserPassword() {
         }
       })
       .catch(console.error);
-  }, [userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
