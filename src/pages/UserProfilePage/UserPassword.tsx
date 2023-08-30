@@ -64,10 +64,19 @@ interface userPassword {
 export default function UserPassword() {
   const [oldPassword, setOldPassword] = useState<string>('Password1');
   const [version, setVersion] = useState<number>(1);
-  const [email, setEmail] = useState<string>('email@gmail.com');
 
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     queryCustomer(userId)
@@ -80,24 +89,10 @@ export default function UserPassword() {
           const data: string = body.password;
           setOldPassword(data);
         }
-        if (body?.email) {
-          const data: string = body.email;
-          setEmail(data);
-        }
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email, oldPassword, version, queryCustomer(userId)]);
-
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  }, [modalIsOpen]);
 
   const {
     register,

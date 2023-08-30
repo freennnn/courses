@@ -100,6 +100,17 @@ export default function UserAddress() {
 
   const [changeAddress, setChangeAddress] = useState<Address>(tempAddress);
 
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [addressIsChange, setIsChange] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   useEffect(() => {
     queryCustomer(userId)
       .then(({ body }) => {
@@ -127,26 +138,7 @@ export default function UserAddress() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    addresses,
-    billingAddressIds,
-    shippingAddressIds,
-    defaultBillingAddress,
-    defaultShippingAddress,
-    version,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    queryCustomer(userId),
-  ]);
-
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  }, [modalIsOpen, addressIsChange]);
 
   const {
     register,
@@ -214,8 +206,9 @@ export default function UserAddress() {
       if (toastForNoConnection()) {
         return;
       }
+      setIsChange(true);
       await toastUpdate(onRenderError, () => removeAddress(userId, id, version));
-      closeModal();
+      setIsChange(false);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);
@@ -228,8 +221,9 @@ export default function UserAddress() {
       if (toastForNoConnection()) {
         return;
       }
+      setIsChange(true);
       await toastUpdate(onRenderError, () => addDefaultShipping(userId, id, version));
-      closeModal();
+      setIsChange(false);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);
@@ -242,8 +236,9 @@ export default function UserAddress() {
       if (toastForNoConnection()) {
         return;
       }
+      setIsChange(true);
       await toastUpdate(onRenderError, () => addDefaultBilling(userId, id, version));
-      closeModal();
+      setIsChange(false);
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);

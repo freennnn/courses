@@ -74,10 +74,19 @@ export default function UserInfo() {
   const [email1, setEmail] = useState<string>('email@ex.com');
   const [dateOfBirth1, setdateOfBirth] = useState<string>('01.01.1980');
   const [version, setVersion] = useState<number>(1);
-  const [password, setPassword] = useState<string>('Password1');
 
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
+
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     queryCustomer(userId)
@@ -100,23 +109,10 @@ export default function UserInfo() {
         if (body?.dateOfBirth) {
           setdateOfBirth(body.dateOfBirth);
         }
-        if (body?.password) {
-          setPassword(body.password);
-        }
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firstName1, lastName1, dateOfBirth1, email1, password, version, queryCustomer(userId)]);
-
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  }, [modalIsOpen]);
 
   const {
     register,

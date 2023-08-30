@@ -69,6 +69,16 @@ export default function UserNewAddress() {
   const authContext = useContext(AuthContext);
   const userId = authContext.id;
 
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   useEffect(() => {
     queryCustomer(userId)
       .then(({ body }) => {
@@ -79,17 +89,7 @@ export default function UserNewAddress() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version, queryCustomer(userId)]);
-
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
+  }, [modalIsOpen]);
 
   const {
     register,
