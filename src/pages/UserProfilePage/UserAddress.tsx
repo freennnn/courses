@@ -18,6 +18,7 @@ import { toastForNoConnection, toastUpdate } from './toasts.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants.ts';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
+import UserNewAddress from './UserNewAddress.tsx';
 
 const customStyles = {
   content: {
@@ -57,6 +58,7 @@ interface Address {
   streetName?: string | undefined;
   postalCode?: string | undefined;
   id?: string | undefined;
+  key?: string | undefined;
 }
 
 interface Address2 {
@@ -102,6 +104,10 @@ export default function UserAddress() {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [addressIsChange, setIsChange] = useState(false);
+
+  const onAddNewAddress = (answer: boolean): void => {
+    setIsOpen(answer);
+  };
 
   function openModal() {
     setIsOpen(true);
@@ -337,6 +343,7 @@ export default function UserAddress() {
             })}
         </div>
       </div>
+      <UserNewAddress handleAddNewAddress={onAddNewAddress} />
       <div>
         <Modal
           isOpen={modalIsOpen}

@@ -3,7 +3,6 @@ import './UserProfilePage.scss';
 import UserInfo from './UserInfo';
 import UserPassword from './UserPassword';
 import UserAddress from './UserAddress';
-import UserNewAddress from './UserNewAddress';
 
 function UserProfilePage() {
   return (
@@ -27,7 +26,6 @@ function UserProfilePage() {
             <UserPassword />
           </div>
           <UserAddress />
-          <UserNewAddress />
         </section>
       </div>
     </div>

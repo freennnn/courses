@@ -20,6 +20,8 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 
+Modal.setAppElement('#root');
+
 const customStyles = {
   content: {
     top: '50%',
@@ -30,8 +32,6 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
   },
 };
-
-Modal.setAppElement('#root');
 
 const FormSchema = z.object({
   street: z.string().trim().nonempty(' is required to complete'),
@@ -63,7 +63,11 @@ interface Address {
   key: string;
 }
 
-export default function UserNewAddress() {
+interface Props {
+  handleAddNewAddress: (arg: boolean) => void;
+}
+
+export default function UserNewAddress({ handleAddNewAddress }: Props) {
   const [version, setVersion] = useState<number>(1);
 
   const authContext = useContext(AuthContext);
@@ -130,9 +134,11 @@ export default function UserNewAddress() {
         return;
       }
       await toastUpdate(onRenderError, () => addAddress(userId, address, version));
+      handleAddNewAddress(true);
       const key = data.country + data.city + data.street + data.zip + version;
       if (data.typeadr === 'shipping') await addShipAddress(userId, key, version);
       if (data.typeadr === 'billing') await addBillAddress(userId, key, version);
+      handleAddNewAddress(false);
       closeModal();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
