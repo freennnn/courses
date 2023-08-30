@@ -15,19 +15,7 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constant
 
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-Modal.setAppElement('#root');
+import { customStyles } from '../../components/Modal/Modal.tsx';
 
 interface userInfo {
   email: string;
@@ -75,8 +63,7 @@ export default function UserInfo() {
   const [dateOfBirth1, setdateOfBirth] = useState<string>('01.01.1980');
   const [version, setVersion] = useState<number>(1);
 
-  const authContext = useContext(AuthContext);
-  const userId = authContext.id;
+  const { id: userId } = useContext(AuthContext);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

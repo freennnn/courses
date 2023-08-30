@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
+import Modal from 'react-modal';
 
 import NavigationLayout from './features/Navigation/NavigationLayout';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -15,7 +16,7 @@ import './App.scss';
 
 const App = () => {
   const [appContext, setAuthContext] = useState(defaultContextValues);
-
+  Modal.setAppElement('#root');
   return (
     <>
       <ToastContainer />

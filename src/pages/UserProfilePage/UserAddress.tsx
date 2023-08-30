@@ -19,19 +19,7 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import UserNewAddress from './UserNewAddress.tsx';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-Modal.setAppElement('#root');
+import { customStyles } from '../../components/Modal/Modal.tsx';
 
 const FormSchema = z.object({
   street: z.string().trim().nonempty(' is required to complete'),
@@ -84,8 +72,7 @@ export default function UserAddress() {
   const [defaultShippingAddress, setDefaultShipping] = useState<string>();
   const [version, setVersion] = useState<number>(1);
 
-  const authContext = useContext(AuthContext);
-  const userId = authContext.id;
+  const { id: userId } = useContext(AuthContext);
 
   const countriesList = countries;
   const [activeCountry, setActiveCountry] = useState('US');

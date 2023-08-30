@@ -19,19 +19,7 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants
 
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
-
-Modal.setAppElement('#root');
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+import { customStyles } from '../../components/Modal/Modal.tsx';
 
 const FormSchema = z.object({
   street: z.string().trim().nonempty(' is required to complete'),
@@ -70,8 +58,7 @@ interface Props {
 export default function UserNewAddress({ handleAddNewAddress }: Props) {
   const [version, setVersion] = useState<number>(1);
 
-  const authContext = useContext(AuthContext);
-  const userId = authContext.id;
+  const { id: userId } = useContext(AuthContext);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 

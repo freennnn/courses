@@ -16,19 +16,7 @@ import { toastForNoConnection, toastUpdate } from './toasts.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_PASSWORD_ERROR } from '../../constants.ts';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-Modal.setAppElement('#root');
+import { customStyles } from '../../components/Modal/Modal.tsx';
 
 const FormSchema = z
   .object({
@@ -65,8 +53,7 @@ export default function UserPassword() {
   const [oldPassword, setOldPassword] = useState<string>('Password1');
   const [version, setVersion] = useState<number>(1);
 
-  const authContext = useContext(AuthContext);
-  const userId = authContext.id;
+  const { id: userId } = useContext(AuthContext);
 
   const [modalIsOpen, setIsOpen] = useState(false);
 
