@@ -1,10 +1,10 @@
-import {
-  CustomerSignInResult,
-  ClientResponse,
+import type {
   Attribute,
+  CategoryReference,
+  ClientResponse,
+  CustomerSignInResult,
   Image,
   LocalizedString,
-  CategoryReference,
 } from '@commercetools/platform-sdk';
 
 export interface ApiErrorResponse {

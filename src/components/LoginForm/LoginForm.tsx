@@ -1,16 +1,16 @@
-import { useState, useContext } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useContext, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { signIn } from '../../api/api.ts';
-import { ApiErrorResponse } from '../../types.ts';
-import { toastForNoConnection, toastSignIn } from './toasts.ts';
-import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
-import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
+import { signIn } from '../../api/api.ts';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { ApiErrorResponse } from '../../types.ts';
 import './LoginForm.scss';
+import { toastForNoConnection, toastSignIn } from './toasts.ts';
 
 const FormSchema = z.object({
   email: z.string().nonempty(' is required').email({

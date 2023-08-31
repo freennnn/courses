@@ -1,4 +1,4 @@
-import { CustomerSignin, CustomerDraft } from '@commercetools/platform-sdk';
+import { CustomerDraft, CustomerSignin } from '@commercetools/platform-sdk';
 
 import { signIn, signUp } from '../../api/api';
 

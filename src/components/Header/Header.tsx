@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Navigation from '@/features/Navigation/Navigation';
+
 import './Header.scss';
 
 interface HeaderPropsType {

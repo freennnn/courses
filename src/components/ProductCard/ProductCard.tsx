@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-
-import { ProductItem } from 'types';
+import type { ProductItem } from 'types';
 
 import '@/components/ProductCard/ProductCard.scss';
 
@@ -32,7 +31,11 @@ const ProductCard = ({ product }: ProductProps) => {
 
   return (
     <div className='product-card'>
-      <div className='product-card__image'>{imgUrl ? <img src={imgUrl} /> : null}</div>
+      {imgUrl ? (
+        <div className='product-card__image'>
+          <img src={imgUrl} />
+        </div>
+      ) : null}
       <h3 className='product-card__title'>{product.name['en-US']}</h3>
       {product.description ? (
         <p className='product-card__description'>{product.description['en-US']}</p>

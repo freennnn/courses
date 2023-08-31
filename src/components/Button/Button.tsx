@@ -1,5 +1,5 @@
-import { ButtonType, ButtonSize, ButtonBackgroundColor, ButtonPropsType } from './Button.types';
 import './Button.scss';
+import { ButtonBackgroundColor, ButtonPropsType, ButtonSize, ButtonType } from './Button.types';
 
 export default function Button({
   type = ButtonType.text,
