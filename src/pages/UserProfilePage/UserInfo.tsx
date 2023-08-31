@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { apiRoot } from '../../api/apiHelpers';
-import { projectKey } from '../../api/apiConfig';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -17,6 +15,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserInfoSchema } from '../../utils/schema.tsx';
+import { updateCustomerInfo } from './apiUser.tsx';
 
 interface userInfo {
   email: string;
@@ -204,36 +203,3 @@ export default function UserInfo() {
     </>
   );
 }
-
-const updateCustomerInfo = (userId: string, userInfo: userInfo, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: userId })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'setFirstName',
-            firstName: userInfo.firstName,
-          },
-          {
-            action: 'setLastName',
-            lastName: userInfo.lastName,
-          },
-          {
-            action: 'changeEmail',
-            email: userInfo.email,
-          },
-          {
-            action: 'setDateOfBirth',
-            dateOfBirth: userInfo.dateOfBirth,
-          },
-        ],
-      },
-    })
-    .execute();
-};

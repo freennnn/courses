@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { apiRoot } from '../../api/apiHelpers';
-import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,6 +16,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserPasswordSchema } from '../../utils/schema.tsx';
+import { customerChangePassword } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserPasswordSchema>;
 interface userPassword {
@@ -188,25 +187,3 @@ export default function UserPassword() {
     </>
   );
 }
-
-const customerChangePassword = (
-  customerID: string,
-  userPassword: userPassword,
-  version: number,
-) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .password()
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        id: customerID,
-        version: version,
-        currentPassword: userPassword.oldpassword,
-        newPassword: userPassword.password,
-      },
-    })
-    .execute();
-};

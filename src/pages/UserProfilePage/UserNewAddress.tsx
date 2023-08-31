@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { apiRoot } from '../../api/apiHelpers';
-import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +19,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserNewAddressSchema } from '../../utils/schema.tsx';
+import { addAddress, addTypeAddress } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserNewAddressSchema>;
 
@@ -205,51 +204,3 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
     </>
   );
 }
-
-const addAddress = (customerID: string, address: Address, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'addAddress',
-            address: {
-              key: address.key,
-              streetName: address.streetName,
-              postalCode: address.postalCode,
-              city: address.city,
-              country: address.country,
-            },
-          },
-        ],
-      },
-    })
-    .execute();
-};
-
-const addTypeAddress = (customerID: string, id: string, version: number, addressType: string) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version + 1,
-        actions: [
-          {
-            action: addressType === 'billing' ? 'addBillingAddressId' : 'addShippingAddressId',
-            addressKey: id,
-          },
-        ],
-      },
-    })
-    .execute();
-};

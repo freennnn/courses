@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
 import { queryCustomer } from '../../api/api';
-import { apiRoot } from '../../api/apiHelpers';
-import { projectKey } from '../../api/apiConfig';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +19,7 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import UserNewAddress from './UserNewAddress.tsx';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserAddressSchema } from '../../utils/schema.tsx';
+import { updateAddress, removeAddress, addDefaultShipping, addDefaultBilling } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserAddressSchema>;
 interface Country {
@@ -394,98 +393,3 @@ export default function UserAddress() {
     </>
   );
 }
-
-const updateAddress = (
-  customerID: string,
-  address: ChangeAddress,
-  addressId: string,
-  version: number,
-) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'changeAddress',
-            addressId: addressId,
-            address: {
-              streetName: address.streetName,
-              city: address.city,
-              country: address.country,
-              postalCode: address.postalCode,
-            },
-          },
-        ],
-      },
-    })
-    .execute();
-};
-
-const removeAddress = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'removeAddress',
-            addressId: id,
-          },
-        ],
-      },
-    })
-    .execute();
-};
-
-const addDefaultShipping = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'setDefaultShippingAddress',
-            addressId: id,
-          },
-        ],
-      },
-    })
-    .execute();
-};
-
-const addDefaultBilling = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: version,
-        actions: [
-          {
-            action: 'setDefaultBillingAddress',
-            addressId: id,
-          },
-        ],
-      },
-    })
-    .execute();
-};
