@@ -122,69 +122,62 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
           contentLabel='Example Modal'
         >
           <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-            <fieldset>
-              <div>
-                <label htmlFor='street'>Street</label>
-                {errors.street && <span className='user-form__error'>{errors.street.message}</span>}
-                <input
-                  id='street'
-                  type='text'
-                  {...register('street')}
-                  className='user-form__input'
-                />
-              </div>
-              <div>
-                <label htmlFor='city'>City</label>
-                {errors.city && <span className='user-form__error'>{errors.city.message}</span>}
-                <input id='city' type='text' {...register('city')} className='user-form__input' />
-              </div>
-              <div>
-                {errors.country && <p className='user-form__error'>{errors.country.message}</p>}
-                <select
-                  id='country'
-                  {...register('country')}
-                  onChange={(event) => setActiveCountry(event.target.value)}
-                >
-                  <option value='' disabled={true}>
-                    Country
-                  </option>
-                  {countriesList.map((item: Country, index) => {
-                    return (
-                      <option key={index} value={item.id}>
-                        {item.descr}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-              <div>
-                <label htmlFor='zip'>
-                  Postal code
-                  {errors.zip && <span className='user-form__error'>{errors.zip.message}</span>}
-                </label>
-                <input
-                  id='zip'
-                  type='text'
-                  {...register('zip')}
-                  className='user-form__input'
-                  pattern={getZip()}
-                />
-                <p className='user-form__error--zip'>
-                  Enter the code according to the rules of the selected country
-                </p>
-              </div>
-              <div className='user__flex'>
-                <label htmlFor='shipping'>
-                  <input id='shipping' type='radio' value='shipping' {...register('typeadr')} />
-                  Use as a shipping address
-                </label>
-                <label htmlFor='billing'>
-                  <input id='billing' type='radio' value='billing' {...register('typeadr')} />
-                  Use as a billing address
-                </label>
-              </div>
-              {errors.typeadr && <span className='user-form__error'>{errors.typeadr.message}</span>}
-            </fieldset>
+            <div>
+              <label htmlFor='street'>Street</label>
+              {errors.street && <span className='user-form__error'>{errors.street.message}</span>}
+              <input id='street' type='text' {...register('street')} className='user-form__input' />
+            </div>
+            <div>
+              <label htmlFor='city'>City</label>
+              {errors.city && <span className='user-form__error'>{errors.city.message}</span>}
+              <input id='city' type='text' {...register('city')} className='user-form__input' />
+            </div>
+            <div>
+              {errors.country && <p className='user-form__error'>{errors.country.message}</p>}
+              <select
+                id='country'
+                {...register('country')}
+                onChange={(event) => setActiveCountry(event.target.value)}
+              >
+                <option value='' disabled={true}>
+                  Country
+                </option>
+                {countriesList.map((item: Country, index) => {
+                  return (
+                    <option key={index} value={item.id}>
+                      {item.descr}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label htmlFor='zip'>
+                Postal code
+                {errors.zip && <span className='user-form__error'>{errors.zip.message}</span>}
+              </label>
+              <input
+                id='zip'
+                type='text'
+                {...register('zip')}
+                className='user-form__input'
+                pattern={getZip()}
+              />
+              <p className='user-form__error--zip'>
+                Enter the code according to the rules of the selected country
+              </p>
+            </div>
+            <div className='user__flex'>
+              <label htmlFor='shipping'>
+                <input id='shipping' type='radio' value='shipping' {...register('typeadr')} />
+                Use as a shipping address
+              </label>
+              <label htmlFor='billing'>
+                <input id='billing' type='radio' value='billing' {...register('typeadr')} />
+                Use as a billing address
+              </label>
+            </div>
+            {errors.typeadr && <span className='user-form__error'>{errors.typeadr.message}</span>}
             <div className='user__flex'>
               <button className='user__btn' onClick={onReset}>
                 Cancel

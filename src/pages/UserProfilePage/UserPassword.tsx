@@ -128,7 +128,7 @@ export default function UserPassword() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+          <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div>
                 <label htmlFor='password' className='user-form__label-pass'>
