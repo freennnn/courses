@@ -8,14 +8,14 @@ import { getProductsList } from './helpers';
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
 const CatalogProductPage = () => {
-  const [productList, setProductList] = useState<ProductItem[] | undefined>([]);
+  const [productList, setProductList] = useState<ProductItem[]>([]);
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedPriceRange, setSelectedPriceRange] = useState('');
 
   useEffect(() => {
     getProductsList(selectedYear, selectedPriceRange)
       .then((productList) => {
-        setProductList(productList);
+        setProductList(productList ?? []);
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
@@ -32,7 +32,7 @@ const CatalogProductPage = () => {
 
     getProductsList(year, price)
       .then((productList) => {
-        setProductList(productList);
+        setProductList(productList ?? []);
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
@@ -77,7 +77,7 @@ const CatalogProductPage = () => {
             </div>
           </div>
         </div>
-        {productList && productList?.length > 0 ? <ProductList productList={productList} /> : null}
+        {productList ? <ProductList productList={productList} /> : null}
       </div>
     </div>
   );

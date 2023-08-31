@@ -10,34 +10,34 @@ export const getProductsList = async (year: string, price: string) => {
     response = await getProducts(year, price);
     const discountsResponse = await getDiscounts();
     discounts = discountsResponse.body.results;
+
+    if (response) {
+      const productList = response.body.results.map((product: Product) => {
+        let price: number | undefined = undefined;
+
+        if (product.masterData.current.masterVariant.prices) {
+          if (product.masterData.current.masterVariant.prices[0]) {
+            price = product.masterData.current.masterVariant.prices[0].value.centAmount;
+          }
+        }
+
+        return {
+          id: product.id,
+          name: product.masterData.current.name,
+          categories: product.masterData.current.categories,
+          description: product.masterData.current.description,
+          images: product.masterData.current.masterVariant.images,
+          attributes: product.masterData.current.masterVariant.attributes,
+          price,
+          discount: getFinalDiscountValue(product, discounts),
+        };
+      });
+
+      return productList;
+    }
   } catch (error) {
     /* eslint-disable-next-line no-console */
     console.log(error);
-  }
-
-  if (response) {
-    const productList = response.body.results.map((product: Product) => {
-      let price: number | undefined = undefined;
-
-      if (product.masterData.current.masterVariant.prices) {
-        if (product.masterData.current.masterVariant.prices[0]) {
-          price = product.masterData.current.masterVariant.prices[0].value.centAmount;
-        }
-      }
-
-      return {
-        id: product.id,
-        name: product.masterData.current.name,
-        categories: product.masterData.current.categories,
-        description: product.masterData.current.description,
-        images: product.masterData.current.masterVariant.images,
-        attributes: product.masterData.current.masterVariant.attributes,
-        price,
-        discount: getFinalDiscountValue(product, discounts),
-      };
-    });
-
-    return productList;
   }
 };
 
