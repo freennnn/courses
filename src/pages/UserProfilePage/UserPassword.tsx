@@ -125,9 +125,6 @@ export default function UserPassword() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button className='user__btn' onClick={closeModal}>
-            x
-          </button>
           <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div>

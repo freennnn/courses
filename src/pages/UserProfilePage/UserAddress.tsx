@@ -181,7 +181,7 @@ export default function UserAddress() {
   };
 
   const deleteAddress = async (item: Address): Promise<void> => {
-    const id: string = item.id ? item.id : '123456';
+    const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
         return;
@@ -196,7 +196,7 @@ export default function UserAddress() {
   };
 
   const defaultShipping = async (item: Address): Promise<void> => {
-    const id: string = item.id ? item.id : '123456';
+    const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
         return;
@@ -211,7 +211,7 @@ export default function UserAddress() {
   };
 
   const defaultBilling = async (item: Address): Promise<void> => {
-    const id: string = item.id ? item.id : '123456';
+    const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
         return;
@@ -325,9 +325,6 @@ export default function UserAddress() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button className='user__btn' onClick={closeModal}>
-            x
-          </button>
           <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <div>

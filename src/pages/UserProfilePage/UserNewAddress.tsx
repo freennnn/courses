@@ -108,8 +108,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
       await toastUpdate(onRenderError, () => addAddress(userId, address, version));
       handleAddNewAddress(true);
       const key = data.country + data.city + data.street + data.zip + version;
-      if (data.typeadr === 'shipping') await addShipAddress(userId, key, version);
-      if (data.typeadr === 'billing') await addBillAddress(userId, key, version);
+      await addTypeAddress(userId, key, version, data.typeadr);
       handleAddNewAddress(false);
       closeModal();
     } catch (error) {
@@ -130,9 +129,6 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button className='user__btn' onClick={closeModal}>
-            x
-          </button>
           <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <fieldset>
               <div>
@@ -237,7 +233,7 @@ const addAddress = (customerID: string, address: Address, version: number) => {
     .execute();
 };
 
-const addShipAddress = (customerID: string, id: string, version: number) => {
+const addTypeAddress = (customerID: string, id: string, version: number, addressType: string) => {
   return apiRoot
     .withProjectKey({ projectKey })
     .customers()
@@ -246,31 +242,10 @@ const addShipAddress = (customerID: string, id: string, version: number) => {
       // The CustomerUpdate is the object within the body
       body: {
         // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: (version = version + 1),
+        version: version + 1,
         actions: [
           {
-            action: 'addShippingAddressId',
-            addressKey: id,
-          },
-        ],
-      },
-    })
-    .execute();
-};
-
-const addBillAddress = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .post({
-      // The CustomerUpdate is the object within the body
-      body: {
-        // The version of a new Customer is 1. This value is incremented every time an update action is applied to the Customer. If the specified version does not match the current version, the request returns an error.
-        version: (version = version + 1),
-        actions: [
-          {
-            action: 'addBillingAddressId',
+            action: addressType === 'billing' ? 'addBillingAddressId' : 'addShippingAddressId',
             addressKey: id,
           },
         ],

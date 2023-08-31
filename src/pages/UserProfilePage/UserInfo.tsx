@@ -149,9 +149,6 @@ export default function UserInfo() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <button className='user__btn' onClick={closeModal}>
-            x
-          </button>
           <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor='firstname'>First Name</label>
