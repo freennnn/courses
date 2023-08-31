@@ -77,9 +77,10 @@ export default function UserAddress() {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [addressIsChange, setIsChange] = useState(false);
+  const [newIsCreate, setIsCreate] = useState(false);
 
   const onAddNewAddress = (answer: boolean): void => {
-    setIsOpen(answer);
+    setIsCreate(answer);
   };
 
   function openModal() {
@@ -117,7 +118,7 @@ export default function UserAddress() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalIsOpen, addressIsChange]);
+  }, [modalIsOpen, addressIsChange, newIsCreate]);
 
   const {
     register,
