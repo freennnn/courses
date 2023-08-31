@@ -16,15 +16,10 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserPasswordSchema } from '../../utils/schema.tsx';
+import { UserPasswordData, PasswordView } from './types.ts';
 import { customerChangePassword } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserPasswordSchema>;
-interface userPassword {
-  password: string;
-  oldpassword: string;
-}
-
-type PasswordView = 'text' | 'password';
 
 export default function UserPassword() {
   const [oldPassword, setOldPassword] = useState('Password1');
@@ -82,7 +77,7 @@ export default function UserPassword() {
   };
 
   const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
-    const userPassword: userPassword = {
+    const userPassword: UserPasswordData = {
       password: data.password,
       oldpassword: data.oldpassword,
     };

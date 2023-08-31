@@ -19,30 +19,12 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import UserNewAddress from './UserNewAddress.tsx';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserAddressSchema } from '../../utils/schema.tsx';
+import { Country, AddressData, ChangeAddress } from './types.ts';
 import { updateAddress, removeAddress, addDefaultShipping, addDefaultBilling } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserAddressSchema>;
-interface Country {
-  id: string;
-  descr: string;
-  postCode: string;
-}
-interface Address {
-  country?: string | undefined;
-  city?: string | undefined;
-  streetName?: string | undefined;
-  postalCode?: string | undefined;
-  id?: string | undefined;
-  key?: string | undefined;
-}
-interface ChangeAddress {
-  country: string;
-  city: string;
-  streetName: string;
-  postalCode: string;
-}
 
-const tempAddress: Address = {
+const tempAddress: AddressData = {
   country: 'US',
   city: 'New York',
   streetName: 'Baker',
@@ -73,7 +55,7 @@ export default function UserAddress() {
     return act.descr;
   };
 
-  const [changeAddress, setChangeAddress] = useState<Address>(tempAddress);
+  const [changeAddress, setChangeAddress] = useState(tempAddress);
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [addressIsChange, setIsChange] = useState(false);
@@ -130,11 +112,11 @@ export default function UserAddress() {
     resolver: zodResolver(UserAddressSchema),
   });
 
-  const addressId = changeAddress.id ? changeAddress.id : '12345';
-  const addressCountry = changeAddress.country ? changeAddress.country : 'US';
-  const addressCity = changeAddress.city ? changeAddress.city : 'New York';
-  const addressPostalCode = changeAddress.postalCode ? changeAddress.postalCode : '12345';
-  const addressStreet = changeAddress.streetName ? changeAddress.streetName : 'Baker';
+  const addressId = changeAddress.id ?? '12345';
+  const addressCountry = changeAddress.country ?? 'US';
+  const addressCity = changeAddress.city ?? 'New York';
+  const addressPostalCode = changeAddress.postalCode ?? '12345';
+  const addressStreet = changeAddress.streetName ?? 'Baker';
 
   useEffect(() => {
     setValue('country', addressCountry);
@@ -180,7 +162,7 @@ export default function UserAddress() {
     }
   };
 
-  const deleteAddress = async (item: Address): Promise<void> => {
+  const deleteAddress = async (item: AddressData): Promise<void> => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
@@ -195,7 +177,7 @@ export default function UserAddress() {
     }
   };
 
-  const defaultShipping = async (item: Address): Promise<void> => {
+  const defaultShipping = async (item: AddressData): Promise<void> => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
@@ -210,7 +192,7 @@ export default function UserAddress() {
     }
   };
 
-  const defaultBilling = async (item: Address): Promise<void> => {
+  const defaultBilling = async (item: AddressData): Promise<void> => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {

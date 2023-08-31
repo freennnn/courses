@@ -19,23 +19,10 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserNewAddressSchema } from '../../utils/schema.tsx';
+import { Country, NewAddress } from './types.ts';
 import { addAddress, addTypeAddress } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserNewAddressSchema>;
-
-interface Country {
-  id: string;
-  descr: string;
-  postCode: string;
-}
-
-interface Address {
-  country: string;
-  city: string;
-  streetName: string;
-  postalCode: string;
-  key: string;
-}
 
 interface Props {
   handleAddNewAddress: (arg: boolean) => void;
@@ -92,7 +79,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
   };
 
   const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
-    const address: Address = {
+    const address: NewAddress = {
       country: data.country,
       city: data.city,
       streetName: data.street,

@@ -1,34 +1,8 @@
 import { apiRoot } from '../../api/apiHelpers';
 import { projectKey } from '../../api/apiConfig';
+import { UserInfoData, UserPasswordData, NewAddress, ChangeAddress } from './types.ts';
 
-interface userInfo {
-  email: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-}
-
-interface userPassword {
-  password: string;
-  oldpassword: string;
-}
-
-interface ChangeAddress {
-  country: string;
-  city: string;
-  streetName: string;
-  postalCode: string;
-}
-
-interface NewAddress {
-  country: string;
-  city: string;
-  streetName: string;
-  postalCode: string;
-  key: string;
-}
-
-export const updateCustomerInfo = (userId: string, userInfo: userInfo, version: number) => {
+export const updateCustomerInfo = (userId: string, userInfo: UserInfoData, version: number) => {
   return apiRoot
     .withProjectKey({ projectKey })
     .customers()
@@ -63,7 +37,7 @@ export const updateCustomerInfo = (userId: string, userInfo: userInfo, version: 
 
 export const customerChangePassword = (
   customerID: string,
-  userPassword: userPassword,
+  userPassword: UserPasswordData,
   version: number,
 ) => {
   return apiRoot
