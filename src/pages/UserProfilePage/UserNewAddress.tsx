@@ -20,22 +20,9 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
+import { UserNewAddressSchema } from '../../utils/schema.tsx';
 
-const FormSchema = z.object({
-  street: z.string().trim().nonempty(' is required to complete'),
-  city: z
-    .string()
-    .trim()
-    .min(1, { message: ' must contain at least one character' })
-    .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
-  country: z.string().nonempty('Country is required to complete'),
-  zip: z.string().trim().nonempty(' is required to complete'),
-  typeadr: z.string({
-    invalid_type_error: 'Choose, please, one of types',
-  }),
-});
-
-type FormRegistr = z.infer<typeof FormSchema>;
+type FormNewAddress = z.infer<typeof UserNewAddressSchema>;
 
 interface Country {
   id: string;
@@ -56,10 +43,8 @@ interface Props {
 }
 
 export default function UserNewAddress({ handleAddNewAddress }: Props) {
-  const [version, setVersion] = useState<number>(1);
-
+  const [version, setVersion] = useState(1);
   const { id: userId } = useContext(AuthContext);
-
   const [modalIsOpen, setIsOpen] = useState(false);
 
   function openModal() {
@@ -86,9 +71,9 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormRegistr>({
+  } = useForm<FormNewAddress>({
     mode: 'onChange',
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(UserNewAddressSchema),
   });
 
   const countriesList = countries;
@@ -107,7 +92,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
     }
   };
 
-  const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormNewAddress> = async (data): Promise<void> => {
     const address: Address = {
       country: data.country,
       city: data.city,

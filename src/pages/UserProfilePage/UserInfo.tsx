@@ -16,6 +16,7 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constant
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
+import { UserInfoSchema } from '../../utils/schema.tsx';
 
 interface userInfo {
   email: string;
@@ -24,44 +25,14 @@ interface userInfo {
   dateOfBirth: string;
 }
 
-const UserInfoSchema = z.object({
-  firstName: z
-    .string()
-    .trim()
-    .min(1, { message: '  must contain at least one character' })
-    .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
-  lastName: z
-    .string()
-    .trim()
-    .min(1, { message: ' must contain at least one character' })
-    .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
-  email: z.string().nonempty(' is required to complete').email({
-    message: ' is invalid. Please enter a valid email address(e.g., user@example.com)',
-  }),
-  dateOfBirth: z.coerce
-    .date()
-    .min(new Date(1920, 0, 1), {
-      message: ' cannot go past January 1 1923',
-    })
-    .max(new Date(), { message: ' must be in the past' })
-    .refine(
-      (date: Date) => {
-        const ageTime = new Date(Date.now() - date.getTime());
-        const age = Math.abs(ageTime.getUTCFullYear() - 1970);
-        return age >= 18;
-      },
-      { message: 'You must be 18 years or older' },
-    ),
-});
-
 type FormEditUserInfo = z.infer<typeof UserInfoSchema>;
 
 export default function UserInfo() {
-  const [firstName1, setFirstName] = useState<string>('John');
-  const [lastName1, setLastName] = useState<string>('Doy');
-  const [email1, setEmail] = useState<string>('email@ex.com');
-  const [dateOfBirth1, setdateOfBirth] = useState<string>('01.01.1980');
-  const [version, setVersion] = useState<number>(1);
+  const [firstName1, setFirstName] = useState('John');
+  const [lastName1, setLastName] = useState('Doy');
+  const [email1, setEmail] = useState('email@ex.com');
+  const [dateOfBirth1, setdateOfBirth] = useState('01.01.1980');
+  const [version, setVersion] = useState(1);
 
   const { id: userId } = useContext(AuthContext);
 

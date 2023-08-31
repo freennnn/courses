@@ -17,41 +17,17 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_PASSWORD_ERROR } from '../../constan
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
+import { UserPasswordSchema } from '../../utils/schema.tsx';
 
-const FormSchema = z
-  .object({
-    oldpassword: z
-      .string()
-      .trim()
-      .min(8, 'Password must have at least 8 characters')
-      .regex(/[0-9]/, 'Password must have at least 1 digit character')
-      .regex(/[a-z]/, 'Password must have at least 1 lowercase character')
-      .regex(/[A-Z]/, 'Password must have at least 1 uppercase character'),
-    password: z
-      .string()
-      .trim()
-      .min(8, 'Password must have at least 8 characters')
-      .regex(/[0-9]/, 'Password must have at least 1 digit character')
-      .regex(/[a-z]/, 'Password must have at least 1 lowercase character')
-      .regex(/[A-Z]/, 'Password must have at least 1 uppercase character'),
-
-    confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
-  });
-
-type FormRegistr = z.infer<typeof FormSchema>;
-
+type FormPassword = z.infer<typeof UserPasswordSchema>;
 interface userPassword {
   password: string;
   oldpassword: string;
 }
 
 export default function UserPassword() {
-  const [oldPassword, setOldPassword] = useState<string>('Password1');
-  const [version, setVersion] = useState<number>(1);
+  const [oldPassword, setOldPassword] = useState('Password1');
+  const [version, setVersion] = useState(1);
 
   const { id: userId } = useContext(AuthContext);
 
@@ -85,9 +61,9 @@ export default function UserPassword() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormRegistr>({
+  } = useForm<FormPassword>({
     mode: 'onChange',
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(UserPasswordSchema),
   });
 
   type PasswordView = 'text' | 'password';
@@ -106,7 +82,7 @@ export default function UserPassword() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormPassword> = async (data): Promise<void> => {
     const userPassword: userPassword = {
       password: data.password,
       oldpassword: data.oldpassword,

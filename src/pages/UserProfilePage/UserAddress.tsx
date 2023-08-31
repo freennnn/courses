@@ -20,26 +20,14 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import UserNewAddress from './UserNewAddress.tsx';
 import { customStyles } from '../../components/Modal/Modal.tsx';
+import { UserAddressSchema } from '../../utils/schema.tsx';
 
-const FormSchema = z.object({
-  street: z.string().trim().nonempty(' is required to complete'),
-  city: z
-    .string()
-    .trim()
-    .min(1, { message: ' must contain at least one character' })
-    .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
-  country: z.string().nonempty('Country is required to complete'),
-  zip: z.string().trim().nonempty(' is required to complete'),
-});
-
-type FormRegistr = z.infer<typeof FormSchema>;
-
+type FormAddress = z.infer<typeof UserAddressSchema>;
 interface Country {
   id: string;
   descr: string;
   postCode: string;
 }
-
 interface Address {
   country?: string | undefined;
   city?: string | undefined;
@@ -48,7 +36,6 @@ interface Address {
   id?: string | undefined;
   key?: string | undefined;
 }
-
 interface Address2 {
   country: string;
   city: string;
@@ -65,12 +52,12 @@ const tempAddress: Address = {
 };
 
 export default function UserAddress() {
-  const [addresses, setAddresses] = useState<Address[]>([tempAddress]);
-  const [billingAddressIds, setBillingAddress] = useState<string[]>(['0']);
-  const [shippingAddressIds, setShippingAddress] = useState<string[]>(['1']);
+  const [addresses, setAddresses] = useState([tempAddress]);
+  const [billingAddressIds, setBillingAddress] = useState(['0']);
+  const [shippingAddressIds, setShippingAddress] = useState(['1']);
   const [defaultBillingAddress, setDefaultBilling] = useState<string>();
   const [defaultShippingAddress, setDefaultShipping] = useState<string>();
-  const [version, setVersion] = useState<number>(1);
+  const [version, setVersion] = useState(1);
 
   const { id: userId } = useContext(AuthContext);
 
@@ -138,9 +125,9 @@ export default function UserAddress() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormRegistr>({
+  } = useForm<FormAddress>({
     mode: 'onChange',
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(UserAddressSchema),
   });
 
   const addressId = changeAddress.id ? changeAddress.id : '12345';
@@ -173,7 +160,7 @@ export default function UserAddress() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormRegistr> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormAddress> = async (data): Promise<void> => {
     const address: Address2 = {
       country: data.country,
       city: data.city,

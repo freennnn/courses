@@ -5,6 +5,7 @@ import * as z from 'zod';
 import { useNavigate } from 'react-router-dom';
 
 import { signIn } from '../../api/api.ts';
+import { LoginFormSchema } from '../../utils/schema.tsx';
 import { ApiErrorResponse } from '../../types.ts';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
@@ -12,20 +13,7 @@ import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constant
 
 import './LoginForm.scss';
 
-const FormSchema = z.object({
-  email: z.string().nonempty(' is required').email({
-    message: ' is invalid. Please enter a valid email address(e.g., user@example.com)',
-  }),
-  password: z
-    .string()
-    .nonempty(' is required')
-    .min(8, 'Password must have at least 8 characters')
-    .regex(/[0-9]/, 'Your password must have at least 1 digit character')
-    .regex(/[a-z]/, 'Your password must have at least 1 lowercase character')
-    .regex(/[A-Z]/, 'Your password must have at least 1 uppercasecharacter'),
-});
-
-export type FormInput = z.infer<typeof FormSchema>;
+export type FormInput = z.infer<typeof LoginFormSchema>;
 
 export default function Form() {
   const {
@@ -35,7 +23,7 @@ export default function Form() {
     formState: { errors },
   } = useForm<FormInput>({
     mode: 'onChange',
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: '',
       password: '',
