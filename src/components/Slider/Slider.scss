@@ -1,0 +1,43 @@
+.slider {
+  overflow: auto;
+  touch-action: pan-y;
+  width: 100%;
+  max-width: 640px;
+  min-width: 320px;
+  background-color: aquamarine;
+}
+
+.slider__list {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  // column-gap: 10px;
+  list-style: none;
+  padding: 0px; // TODO: check Normalize - looks like it 10 years old one doesn't work
+  margin: 0px; // TODO: Normalize doesn't work
+  transition: transform 0.3s ease-out;
+  &.swiping {
+    transition: none;
+  }
+}
+
+.slider__navigation {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 15px 0 0 0;
+  padding: 0;
+}
+
+.slider__navigation-item {
+  width: 12px;
+  height: 12px;
+  margin: 0 4px;
+  border-radius: 50%;
+  background-color: $color-tertiary;
+  cursor: pointer;
+
+  &.active {
+    background-color: $color-accent;
+  }
+}

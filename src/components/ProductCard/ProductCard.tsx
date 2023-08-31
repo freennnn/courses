@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 
 import { ProductItem } from 'types';
 
@@ -9,6 +10,8 @@ interface ProductProps {
 }
 
 const ProductCard = ({ product }: ProductProps) => {
+  const navigate = useNavigate();
+
   let imgUrl = '';
 
   if (product.images && product.images?.length > 0) {
@@ -31,7 +34,10 @@ const ProductCard = ({ product }: ProductProps) => {
   });
 
   return (
-    <div className='product-card'>
+    <div
+      className='product-card'
+      onClick={() => navigate(`/products/${product.id}`, { state: product })}
+    >
       <div className='product-card__image'>{imgUrl ? <img src={imgUrl} /> : null}</div>
       <h3 className='product-card__title'>{product.name['en-US']}</h3>
       {product.description ? (
