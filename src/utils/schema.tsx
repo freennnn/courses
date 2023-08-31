@@ -151,6 +151,6 @@ export const UserNewAddressSchema = z.object({
   country: z.string().nonempty('Country is required to complete'),
   zip: z.string().trim().nonempty(' is required to complete'),
   typeadr: z.string({
-    invalid_type_error: 'Choose, please, one of types',
+    invalid_type_error: 'Choose, please, one of the types',
   }),
 });

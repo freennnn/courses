@@ -221,16 +221,17 @@ export default function UserAddress() {
                     <h4 className='user__default'>Shipping default address</h4>
                   )}
                   <p>
-                    Country: <span>{item.country !== undefined && getName(item.country)}</span>
+                    <b>Country:</b>{' '}
+                    <span>{item.country !== undefined && getName(item.country)}</span>
                   </p>
                   <p>
-                    City: <span>{item.city}</span>
+                    <b>City:</b> <span>{item.city}</span>
                   </p>
                   <p>
-                    Street: <span>{item.streetName}</span>
+                    <b>Street:</b> <span>{item.streetName}</span>
                   </p>
                   <p>
-                    Postal code: <span>{item.postalCode}</span>
+                    <b>Postal code:</b> <span>{item.postalCode}</span>
                   </p>
                   <div className='user__flex'>
                     <button
@@ -265,16 +266,17 @@ export default function UserAddress() {
                     <h4 className='user__default'>Billing default address</h4>
                   )}
                   <p>
-                    Country: <span>{item.country !== undefined && getName(item.country)}</span>
+                    <b>Country:</b>{' '}
+                    <span>{item.country !== undefined && getName(item.country)}</span>
                   </p>
                   <p>
-                    City: <span>{item.city}</span>
+                    <b>City:</b> <span>{item.city}</span>
                   </p>
                   <p>
-                    Street: <span>{item.streetName}</span>
+                    <b>Street:</b> <span>{item.streetName}</span>
                   </p>
                   <p>
-                    Postal code: <span>{item.postalCode}</span>
+                    <b>Postal code:</b> <span>{item.postalCode}</span>
                   </p>
                   <div className='user__flex'>
                     <button

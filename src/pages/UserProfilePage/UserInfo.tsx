@@ -126,10 +126,18 @@ export default function UserInfo() {
     <>
       <div className='user__info'>
         <h2>Person information</h2>
-        <p>First name: {firstName1}</p>
-        <p>Last name: {lastName1}</p>
-        <p>Email: {email1}</p>
-        <p>Date of birth: {dateOfBirth1}</p>
+        <p>
+          <b>First name:</b> {firstName1}
+        </p>
+        <p>
+          <b>Last name:</b> {lastName1}
+        </p>
+        <p>
+          <b>Email:</b> {email1}
+        </p>
+        <p>
+          <b>Date of birth:</b> {dateOfBirth1}
+        </p>
         <button className='user__btn' onClick={openModal}>
           Edit
         </button>
@@ -142,7 +150,7 @@ export default function UserInfo() {
           style={customStyles}
           contentLabel='Example Modal'
         >
-          <form className='user__info-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+          <form className='user-form' autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label htmlFor='firstname'>First Name</label>
               {errors?.firstName?.message && (

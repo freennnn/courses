@@ -56,6 +56,7 @@ export default function UserPassword() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormType>({
     mode: 'onChange',
@@ -87,6 +88,7 @@ export default function UserPassword() {
       }
       setSignUpError(null);
       await toastUpdate(onRenderError, () => customerChangePassword(userId, userPassword, version));
+      reset();
       closeModal();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
@@ -102,11 +104,18 @@ export default function UserPassword() {
     passStyleConfirm === 'password' ? setPassConfirmStyle('text') : setPassConfirmStyle('password');
   };
 
+  const onReset = (): void => {
+    reset();
+    closeModal();
+  };
+
   return (
     <>
       <div className='user__info'>
         <h2>Password information</h2>
-        <p>password: {oldPassword}</p>
+        <p>
+          <b>Password:</b> {oldPassword}
+        </p>
         <button className='user__btn' onClick={openModal}>
           Change password
         </button>
@@ -169,7 +178,7 @@ export default function UserPassword() {
               </div>
             </div>
             <div className='user__flex'>
-              <button className='user__btn' onClick={closeModal}>
+              <button className='user__btn' onClick={onReset}>
                 Cancel
               </button>
               <button className='user__btn' type='submit'>

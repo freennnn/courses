@@ -56,6 +56,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormType>({
     mode: 'onChange',
@@ -96,11 +97,16 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
       const key = data.country + data.city + data.street + data.zip + version;
       await addTypeAddress(userId, key, version, data.typeadr);
       handleAddNewAddress(false);
-      closeModal();
+      reset(), closeModal();
     } catch (error) {
       const apiError = error as ApiErrorResponse;
       console.error(apiError);
     }
+  };
+
+  const onReset = (): void => {
+    reset();
+    closeModal();
   };
 
   return (
@@ -167,18 +173,20 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
                   Enter the code according to the rules of the selected country
                 </p>
               </div>
-              <label htmlFor='shipping'>
-                <input id='shipping' type='radio' value='shipping' {...register('typeadr')} />
-                Use as a shipping address
-              </label>
-              <label htmlFor='billing'>
-                <input id='billing' type='radio' value='billing' {...register('typeadr')} />
-                Use as a billing address
-              </label>
+              <div className='user__flex'>
+                <label htmlFor='shipping'>
+                  <input id='shipping' type='radio' value='shipping' {...register('typeadr')} />
+                  Use as a shipping address
+                </label>
+                <label htmlFor='billing'>
+                  <input id='billing' type='radio' value='billing' {...register('typeadr')} />
+                  Use as a billing address
+                </label>
+              </div>
               {errors.typeadr && <span className='user-form__error'>{errors.typeadr.message}</span>}
             </fieldset>
             <div className='user__flex'>
-              <button className='user__btn' onClick={closeModal}>
+              <button className='user__btn' onClick={onReset}>
                 Cancel
               </button>
               <button className='user__btn' type='submit'>
