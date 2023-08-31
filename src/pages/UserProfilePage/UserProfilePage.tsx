@@ -17,9 +17,6 @@ function UserProfilePage() {
         <section className='user__inner'>
           <div className='user__flex user__flex--center'>
             <h1>User Profile</h1>
-            <Link className='user__link' to={'/login'}>
-              Already have account
-            </Link>
           </div>
           <div className='user__flex'>
             <UserInfo />

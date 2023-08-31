@@ -88,7 +88,7 @@ export default function UserInfo() {
   }, [email1, setValue]);
 
   useEffect(() => {
-    setValue('dateOfBirth', new Date(dateOfBirth1));
+    setValue('dateOfBirth', new Date(Date.parse(dateOfBirth1)));
   }, [dateOfBirth1, setValue]);
 
   const [signUpError, setSignUpError] = useState<null | ApiErrorResponse>(null);
@@ -167,10 +167,8 @@ export default function UserInfo() {
                 id='email'
                 {...register('email')}
                 className={`user-form__input ${signUpError ? 'server-error' : ''}`}
-                placeholder=''
               />
             </div>
-
             <div>
               <label htmlFor='dateOfBirth'>Date of birth</label>
               {errors?.dateOfBirth?.message && (
