@@ -19,11 +19,13 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserPasswordSchema } from '../../utils/schema.tsx';
 
-type FormPassword = z.infer<typeof UserPasswordSchema>;
+type FormType = z.infer<typeof UserPasswordSchema>;
 interface userPassword {
   password: string;
   oldpassword: string;
 }
+
+type PasswordView = 'text' | 'password';
 
 export default function UserPassword() {
   const [oldPassword, setOldPassword] = useState('Password1');
@@ -61,12 +63,10 @@ export default function UserPassword() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormPassword>({
+  } = useForm<FormType>({
     mode: 'onChange',
     resolver: zodResolver(UserPasswordSchema),
   });
-
-  type PasswordView = 'text' | 'password';
 
   const [passStyle, setPassStyle] = useState<PasswordView>('password');
   const [passStyleConfirm, setPassConfirmStyle] = useState<PasswordView>('password');
@@ -82,7 +82,7 @@ export default function UserPassword() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormPassword> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
     const userPassword: userPassword = {
       password: data.password,
       oldpassword: data.oldpassword,

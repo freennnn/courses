@@ -22,7 +22,7 @@ import UserNewAddress from './UserNewAddress.tsx';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserAddressSchema } from '../../utils/schema.tsx';
 
-type FormAddress = z.infer<typeof UserAddressSchema>;
+type FormType = z.infer<typeof UserAddressSchema>;
 interface Country {
   id: string;
   descr: string;
@@ -36,7 +36,7 @@ interface Address {
   id?: string | undefined;
   key?: string | undefined;
 }
-interface Address2 {
+interface ChangeAddress {
   country: string;
   city: string;
   streetName: string;
@@ -125,7 +125,7 @@ export default function UserAddress() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormAddress>({
+  } = useForm<FormType>({
     mode: 'onChange',
     resolver: zodResolver(UserAddressSchema),
   });
@@ -160,8 +160,8 @@ export default function UserAddress() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormAddress> = async (data): Promise<void> => {
-    const address: Address2 = {
+  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
+    const address: ChangeAddress = {
       country: data.country,
       city: data.city,
       streetName: data.street,
@@ -400,7 +400,7 @@ export default function UserAddress() {
 
 const updateAddress = (
   customerID: string,
-  address: Address2,
+  address: ChangeAddress,
   addressId: string,
   version: number,
 ) => {

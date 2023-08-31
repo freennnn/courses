@@ -25,7 +25,7 @@ interface userInfo {
   dateOfBirth: string;
 }
 
-type FormEditUserInfo = z.infer<typeof UserInfoSchema>;
+type FormType = z.infer<typeof UserInfoSchema>;
 
 export default function UserInfo() {
   const [firstName1, setFirstName] = useState('John');
@@ -77,7 +77,7 @@ export default function UserInfo() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormEditUserInfo>({
+  } = useForm<FormType>({
     mode: 'onChange',
     resolver: zodResolver(UserInfoSchema),
   });
@@ -109,7 +109,7 @@ export default function UserInfo() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormEditUserInfo> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
     const userInfo: userInfo = {
       email: data.email,
       firstName: data.firstName,
@@ -158,24 +158,14 @@ export default function UserInfo() {
               {errors?.firstName?.message && (
                 <span className='user-form__error'>{errors.firstName.message}</span>
               )}
-              <input
-                id='firstname'
-                {...register('firstName')}
-                className='user-form__input'
-                placeholder=''
-              />
+              <input id='firstname' {...register('firstName')} className='user-form__input' />
             </div>
             <div>
               <label htmlFor='lastname'>Last Name</label>
               {errors?.lastName?.message && (
                 <span className='user-form__error'>{errors.lastName.message}</span>
               )}
-              <input
-                id='lastname'
-                {...register('lastName')}
-                className='user-form__input'
-                placeholder=''
-              />
+              <input id='lastname' {...register('lastName')} className='user-form__input' />
             </div>
 
             <div>

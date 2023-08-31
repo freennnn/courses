@@ -22,7 +22,7 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserNewAddressSchema } from '../../utils/schema.tsx';
 
-type FormNewAddress = z.infer<typeof UserNewAddressSchema>;
+type FormType = z.infer<typeof UserNewAddressSchema>;
 
 interface Country {
   id: string;
@@ -71,7 +71,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormNewAddress>({
+  } = useForm<FormType>({
     mode: 'onChange',
     resolver: zodResolver(UserNewAddressSchema),
   });
@@ -92,7 +92,7 @@ export default function UserNewAddress({ handleAddNewAddress }: Props) {
     }
   };
 
-  const onSubmit: SubmitHandler<FormNewAddress> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
     const address: Address = {
       country: data.country,
       city: data.city,
