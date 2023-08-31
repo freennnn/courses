@@ -16,7 +16,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserPasswordSchema } from '../../utils/schema.tsx';
-import { UserPasswordData, PasswordView } from './types.ts';
+import type { UserPasswordData, PasswordView } from './types.ts';
 import { customerChangePassword } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserPasswordSchema>;
@@ -77,7 +77,7 @@ export default function UserPassword() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormType> = async (data) => {
     const userPassword: UserPasswordData = {
       password: data.password,
       oldpassword: data.oldpassword,

@@ -1,6 +1,6 @@
 import { apiRoot } from '../../api/apiHelpers';
 import { projectKey } from '../../api/apiConfig';
-import { UserInfoData, UserPasswordData, NewAddress, ChangeAddress } from './types.ts';
+import type { UserInfoData, UserPasswordData, NewAddress, ChangeAddressInput } from './types.ts';
 
 export const updateCustomerInfo = (userId: string, userInfo: UserInfoData, version: number) => {
   return apiRoot
@@ -59,7 +59,7 @@ export const customerChangePassword = (
 
 export const updateAddress = (
   customerID: string,
-  address: ChangeAddress,
+  address: ChangeAddressInput,
   addressId: string,
   version: number,
 ) => {
@@ -76,12 +76,7 @@ export const updateAddress = (
           {
             action: 'changeAddress',
             addressId: addressId,
-            address: {
-              streetName: address.streetName,
-              city: address.city,
-              country: address.country,
-              postalCode: address.postalCode,
-            },
+            address,
           },
         ],
       },
@@ -165,13 +160,7 @@ export const addAddress = (customerID: string, address: NewAddress, version: num
         actions: [
           {
             action: 'addAddress',
-            address: {
-              key: address.key,
-              streetName: address.streetName,
-              postalCode: address.postalCode,
-              city: address.city,
-              country: address.country,
-            },
+            address,
           },
         ],
       },

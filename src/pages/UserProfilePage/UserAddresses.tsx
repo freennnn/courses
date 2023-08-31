@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer } from '../../api/api';
+import { queryCustomer } from '../../api/api.ts';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import countries from '../../components/LoginForm/CountryData';
+import countries from '../../components/LoginForm/CountryData.tsx';
 
 import Modal from 'react-modal';
 
@@ -19,12 +19,12 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import UserNewAddress from './UserNewAddress.tsx';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserAddressSchema } from '../../utils/schema.tsx';
-import { Country, AddressData, ChangeAddress } from './types.ts';
+import type { Country, AddressResponse, ChangeAddressInput } from './types.ts';
 import { updateAddress, removeAddress, addDefaultShipping, addDefaultBilling } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserAddressSchema>;
 
-const tempAddress: AddressData = {
+const tempAddress: AddressResponse = {
   country: 'US',
   city: 'New York',
   streetName: 'Baker',
@@ -59,10 +59,10 @@ export default function UserAddress() {
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const [addressIsChange, setIsChange] = useState(false);
-  const [newIsCreate, setIsCreate] = useState(false);
+  const [addNewAddress, setAddNewAddress] = useState(false);
 
   const onAddNewAddress = (answer: boolean): void => {
-    setIsCreate(answer);
+    setAddNewAddress(answer);
   };
 
   function openModal() {
@@ -100,7 +100,7 @@ export default function UserAddress() {
       })
       .catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalIsOpen, addressIsChange, newIsCreate]);
+  }, [modalIsOpen, addressIsChange, addNewAddress]);
 
   const {
     register,
@@ -142,8 +142,8 @@ export default function UserAddress() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
-    const address: ChangeAddress = {
+  const onSubmit: SubmitHandler<FormType> = async (data) => {
+    const address: ChangeAddressInput = {
       country: data.country,
       city: data.city,
       streetName: data.street,
@@ -162,7 +162,7 @@ export default function UserAddress() {
     }
   };
 
-  const deleteAddress = async (item: AddressData): Promise<void> => {
+  const deleteAddress = async (item: AddressResponse) => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
@@ -177,7 +177,7 @@ export default function UserAddress() {
     }
   };
 
-  const defaultShipping = async (item: AddressData): Promise<void> => {
+  const defaultShipping = async (item: AddressResponse) => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {
@@ -192,7 +192,7 @@ export default function UserAddress() {
     }
   };
 
-  const defaultBilling = async (item: AddressData): Promise<void> => {
+  const defaultBilling = async (item: AddressResponse) => {
     const id: string = item.id ?? '12345';
     try {
       if (toastForNoConnection()) {

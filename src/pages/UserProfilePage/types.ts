@@ -19,7 +19,7 @@ export interface NewAddress {
   key: string;
 }
 
-export interface AddressData {
+export interface AddressResponse {
   country?: string | undefined;
   city?: string | undefined;
   streetName?: string | undefined;
@@ -28,7 +28,7 @@ export interface AddressData {
   key?: string | undefined;
 }
 
-export interface ChangeAddress {
+export interface ChangeAddressInput {
   country: string;
   city: string;
   streetName: string;

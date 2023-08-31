@@ -15,7 +15,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserInfoSchema } from '../../utils/schema.tsx';
-import { UserInfoData } from './types.ts';
+import type { UserInfoData } from './types.ts';
 import { updateCustomerInfo } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserInfoSchema>;
@@ -102,7 +102,7 @@ export default function UserInfo() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormType> = async (data): Promise<void> => {
+  const onSubmit: SubmitHandler<FormType> = async (data) => {
     const userInfo: UserInfoData = {
       email: data.email,
       firstName: data.firstName,
