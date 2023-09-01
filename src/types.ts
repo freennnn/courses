@@ -5,7 +5,6 @@ import {
   Image,
   LocalizedString,
   CategoryReference,
-  Customer,
 } from '@commercetools/platform-sdk';
 
 export interface ApiErrorResponse {
@@ -33,5 +32,3 @@ export interface DiscountsType {
   sortOrder: string;
   discount: number;
 }
-
-export type UpdateFunction = () => Promise<ClientResponse<Customer>>;

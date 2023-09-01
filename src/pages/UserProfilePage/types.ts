@@ -1,3 +1,4 @@
+import { ClientResponse, Customer } from '@commercetools/platform-sdk';
 export interface UserInfoData {
   email: string;
   firstName: string;
@@ -41,3 +42,5 @@ export interface UserPasswordData {
 }
 
 export type PasswordView = 'text' | 'password';
+
+export type UpdateFunction = () => Promise<ClientResponse<Customer>>;
