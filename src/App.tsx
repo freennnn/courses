@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
+import Modal from 'react-modal';
 
 import NavigationLayout from './features/Navigation/NavigationLayout';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -16,7 +17,7 @@ import './App.scss';
 
 const App = () => {
   const [appContext, setAuthContext] = useState(defaultContextValues);
-
+  Modal.setAppElement('#root');
   return (
     <>
       <ToastContainer />
@@ -29,10 +30,10 @@ const App = () => {
         <Routes>
           <Route path='/' element={<NavigationLayout />}>
             <Route path='basket' element={<BasketPage />} />
-            <Route path='profile' element={<UserProfilePage />} />
             <Route index element={<MainPage />} />
             <Route path='products' element={<CatalogProductPage />} />
           </Route>
+          <Route path='profile' element={<UserProfilePage />} />
           <Route path='login' element={<MainOrLoginRoute />} />
           <Route path='register' element={<RegistrationPage />} />
           <Route path='*' element={<NotFoundPage />} />
