@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import countries from './CountryData';
 import { RegistrationFormSchema } from '../../utils/schema.tsx';
 import { signIn, signUp } from '../../api/api.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
