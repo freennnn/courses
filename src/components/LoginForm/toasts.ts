@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify';
 
-import { ApiErrorResponse, SignInOrSignUpFunction } from '../../types.ts';
 import {
   TOAST_NO_CONNECTION,
   TOAST_SIGN_IN_PENDING,
@@ -8,6 +7,7 @@ import {
   TOAST_SIGN_UP_PENDING,
   TOAST_SIGN_UP_SUCCESS,
 } from '../../constants.ts';
+import { ApiErrorResponse, SignInOrSignUpFunction } from '../../types.ts';
 
 export const toastForNoConnection = () => {
   if (!navigator.onLine) {

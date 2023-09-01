@@ -1,19 +1,19 @@
 import React from 'react';
-import { useState, useContext } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useContext, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import countries from './CountryData';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
 import { RegistrationFormSchema } from '../../utils/schema.tsx';
 import { signIn, signUp } from '../../api/api.ts';
-import { ApiErrorResponse } from '../../types.ts';
-import { toastForNoConnection, toastSignUp } from './toasts.ts';
-import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
-
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { ApiErrorResponse } from '../../types.ts';
+import countries from './CountryData';
 import './LoginForm.scss';
+import { toastForNoConnection, toastSignUp } from './toasts.ts';
 
 type FormRegistr = z.infer<typeof RegistrationFormSchema>;
 

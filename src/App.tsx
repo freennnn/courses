@@ -1,19 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
 
-import NavigationLayout from './features/Navigation/NavigationLayout';
-import MainPage from '@/pages/MainPage/MainPage';
 import MainOrLoginRoute from '@/features/Navigation/MainOrLoginRoute';
-import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import BasketPage from '@/pages/BasketPage/BasketPage';
-import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
-import CatalogProductPage from './pages/CatalogProductPage/CatalogProductPage';
-import { AuthContext, defaultContextValues } from './contexts/AuthContext';
+import MainPage from '@/pages/MainPage/MainPage';
 
 import './App.scss';
+import { AuthContext, defaultContextValues } from './contexts/AuthContext';
+import NavigationLayout from './features/Navigation/NavigationLayout';
+import CatalogProductPage from './pages/CatalogProductPage/CatalogProductPage';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
+import UserProfilePage from './pages/UserProfilePage/UserProfilePage';
 
 const App = () => {
   const [appContext, setAuthContext] = useState(defaultContextValues);

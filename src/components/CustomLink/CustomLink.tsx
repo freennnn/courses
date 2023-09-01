@@ -1,8 +1,10 @@
-import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 import { useContext } from 'react';
-import { ButtonType, ButtonBackgroundColor } from '@/components/Button/Button.types';
+import { Link, useMatch, useResolvedPath } from 'react-router-dom';
+
 import Button from '@/components/Button/Button';
+import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.types';
 import { NavigationState } from '@/features/Navigation/Navigation.types';
+
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 
 export default function CustomLink({
