@@ -5,6 +5,7 @@
   background-color: white;
   font-size: 14px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
 
   &__image {
     img {
@@ -36,6 +37,7 @@
     -webkit-line-clamp: 2; /* Number of lines to display */
     overflow: hidden;
     text-align: justify;
+    color: #303030;
   }
 
   &__price {
