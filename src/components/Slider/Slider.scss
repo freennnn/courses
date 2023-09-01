@@ -4,7 +4,7 @@
   width: 100%;
   max-width: 640px;
   min-width: 320px;
-  background-color: aquamarine;
+  //background-color: aquamarine;
 }
 
 .slider__list {
@@ -13,7 +13,7 @@
   flex-direction: row;
   // column-gap: 10px;
   list-style: none;
-  padding: 0px; // TODO: check Normalize - looks like it 10 years old one doesn't work
+  padding: 0px; // TODO: check Normalize - looks like this 10 years old one doesn't work
   margin: 0px; // TODO: Normalize doesn't work
   transition: transform 0.3s ease-out;
   &.swiping {
@@ -39,5 +39,8 @@
 
   &.active {
     background-color: $color-accent;
+  }
+  &:hover:not(.active) {
+    background-color: $color-primary;
   }
 }
