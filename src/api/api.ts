@@ -69,13 +69,3 @@ export const getDiscounts = async () => {
   const response = await apiRoot.withProjectKey({ projectKey }).productDiscounts().get().execute();
   return response;
 };
-
-export const queryCustomer = async (customerID: string) => {
-  const response = await apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .get()
-    .execute();
-  return response;
-};

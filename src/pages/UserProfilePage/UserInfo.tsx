@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer } from '../../api/api.ts';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -16,7 +15,7 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserInfoSchema } from '../../utils/schema.tsx';
 import type { UserInfoData } from './types.ts';
-import { updateCustomerInfo } from './apiUser.tsx';
+import { queryCustomer, updateCustomerInfo } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserInfoSchema>;
 

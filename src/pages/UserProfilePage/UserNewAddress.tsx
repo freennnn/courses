@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer } from '../../api/api.ts';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,7 +19,7 @@ import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
 import { UserNewAddressSchema } from '../../utils/schema.tsx';
 import type { Country, NewAddress } from './types.ts';
-import { addAddress, addTypeAddress } from './apiUser.tsx';
+import { queryCustomer, addAddress, addTypeAddress } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserNewAddressSchema>;
 
