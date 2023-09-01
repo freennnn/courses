@@ -7,3 +7,10 @@ export const TOAST_SIGN_IN_ERROR = 'Incorrect login or password. Please try agai
 export const TOAST_INTERNAL_SERVER_ERROR = 'Internal server error. Please try again!';
 export const TOAST_SIGN_UP_ERROR =
   'This email already exists. Please log in or use another email address!';
+export const ASCENDING_SORT_ORDER = 'asc';
+export const DESCENDING_SORT_ORDER = 'desc';
+export const FROM_ZERO_TO_TEN_PRICE_RANGE = ['*', '999'];
+export const FROM_TEN_TO_TWENTY_PRICE_RANGE = ['1000', '1999'];
+export const FROM_TWENTY_AND_MORE = ['2000', '*'];
+export const SORTING_PARAM_NAME = 'name';
+export const SORTING_PARAM_PRICE = 'price';

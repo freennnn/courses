@@ -1,33 +1,38 @@
-import { ClientResponse, Product, ProductDiscount } from '@commercetools/platform-sdk';
+import { ClientResponse, ProductDiscount, ProductProjection } from '@commercetools/platform-sdk';
 import { getDiscounts, getProducts } from 'api/api';
 import type { DiscountsType } from 'types';
 
-export const getProductsList = async (year: string, price: string) => {
-  let response: ClientResponse<{ results: Product[] }> | null = null;
+export const getProductsList = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+) => {
+  let response: ClientResponse<{ results: ProductProjection[] }> | null = null;
   let discounts: ProductDiscount[] = [];
 
   try {
-    response = await getProducts(year, price);
+    response = await getProducts(year, price, sortParam, sortVal);
     const discountsResponse = await getDiscounts();
     discounts = discountsResponse.body.results;
 
     if (response) {
-      const productList = response.body.results.map((product: Product) => {
+      const productList = response.body.results.map((product: ProductProjection) => {
         let price: number | undefined = undefined;
 
-        if (product.masterData.current.masterVariant.prices) {
-          if (product.masterData.current.masterVariant.prices[0]) {
-            price = product.masterData.current.masterVariant.prices[0].value.centAmount;
+        if (product.masterVariant.prices) {
+          if (product.masterVariant.prices[0]) {
+            price = product.masterVariant.prices[0].value.centAmount;
           }
         }
 
         return {
           id: product.id,
-          name: product.masterData.current.name,
-          categories: product.masterData.current.categories,
-          description: product.masterData.current.description,
-          images: product.masterData.current.masterVariant.images,
-          attributes: product.masterData.current.masterVariant.attributes,
+          name: product.name,
+          categories: product.categories,
+          description: product.description,
+          images: product.masterVariant.images,
+          attributes: product.masterVariant.attributes,
           price,
           discount: getFinalDiscountValue(product, discounts),
         };
@@ -41,10 +46,10 @@ export const getProductsList = async (year: string, price: string) => {
   }
 };
 
-const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
+const getSingleDiscountValue = (product: ProductProjection, discount: ProductDiscount) => {
   if (
     discount.references[0]?.typeId === 'category' &&
-    discount.references[0]?.id === product.masterData.current.categories?.[0]?.id
+    discount.references[0]?.id === product.categories?.[0]?.id
   ) {
     return {
       sortOrder: discount.sortOrder,
@@ -54,7 +59,7 @@ const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => 
   return { sortOrder: '0', discount: 0 };
 };
 
-const getFinalDiscountValue = (product: Product, discounts: ProductDiscount[]) => {
+const getFinalDiscountValue = (product: ProductProjection, discounts: ProductDiscount[]) => {
   const { discount } = discounts.reduce(
     (acc: DiscountsType, val: ProductDiscount): DiscountsType => {
       const { sortOrder, discount } = getSingleDiscountValue(product, val);
