@@ -2,16 +2,6 @@ import { apiRoot } from '../../api/apiHelpers';
 import { projectKey } from '../../api/apiConfig';
 import type { UserInfoData, UserPasswordData, NewAddress, ChangeAddressInput } from './types.ts';
 
-export const queryCustomer = async (customerID: string) => {
-  const response = await apiRoot
-    .withProjectKey({ projectKey })
-    .customers()
-    .withId({ ID: customerID })
-    .get()
-    .execute();
-  return response;
-};
-
 export const updateCustomerInfo = (userId: string, userInfo: UserInfoData, version: number) => {
   return apiRoot
     .withProjectKey({ projectKey })

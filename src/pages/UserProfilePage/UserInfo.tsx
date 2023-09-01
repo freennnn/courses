@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import './UserProfilePage.scss';
-import { queryCustomer } from './apiUser';
+import { queryCustomer } from '../../api/api.ts';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';

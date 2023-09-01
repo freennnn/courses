@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
-import { ApiErrorResponse } from '../../types.ts';
-import { UpdateFunction } from './types.ts';
+import { ApiErrorResponse, UpdateFunction } from '../../types.ts';
+
 import {
   TOAST_NO_CONNECTION,
   TOAST_UPDATE_PENDING,
