@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import Preloader from '@/components/Preloader/Preloader';
 import ProductList from '@/features/ProductList/ProductList';
 import type { ProductItem } from 'types';
 
@@ -25,11 +26,14 @@ const CatalogProductPage = () => {
   const [sortingByPriceValue, setSortingByPriceValue] = useState('');
   const [sortingOrder, setSortingOrder] = useState('');
   const [sortingParam, setSortingParam] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getProductsList(selectedYear, selectedPriceRange, sortingParam, sortingOrder)
       .then((productList) => {
         setProductList(productList ?? []);
+        setLoading(false);
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
@@ -188,8 +192,13 @@ const CatalogProductPage = () => {
             </div>
           </div>
         </div>
-
-        {productList ? <ProductList productList={productList} /> : null}
+        {loading ? (
+          <Preloader />
+        ) : productList && productList.length > 0 ? (
+          <ProductList productList={productList} />
+        ) : (
+          <p className='no-products-message'> No movies match the selected filters.</p>
+        )}
       </div>
     </div>
   );

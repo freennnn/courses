@@ -9,7 +9,7 @@
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx,scss}\"",
     "preview": "vite preview",
     "prepare": "husky install",
     "lint-staged": "lint-staged"
