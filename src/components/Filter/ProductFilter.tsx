@@ -11,6 +11,7 @@ import {
   SORTING_PARAM_NAME,
   SORTING_PARAM_PRICE,
 } from '../../constants';
+import './ProductFilter.scss';
 
 const availableYears = ['2020', '2021', '2022', '2023'];
 const availablePriceRanges = ['<10', '10-20', '>20'];
