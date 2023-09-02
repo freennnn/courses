@@ -3,7 +3,7 @@ import type { CustomerDraft, CustomerSignin } from '@commercetools/platform-sdk'
 import { projectKey } from './apiConfig';
 import { apiRoot, getAuthApiRoot } from './apiHelpers';
 
-const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
+export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
 
 export const signIn = async (loginRequest: CustomerSignin) => {
   const authApiRoot = getAuthApiRoot(loginRequest);

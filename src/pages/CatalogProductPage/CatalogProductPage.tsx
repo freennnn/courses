@@ -167,7 +167,7 @@ const CatalogProductPage = () => {
         </div>
         {loading ? (
           <Preloader />
-        ) : productList && productList.length > 0 ? (
+        ) : productList.length > 0 ? (
           <ProductList productList={productList} />
         ) : (
           <p className='no-products-message'> No movies match the selected filters.</p>
