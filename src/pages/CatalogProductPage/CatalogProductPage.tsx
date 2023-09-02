@@ -61,15 +61,6 @@ const CatalogProductPage = () => {
 
     setSelectedPriceRange(priceRange);
     setSelectedPriceRangeValue(price);
-
-    getProductsList(year, priceRange, sortingParam, sortingOrder)
-      .then((productList) => {
-        setProductList(productList ?? []);
-      })
-      .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error('Error fetching products:', error);
-      });
   };
 
   const handleSortingByName = (sortVal: string) => {
@@ -86,15 +77,6 @@ const CatalogProductPage = () => {
     }
 
     setSortingOrder(order);
-
-    getProductsList(selectedYear, selectedPriceRange, SORTING_PARAM_NAME, order)
-      .then((productList) => {
-        setProductList(productList ?? []);
-      })
-      .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error('Error fetching products:', error);
-      });
   };
 
   const handleSortingByPrice = (sortVal: string) => {
@@ -111,15 +93,6 @@ const CatalogProductPage = () => {
     }
 
     setSortingOrder(order);
-
-    getProductsList(selectedYear, selectedPriceRange, SORTING_PARAM_PRICE, order)
-      .then((productList) => {
-        setProductList(productList ?? []);
-      })
-      .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error('Error fetching products:', error);
-      });
   };
 
   return (
