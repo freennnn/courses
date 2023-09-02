@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 import Preloader from '@/components/Preloader/Preloader';
 import ProductList from '@/features/ProductList/ProductList';
+import { AiOutlineSearch } from 'react-icons/ai';
 import type { ProductItem } from 'types';
 
 import {
@@ -27,10 +28,12 @@ const CatalogProductPage = () => {
   const [sortingOrder, setSortingOrder] = useState('');
   const [sortingParam, setSortingParam] = useState('');
   const [loading, setLoading] = useState(false);
+  const [searchWord, setSearchWord] = useState('');
+  const [searchInputVal, setSearchInputVal] = useState('');
 
   useEffect(() => {
     setLoading(true);
-    getProductsList(selectedYear, selectedPriceRange, sortingParam, sortingOrder)
+    getProductsList(selectedYear, selectedPriceRange, sortingParam, sortingOrder, searchWord)
       .then((productList) => {
         setProductList(productList ?? []);
         setLoading(false);
@@ -39,7 +42,7 @@ const CatalogProductPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
-  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam]);
+  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord]);
 
   const availableYears = ['2020', '2021', '2022', '2023'];
   const availablePriceRanges = ['<10', '10-20', '>20'];
@@ -93,6 +96,21 @@ const CatalogProductPage = () => {
     }
 
     setSortingOrder(order);
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event !== null) {
+      const { value } = event.target;
+      setSearchInputVal(value);
+    }
+  };
+
+  const performSearch = (event: FormEvent<HTMLFormElement>) => {
+    if (event !== null) {
+      event.preventDefault();
+    }
+
+    setSearchWord(searchInputVal);
   };
 
   return (
@@ -164,6 +182,18 @@ const CatalogProductPage = () => {
               </select>
             </div>
           </div>
+          <form className='filters__container' onSubmit={performSearch}>
+            <input
+              className='filters__input filters__input_search'
+              type='text'
+              placeholder='Search...'
+              value={searchInputVal}
+              onChange={handleInputChange}
+            />
+            <button className='filters__input filters__input_button' type='submit'>
+              <AiOutlineSearch />
+            </button>
+          </form>
         </div>
         {loading ? (
           <Preloader />

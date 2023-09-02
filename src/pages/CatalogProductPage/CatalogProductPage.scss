@@ -40,17 +40,28 @@
       border: 1px solid green;
       border-radius: 3px;
       outline: none;
+
+      &_search {
+        flex-grow: 1;
+        margin-bottom: 20px;
+      }
+
+      &_button {
+        width: 50px;
+        margin-bottom: 20px;
+      }
     }
 
     &__sorting {
       margin-bottom: 20px;
     }
 
-    @media (min-width: 850px) {
+    @media (min-width: 960px) {
       flex-direction: row;
       justify-content: space-between;
     }
   }
+
   .no-products-message {
     text-align: center;
     color: white;

@@ -7,12 +7,13 @@ export const getProductsList = async (
   price: string[],
   sortParam: string,
   sortVal: string,
+  word: string,
 ) => {
   let response: ClientResponse<{ results: ProductProjection[] }> | null = null;
   let discounts: ProductDiscount[] = [];
 
   try {
-    response = await getProducts(year, price, sortParam, sortVal);
+    response = await getProducts(year, price, sortParam, sortVal, word);
     const discountsResponse = await getDiscounts();
     discounts = discountsResponse.body.results;
 
