@@ -56,6 +56,10 @@ export const getProducts = async (
       filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
       sort: sortArgs,
     };
+  } else {
+    queryArgs = {
+      sort: sortArgs,
+    };
   }
 
   const response = await apiRootWithProjectKey
