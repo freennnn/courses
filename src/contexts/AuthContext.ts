@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 interface AuthContextValues {
   isSignedIn: boolean;
+  id: string;
 }
 
 interface SetAuthContextFunction {
@@ -13,6 +14,7 @@ type AuthContext = AuthContextValues & SetAuthContextFunction;
 // Add new app context variables here
 export const defaultContextValues: AuthContextValues = {
   isSignedIn: false,
+  id: '',
 };
 
 export const defaultContext: AuthContext = {
