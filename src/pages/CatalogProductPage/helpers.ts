@@ -5,7 +5,7 @@ import type { DiscountsType } from 'types';
 export const getProductsList = async (
   year: string,
   price: string[],
-  sortParam: 'name' | 'price' | '',
+  sortParam: string,
   sortVal: string,
   word: string,
 ) => {

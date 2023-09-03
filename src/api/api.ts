@@ -27,19 +27,18 @@ export const signUp = async (customer: CustomerDraft) => {
 export const getProducts = async (
   year: string,
   price: string[],
-  sortParam: 'name' | 'price' | '',
+  sortParam: string,
   sortVal: string,
   word: string,
 ) => {
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
 
-  sortArgs =
-    sortParam === 'name'
-      ? [`name.en-US ${sortVal}`]
-      : sortParam === 'price'
-      ? [`price ${sortVal}`]
-      : [];
+  if (sortParam === 'name') {
+    sortArgs = [`name.en-US ${sortVal}`];
+  } else if (sortParam === 'price') {
+    sortArgs = [`price ${sortVal}`];
+  }
 
   if (year && price.length > 0) {
     queryArgs = {
