@@ -11,17 +11,13 @@ import {
   SORTING_PARAM_NAME,
   SORTING_PARAM_PRICE,
 } from '../../constants';
+import type { ProductFilterProps } from '../../types';
 import './ProductFilter.scss';
 
 const availableYears = ['2020', '2021', '2022', '2023'];
 const availablePriceRanges = ['<10', '10-20', '>20'];
 const avaliableSortingOrderName = ['A-Z', 'Z-A'];
 const avaliableSortingOrderPrice = ['low to high', 'high to low'];
-
-interface ProductFilterProps {
-  selectedYear: string;
-  onChangeFilter: (type: string, value: string | string[]) => void;
-}
 
 const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => {
   const [selectedPriceRangeValue, setSelectedPriceRangeValue] = useState('');
