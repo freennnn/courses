@@ -22,9 +22,11 @@ const CatalogProductPage = () => {
     handleFilterChange,
   } = useProductFilter();
 
+  const sortingParamFixed = sortingParam === 'name' ? 'name' : 'price';
+
   useEffect(() => {
     setLoading(true);
-    getProductsList(selectedYear, selectedPriceRange, sortingParam, sortingOrder, searchWord)
+    getProductsList(selectedYear, selectedPriceRange, sortingParamFixed, sortingOrder, searchWord)
       .then((productList) => {
         setProductList(productList ?? []);
         setLoading(false);
@@ -33,7 +35,7 @@ const CatalogProductPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
-  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord]);
+  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParamFixed, searchWord]);
 
   return (
     <div className='catalog-page'>
