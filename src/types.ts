@@ -37,3 +37,7 @@ export interface ProductFilterProps {
   selectedYear: string;
   onChangeFilter: (type: string, value: string | string[]) => void;
 }
+
+export interface QueryArgs {
+  [key: string]: string | string[];
+}
