@@ -81,7 +81,6 @@ const CategoryList = ({ handleActiveCategory, newId }: Props) => {
     const path = item.parent ? breadItem.join('/') + ' /' : '';
     const pathid = item.parent ? item.ancestors[0].id : '';
     handleActiveCategory({ id, name, path, pathid });
-    console.log({ id, name, path, pathid });
     setActiveCategory(id);
   };
 
@@ -91,7 +90,7 @@ const CategoryList = ({ handleActiveCategory, newId }: Props) => {
 
   const [categoryView, setCategoryView] = useState<boolean>(false);
   const toggleList = (): void => {
-    categoryView === false ? setCategoryView(true) : setCategoryView(false);
+    setCategoryView((prevValue) => !prevValue);
   };
 
   const getSubcategory = (parents: string) => {

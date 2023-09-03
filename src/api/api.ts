@@ -31,8 +31,12 @@ export const getProducts = async (
   word: string,
   category: string,
 ) => {
-  let queryArgs = {};
+  interface QueryArgs {
+    [key: string]: string | string[];
+  }
+
   let sortArgs: string[] = [];
+  let queryArgs: QueryArgs = {};
 
   if (sortParam === 'name') {
     sortArgs = [`name.en-US ${sortVal}`];
@@ -45,7 +49,6 @@ export const getProducts = async (
       filter: [
         `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
         `variants.attributes.year: ${year}`,
-        `categories.id: "${category}"`,
       ],
       sort: sortArgs,
       ['text.en-US']: word,
@@ -64,10 +67,14 @@ export const getProducts = async (
     };
   } else {
     queryArgs = {
+      filter: [],
       sort: sortArgs,
       ['text.en-US']: word,
-      filter: `categories.id: "${category}"`,
     };
+  }
+
+  if (category && Array.isArray(queryArgs.filter)) {
+    queryArgs.filter.push(`categories.id: "${category}"`);
   }
 
   const response = await apiRootWithProjectKey

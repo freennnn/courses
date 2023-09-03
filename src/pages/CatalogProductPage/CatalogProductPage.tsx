@@ -41,7 +41,7 @@ const CatalogProductPage = () => {
     pathid: '',
   });
 
-  const onActiveCategory = (item: ActiveItem): void => {
+  const onActiveCategory = (item: ActiveItem) => {
     setActiveCat(item);
     setActiveId(item.id);
   };
