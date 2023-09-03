@@ -1,4 +1,5 @@
 import type { CustomerDraft, CustomerSignin } from '@commercetools/platform-sdk';
+import type { QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
 import { apiRoot, getAuthApiRoot } from './apiHelpers';
@@ -30,8 +31,8 @@ export const getProducts = async (
   sortVal: string,
   word: string,
 ) => {
-  let queryArgs = {};
   let sortArgs: string[] = [];
+  let queryArgs: QueryArgs = {};
 
   if (sortParam === 'name') {
     sortArgs = [`name.en-US ${sortVal}`];
@@ -62,6 +63,7 @@ export const getProducts = async (
     };
   } else {
     queryArgs = {
+      filter: [],
       sort: sortArgs,
       ['text.en-US']: word,
     };
