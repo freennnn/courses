@@ -1,0 +1,71 @@
+.category {
+  position: absolute;
+  left: 5%;
+  top: 30%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  z-index: 5;
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
+
+  &__btn {
+    font-size: 1rem;
+    width: auto;
+    padding: 0.3rem 0.6rem;
+    color: white;
+    background-color: #304ffe;
+    text-transform: capitalize;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 0.5rem;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e91e63;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  &__list {
+    font-size: 0;
+  }
+
+  &__list--active {
+    font-size: 1rem;
+    list-style-type: none;
+  }
+
+  &__sublist {
+    list-style-type: none;
+  }
+
+  &__item {
+    cursor: pointer;
+
+    a {
+      color: black;
+      text-decoration: none;
+      &:hover {
+        color: red;
+      }
+    }
+
+    &--active {
+      & > a {
+        color: red;
+      }
+    }
+  }
+
+  &__sub {
+    cursor: pointer;
+  }
+}
