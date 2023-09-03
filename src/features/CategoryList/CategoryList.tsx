@@ -53,9 +53,10 @@ const getCategoryList = async () => {
 
 interface Props {
   handleActiveCategory: (item: ActiveItem) => void;
+  newId: string;
 }
 
-const CategoryList = ({ handleActiveCategory }: Props) => {
+const CategoryList = ({ handleActiveCategory, newId }: Props) => {
   const [categories, setCategories] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
@@ -71,7 +72,7 @@ const CategoryList = ({ handleActiveCategory }: Props) => {
 
   const [activeCategory, setActiveCategory] = useState('');
 
-  const showCategory = (item: CategoryItem) => {
+  const showBread = (item: CategoryItem) => {
     const id = item.id;
     const name = item.name['en-US'];
     const breadItem = categories
@@ -80,8 +81,13 @@ const CategoryList = ({ handleActiveCategory }: Props) => {
     const path = item.parent ? breadItem.join('/') + ' /' : '';
     const pathid = item.parent ? item.ancestors[0].id : '';
     handleActiveCategory({ id, name, path, pathid });
+    console.log({ id, name, path, pathid });
     setActiveCategory(id);
   };
+
+  useEffect(() => {
+    setActiveCategory(newId);
+  }, [newId]);
 
   const [categoryView, setCategoryView] = useState<boolean>(false);
   const toggleList = (): void => {
@@ -103,7 +109,7 @@ const CategoryList = ({ handleActiveCategory }: Props) => {
               <Link
                 onClick={(e) => {
                   e.stopPropagation();
-                  showCategory(subcategory);
+                  showBread(subcategory);
                 }}
                 to={`/products/category/${subcategory.id}`}
               >
@@ -130,7 +136,7 @@ const CategoryList = ({ handleActiveCategory }: Props) => {
                 category.id === activeCategory ? 'category__item--active' : 'category__item'
               }
             >
-              <Link to={`/products/category/${category.id}`} onClick={() => showCategory(category)}>
+              <Link to={`/products/category/${category.id}`} onClick={() => showBread(category)}>
                 {category.name['en-US']}
               </Link>
               <ul className='category__sublist'>{getSubcategory(category.id)}</ul>

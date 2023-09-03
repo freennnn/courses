@@ -143,12 +143,17 @@ const CategoryPage = () => {
   const onActiveCategory = (item: ActiveItem): void => {
     setActiveCat(item);
   };
+  const [activeId, setActiveId] = useState<string>('');
+
+  const onActiveId = (id: string): void => {
+    setActiveId(id);
+  };
 
   return (
     <div className='catalog-page'>
       <div className='container catalog-page__content'>
-        <CategoryList handleActiveCategory={onActiveCategory} />
-        <Breadcrumbs data={activeCat} />
+        <CategoryList handleActiveCategory={onActiveCategory} newId={activeId} />
+        <Breadcrumbs data={activeCat} onActiveId={onActiveId} />
         <div className='filters'>
           <div className='filters__container'>
             <div className='filters__item'>

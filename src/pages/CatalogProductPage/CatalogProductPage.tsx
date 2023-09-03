@@ -31,19 +31,22 @@ const CatalogProductPage = () => {
     pathid?: string;
   }
 
-  const tempActiveItem: ActiveItem = {
+  const [activeCat, setActiveCat] = useState<ActiveItem>({
     id: '',
     name: '',
     path: '',
     pathid: '',
-  };
-
-  const [activeCat, setActiveCat] = useState<ActiveItem>(tempActiveItem);
-  const [category, setCategory] = useState<string>('');
+  });
 
   const onActiveCategory = (item: ActiveItem): void => {
     setActiveCat(item);
-    setCategory(item.id);
+    setActiveId(item.id);
+  };
+
+  const [activeId, setActiveId] = useState<string>('');
+
+  const onActiveId = (id: string): void => {
+    setActiveId(id);
   };
 
   useEffect(() => {
@@ -54,7 +57,7 @@ const CatalogProductPage = () => {
       sortingParam,
       sortingOrder,
       searchWord,
-      category,
+      activeId,
     )
       .then((productList) => {
         setProductList(productList ?? []);
@@ -64,13 +67,13 @@ const CatalogProductPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
-  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, category]);
+  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, activeId]);
 
   return (
     <div className='catalog-page'>
       <div className='container catalog-page__content'>
-        <CategoryList handleActiveCategory={onActiveCategory} />
-        <Breadcrumbs data={activeCat} />
+        <CategoryList handleActiveCategory={onActiveCategory} newId={activeId} />
+        <Breadcrumbs data={activeCat} onActiveId={onActiveId} />
         <ProductFilter selectedYear={selectedYear} onChangeFilter={handleFilterChange} />
         {loading ? (
           <Preloader />
