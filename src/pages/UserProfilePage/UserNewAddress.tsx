@@ -1,25 +1,22 @@
 /* eslint-disable no-console */
-import { useState, useEffect } from 'react';
-import './UserProfilePage.scss';
+import { useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import Modal from 'react-modal';
 
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import countries from '../../components/LoginForm/CountryData';
-
-import Modal from 'react-modal';
-
-import { ApiErrorResponse } from '../../types.ts';
-import { toastForNoConnection, toastUpdate } from './toasts.ts';
-import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants.ts';
-
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext.ts';
 import { customStyles } from '../../components/Modal/Modal.tsx';
+import { TOAST_INTERNAL_SERVER_ERROR, TOAST_UPDATE_ERROR } from '../../constants.ts';
+import { AuthContext } from '../../contexts/AuthContext.ts';
+import { ApiErrorResponse } from '../../types.ts';
 import { UserNewAddressSchema } from '../../utils/schema.tsx';
+import './UserProfilePage.scss';
+import { addAddress, addTypeAddress, queryCustomer } from './apiUser.tsx';
+import { toastForNoConnection, toastUpdate } from './toasts.ts';
 import type { Country, NewAddress } from './types.ts';
-import { queryCustomer, addAddress, addTypeAddress } from './apiUser.tsx';
 
 type FormType = z.infer<typeof UserNewAddressSchema>;
 

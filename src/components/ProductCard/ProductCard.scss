@@ -5,6 +5,15 @@
   background-color: white;
   font-size: 14px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  transform: scale(1);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.6);
+    background: linear-gradient(to bottom, #777777, #ffffff);
+  }
 
   &__image {
     img {
@@ -36,6 +45,7 @@
     -webkit-line-clamp: 2; /* Number of lines to display */
     overflow: hidden;
     text-align: justify;
+    color: #303030;
   }
 
   &__price {

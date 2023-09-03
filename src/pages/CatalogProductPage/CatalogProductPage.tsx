@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import ProductFilter from '@/components/Filter/ProductFilter';
+import useProductFilter from '@/components/Filter/useProductFilter';
+import Preloader from '@/components/Preloader/Preloader';
 import ProductList from '@/features/ProductList/ProductList';
 import type { ProductItem } from 'types';
 
@@ -9,75 +12,40 @@ import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+  const [loading, setLoading] = useState(false);
+  const {
+    selectedYear,
+    selectedPriceRange,
+    sortingOrder,
+    sortingParam,
+    searchWord,
+    handleFilterChange,
+  } = useProductFilter();
 
   useEffect(() => {
-    getProductsList(selectedYear, selectedPriceRange)
+    setLoading(true);
+    getProductsList(selectedYear, selectedPriceRange, sortingParam, sortingOrder, searchWord)
       .then((productList) => {
         setProductList(productList ?? []);
+        setLoading(false);
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
-  }, [selectedPriceRange, selectedYear]);
-
-  const availableYears = ['2020', '2021', '2022', '2023'];
-  const availablePriceRanges = ['<10', '10-20', '>20'];
-
-  const handleFilterChange = (year: string, price: string) => {
-    setSelectedYear(year);
-    setSelectedPriceRange(price);
-
-    getProductsList(year, price)
-      .then((productList) => {
-        setProductList(productList ?? []);
-      })
-      .catch((error) => {
-        /* eslint-disable-next-line no-console */
-        console.error('Error fetching products:', error);
-      });
-  };
+  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord]);
 
   return (
     <div className='catalog-page'>
       <div className='container catalog-page__content'>
-        <div className='filters'>
-          <div className='filters__container'>
-            <div className='filters__item'>
-              <h5 className='filters__subtitle'>Year:</h5>
-              <select
-                className='filters__input'
-                value={selectedYear}
-                onChange={(e) => handleFilterChange(e.target.value, selectedPriceRange)}
-              >
-                <option value=''>All</option>
-                {availableYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className='filters__item'>
-              <h5 className='filters__subtitle'>Price: $</h5>
-              <select
-                className='filters__input'
-                value={selectedPriceRange}
-                onChange={(e) => handleFilterChange(selectedYear, e.target.value)}
-              >
-                <option value=''>All</option>
-                {availablePriceRanges.map((range) => (
-                  <option key={range} value={range}>
-                    {range}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-        {productList ? <ProductList productList={productList} /> : null}
+        <ProductFilter selectedYear={selectedYear} onChangeFilter={handleFilterChange} />
+        {loading ? (
+          <Preloader />
+        ) : productList.length > 0 ? (
+          <ProductList productList={productList} />
+        ) : (
+          <p className='no-products-message'> No movies match the selected filters.</p>
+        )}
       </div>
     </div>
   );

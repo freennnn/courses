@@ -32,3 +32,8 @@ export interface DiscountsType {
   sortOrder: string;
   discount: number;
 }
+
+export interface ProductFilterProps {
+  selectedYear: string;
+  onChangeFilter: (type: string, value: string | string[]) => void;
+}

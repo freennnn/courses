@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import classNames from 'classnames';
 import type { ProductItem } from 'types';
 
@@ -30,7 +32,7 @@ const ProductCard = ({ product }: ProductProps) => {
   });
 
   return (
-    <div className='product-card'>
+    <Link to={`/products/${product.id}`} className='product-card'>
       {imgUrl ? (
         <div className='product-card__image'>
           <img src={imgUrl} />
@@ -46,7 +48,7 @@ const ProductCard = ({ product }: ProductProps) => {
           <span className='product-card__price_discounted'>${discountedPrice}</span>
         ) : null}
       </div>
-    </div>
+    </Link>
   );
 };
 

@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { RegistrationFormSchema } from '../../utils/schema.tsx';
 import { signIn, signUp } from '../../api/api.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 import { ApiErrorResponse } from '../../types.ts';
+import { RegistrationFormSchema } from '../../utils/schema.tsx';
 import countries from './CountryData';
 import './LoginForm.scss';
 import { toastForNoConnection, toastSignUp } from './toasts.ts';

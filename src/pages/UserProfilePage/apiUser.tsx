@@ -1,10 +1,8 @@
-import { apiRoot } from '../../api/apiHelpers';
-import { projectKey } from '../../api/apiConfig';
-import type { UserInfoData, UserPasswordData, NewAddress, ChangeAddressInput } from './types.ts';
+import { apiRootWithProjectKey } from '../../api/api.ts';
+import type { ChangeAddressInput, NewAddress, UserInfoData, UserPasswordData } from './types.ts';
 
 export const queryCustomer = async (customerID: string) => {
-  const response = await apiRoot
-    .withProjectKey({ projectKey })
+  const response = await apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .get()
@@ -13,8 +11,7 @@ export const queryCustomer = async (customerID: string) => {
 };
 
 export const updateCustomerInfo = (userId: string, userInfo: UserInfoData, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: userId })
     .post({
@@ -50,8 +47,7 @@ export const customerChangePassword = (
   userPassword: UserPasswordData,
   version: number,
 ) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .password()
     .post({
@@ -73,8 +69,7 @@ export const updateAddress = (
   addressId: string,
   version: number,
 ) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({
@@ -95,8 +90,7 @@ export const updateAddress = (
 };
 
 export const removeAddress = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({
@@ -116,8 +110,7 @@ export const removeAddress = (customerID: string, id: string, version: number) =
 };
 
 export const addDefaultShipping = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({
@@ -137,8 +130,7 @@ export const addDefaultShipping = (customerID: string, id: string, version: numb
 };
 
 export const addDefaultBilling = (customerID: string, id: string, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({
@@ -158,8 +150,7 @@ export const addDefaultBilling = (customerID: string, id: string, version: numbe
 };
 
 export const addAddress = (customerID: string, address: NewAddress, version: number) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({
@@ -184,8 +175,7 @@ export const addTypeAddress = (
   version: number,
   addressType: string,
 ) => {
-  return apiRoot
-    .withProjectKey({ projectKey })
+  return apiRootWithProjectKey
     .customers()
     .withId({ ID: customerID })
     .post({

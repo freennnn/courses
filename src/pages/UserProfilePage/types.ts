@@ -1,4 +1,5 @@
 import { ClientResponse, Customer } from '@commercetools/platform-sdk';
+
 export interface UserInfoData {
   email: string;
   firstName: string;

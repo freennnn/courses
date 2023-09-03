@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import './UserProfilePage.scss';
+
+import UserAddresses from './UserAddresses';
 import UserInfo from './UserInfo';
 import UserPassword from './UserPassword';
-import UserAddresses from './UserAddresses';
+import './UserProfilePage.scss';
 
 function UserProfilePage() {
   return (

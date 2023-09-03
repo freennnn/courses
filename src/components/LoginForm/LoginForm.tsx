@@ -6,10 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import { signIn } from '../../api/api.ts';
-import { LoginFormSchema } from '../../utils/schema.tsx';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 import { ApiErrorResponse } from '../../types.ts';
+import { LoginFormSchema } from '../../utils/schema.tsx';
 import './LoginForm.scss';
 import { toastForNoConnection, toastSignIn } from './toasts.ts';
 

@@ -3,7 +3,7 @@ import type { CustomerDraft, CustomerSignin } from '@commercetools/platform-sdk'
 import { projectKey } from './apiConfig';
 import { apiRoot, getAuthApiRoot } from './apiHelpers';
 
-const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
+export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
 
 export const signIn = async (loginRequest: CustomerSignin) => {
   const authApiRoot = getAuthApiRoot(loginRequest);
@@ -23,24 +23,55 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
-export const getProducts = async (year: string, price: string) => {
+export const getProducts = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+) => {
   let queryArgs = {};
+  let sortArgs: string[] = [];
 
-  if (year && price) {
+  if (sortParam === 'name') {
+    sortArgs = [`name.en-US ${sortVal}`];
+  } else if (sortParam === 'price') {
+    sortArgs = [`price ${sortVal}`];
+  }
+
+  if (year && price.length > 0) {
     queryArgs = {
-      where: `masterData(current(masterVariant(attributes(name="year" and value="${year}")))) and masterData(current(masterVariant(attributes(name="price-range" and value="${price}"))))`,
+      filter: [
+        `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
+        `variants.attributes.year: ${year}`,
+      ],
+      sort: sortArgs,
+      ['text.en-US']: word,
     };
   } else if (year) {
     queryArgs = {
-      where: `masterData(current(masterVariant(attributes(name="year" and value="${year}"))))`,
+      filter: [`variants.attributes.year: ${year}`],
+      sort: sortArgs,
+      ['text.en-US']: word,
     };
-  } else if (price) {
+  } else if (price.length > 0) {
     queryArgs = {
-      where: `masterData(current(masterVariant(attributes(name="price-range" and value="${price}"))))`,
+      filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
+      sort: sortArgs,
+      ['text.en-US']: word,
+    };
+  } else {
+    queryArgs = {
+      sort: sortArgs,
+      ['text.en-US']: word,
     };
   }
 
-  const response = await apiRootWithProjectKey.products().get({ queryArgs }).execute();
+  const response = await apiRootWithProjectKey
+    .productProjections()
+    .search()
+    .get({ queryArgs })
+    .execute();
 
   return response;
 };
