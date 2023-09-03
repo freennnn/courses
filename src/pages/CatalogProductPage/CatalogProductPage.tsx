@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import ProductFilter from '@/components/Filter/ProductFilter';
@@ -24,6 +25,8 @@ const CatalogProductPage = () => {
     handleFilterChange,
   } = useProductFilter();
 
+  const { url } = useParams();
+  const category = url ? url : '';
   interface ActiveItem {
     id: string;
     name: string;
@@ -44,7 +47,6 @@ const CatalogProductPage = () => {
   };
 
   const [activeId, setActiveId] = useState<string>('');
-
   const onActiveId = (id: string): void => {
     setActiveId(id);
   };
@@ -57,7 +59,7 @@ const CatalogProductPage = () => {
       sortingParam,
       sortingOrder,
       searchWord,
-      activeId,
+      category,
     )
       .then((productList) => {
         setProductList(productList ?? []);
@@ -67,7 +69,7 @@ const CatalogProductPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
-  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, activeId]);
+  }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, category]);
 
   return (
     <div className='catalog-page'>
