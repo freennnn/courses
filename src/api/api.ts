@@ -1,4 +1,5 @@
 import type { CustomerDraft, CustomerSignin } from '@commercetools/platform-sdk';
+import type { QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
 import { apiRoot, getAuthApiRoot } from './apiHelpers';
@@ -31,10 +32,6 @@ export const getProducts = async (
   word: string,
   category: string,
 ) => {
-  interface QueryArgs {
-    [key: string]: string | string[];
-  }
-
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
 

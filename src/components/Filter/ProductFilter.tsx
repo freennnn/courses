@@ -16,7 +16,6 @@ import './ProductFilter.scss';
 
 const availableYears = ['2020', '2021', '2022', '2023'];
 const availablePriceRanges = ['<10', '10-20', '>20'];
-const avaliableSortingOrderName = ['A-Z', 'Z-A'];
 const avaliableSortingOrderPrice = ['low to high', 'high to low'];
 
 const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => {
@@ -45,17 +44,9 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
   const handleSortingByName = (sortVal: string) => {
     onChangeFilter('sortingParam', SORTING_PARAM_NAME);
 
-    let order = '';
     setSortingByPriceValue('');
     setSortingByNameValue(sortVal);
-
-    if (sortVal === avaliableSortingOrderName[0]) {
-      order = ASCENDING_SORT_ORDER;
-    } else if (sortVal === avaliableSortingOrderName[1]) {
-      order = DESCENDING_SORT_ORDER;
-    }
-
-    onChangeFilter('sortingOrder', order);
+    onChangeFilter('sortingOrder', sortVal);
   };
 
   const handleSortingByPrice = (sortVal: string) => {
@@ -75,8 +66,7 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchInputVal(value);
+    setSearchInputVal(event.target.value ?? '');
   };
 
   const performSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -129,11 +119,8 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
             <option disabled value=''>
               Name
             </option>
-            {avaliableSortingOrderName.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
+            <option value='asc'>A-Z</option>
+            <option value='desc'>Z-A</option>
           </select>
           <select
             className='filters__input'
