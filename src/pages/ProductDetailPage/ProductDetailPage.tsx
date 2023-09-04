@@ -9,6 +9,7 @@ import Slider from '@/components/Slider/Slider';
 import { SliderItemDataSourceType } from '@/components/Slider/SliderItem';
 import { ProductItem } from 'types';
 
+import ProductDetailBreadcrumbs from './ProductDetailBreadcrumbs';
 import './ProductDetailPage.scss';
 
 export default function ProductDetailPage() {
@@ -70,6 +71,14 @@ export default function ProductDetailPage() {
       <div className='product-detail__container '>
         <div className='product-detail__content-container'>
           <div className='product-detail__text-content'>
+            {product ? (
+              <ProductDetailBreadcrumbs
+                productName={product.name['en-US']}
+                productID={product.id}
+              ></ProductDetailBreadcrumbs>
+            ) : (
+              ''
+            )}
             <h3 className='product-detail__title'>{product?.name['en-US']}</h3>
             <p className='product-detail__description'>{product?.description?.['en-US']}</p>
             <Button type={ButtonType.contained} color={ButtonBackgroundColor.accented}>
