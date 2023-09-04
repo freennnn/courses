@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-import { SliderItemType } from './SliderItem';
-import SliderItem from './SliderItem';
-import { useStateRef, getRefValue } from '../../utils/typedHooks';
 
+import { getRefValue, useStateRef } from '../../utils/typedHooks';
 import './Slider.scss';
+import SliderItem from './SliderItem';
+import { SliderItemType } from './SliderItem';
 
 export interface SliderType {
   items: SliderItemType[];

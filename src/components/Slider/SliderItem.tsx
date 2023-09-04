@@ -6,7 +6,8 @@ export interface SliderItemType {
 }
 
 function showModal(imgLargeSrc: string) {
-  console.log(`openModalWindow with ${imgLargeSrc}`);
+  return imgLargeSrc;
+  //console.log(`openModalWindow with ${imgLargeSrc}`);
 }
 
 export default function SliderItem({ imgSrc, imgLargeSrc }: SliderItemType) {

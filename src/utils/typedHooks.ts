@@ -1,4 +1,4 @@
-import { useState, useRef, RefObject } from 'react';
+import { RefObject, useRef, useState } from 'react';
 
 export function getRefValue<T>(ref: RefObject<T>) {
   return ref.current as T;

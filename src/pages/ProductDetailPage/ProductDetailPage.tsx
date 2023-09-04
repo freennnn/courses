@@ -1,17 +1,18 @@
 import { useLocation } from 'react-router-dom';
-// import { SliderType }
+
+import Button from '@/components/Button/Button';
+import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.types';
 import Slider from '@/components/Slider/Slider';
 import { SliderItemType } from '@/components/Slider/SliderItem';
-import Button from '@/components/Button/Button';
-import { ButtonType, ButtonBackgroundColor } from '@/components/Button/Button.types';
 import { ProductItem } from 'types';
+
 import './ProductDetailPage.scss';
 
 export default function ProductDetailPage() {
   const product = useLocation().state as ProductItem | null;
   //TODO: if product is null (user typed in browser route instead of clicking in product gallery => then we need to download the product info manually)
 
-  console.log(product);
+  //console.log(product);
   const sliderItems: SliderItemType[] | undefined = product?.images?.map((image) => {
     return { imgSrc: image.url };
   });
