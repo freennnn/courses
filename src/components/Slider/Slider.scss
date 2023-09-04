@@ -4,7 +4,13 @@
   width: 100%;
   max-width: 640px;
   min-width: 320px;
+  scrollbar-width: none;
+
   //background-color: aquamarine;
+}
+
+.slider::-webkit-scrollbar {
+  display: none;
 }
 
 .slider__list {

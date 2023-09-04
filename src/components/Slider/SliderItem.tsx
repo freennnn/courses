@@ -1,23 +1,18 @@
 import './SliderItem.scss';
 
-export interface SliderItemType {
+export interface SliderItemDataSourceType {
   imgSrc: string;
-  imgLargeSrc?: string;
+  onClickHandler?: (index: number) => void;
 }
 
-function showModal(imgLargeSrc: string) {
-  return imgLargeSrc;
-  //console.log(`openModalWindow with ${imgLargeSrc}`);
-}
-
-export default function SliderItem({ imgSrc, imgLargeSrc }: SliderItemType) {
+export default function SliderItem({ imgSrc }: SliderItemDataSourceType & { index: number }) {
   return (
     <li className='slider__item'>
       <img
         src={imgSrc}
         alt='Product Image'
         className='slider__item__img'
-        onClick={() => showModal(imgLargeSrc ?? imgSrc)}
+        // onClick={() => onClickHandler?.(index)}
         draggable={false}
       ></img>
     </li>

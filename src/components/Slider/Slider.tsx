@@ -1,15 +1,16 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { getRefValue, useStateRef } from '../../utils/typedHooks';
 import './Slider.scss';
 import SliderItem from './SliderItem';
-import { SliderItemType } from './SliderItem';
+import { SliderItemDataSourceType } from './SliderItem';
 
 export interface SliderType {
-  items: SliderItemType[];
+  items: SliderItemDataSourceType[];
+  selectedIndex?: number;
 }
 
-export default function Slider({ items }: SliderType) {
+export default function Slider({ items, selectedIndex = 0 }: SliderType) {
   const [isSwiping, setIsSwiping] = useState(false);
   const [offsetX, setOffsetX, offsetXRef] = useStateRef(0);
   const currentOffsetXRef = useRef(0);
@@ -18,9 +19,9 @@ export default function Slider({ items }: SliderType) {
   const MIN_SWIPE_LENGTH = 50;
 
   const ulRef = useRef<HTMLUListElement>(null);
-  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+  const [currentItemIndex, setCurrentItemIndex] = useState(selectedIndex);
 
-  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     currentOffsetXRef.current = getRefValue(offsetXRef);
     startXRef.current = e.clientX;
     const ulElement = getRefValue(ulRef);
@@ -49,6 +50,12 @@ export default function Slider({ items }: SliderType) {
     setOffsetX(newOffsetX);
   };
 
+  useEffect(() => {
+    // console.log(`useEffect selectItemAtIndex wiht currentItemIndex ${currentItemIndex}`);
+    selectItemAtIndex(currentItemIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onMouseUp = () => {
     const ulElement = getRefValue(ulRef);
     const containerWidth = ulElement.clientWidth;
@@ -69,6 +76,13 @@ export default function Slider({ items }: SliderType) {
       newOffsetX = Math.round(newOffsetX / containerWidth) * containerWidth;
     }
 
+    // then it's just a click, no scroll/swipe attempt
+    if (difference === 0) {
+      // no drug/scroll => means click
+      // console.log('click');
+      items[currentItemIndex].onClickHandler?.(currentItemIndex);
+    }
+
     setIsSwiping(false);
     setOffsetX(newOffsetX);
     setCurrentItemIndex(Math.abs(newOffsetX / containerWidth));
@@ -78,6 +92,7 @@ export default function Slider({ items }: SliderType) {
   };
 
   const selectItemAtIndex = function (index: number) {
+    // console.log(`SELECT item at index ${index}`);
     const ulElement = getRefValue(ulRef);
     const containerWidth = ulElement.offsetWidth;
 
@@ -86,18 +101,19 @@ export default function Slider({ items }: SliderType) {
   };
 
   return (
-    <div className='slider' onMouseDown={onMouseDown}>
+    <div className='slider'>
       <ul
         className={`slider__list ${isSwiping ? 'swiping' : ''}`}
         ref={ulRef}
         style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
+        onMouseDown={onMouseDown}
       >
         {items.map((item, index) => (
-          <SliderItem key={index} {...item} />
+          <SliderItem {...item} index={index} key={index} />
         ))}
       </ul>
       <ul className='slider__navigation'>
-        {items.map((item, index) => (
+        {items.map((_item, index) => (
           <li
             key={index}
             className={`slider__navigation-item ${currentItemIndex === index ? 'active' : ''}`}
