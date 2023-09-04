@@ -1,12 +1,11 @@
 .slider {
-  overflow: auto;
+  overflow: hidden;
   touch-action: pan-y;
   width: 100%;
   max-width: 640px;
   min-width: 320px;
   scrollbar-width: none;
-
-  //background-color: aquamarine;
+  overscroll-behavior-x: contain;
 }
 
 .slider::-webkit-scrollbar {

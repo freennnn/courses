@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { getRefValue, useStateRef } from '../../utils/typedHooks';
+import { getTouchEventData } from '../../utils/universalTouch';
 import './Slider.scss';
 import SliderItem from './SliderItem';
 import { SliderItemDataSourceType } from './SliderItem';
@@ -21,20 +22,22 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
   const ulRef = useRef<HTMLUListElement>(null);
   const [currentItemIndex, setCurrentItemIndex] = useState(selectedIndex);
 
-  const onMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+  const onTouchStart = (e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
     currentOffsetXRef.current = getRefValue(offsetXRef);
-    startXRef.current = e.clientX;
+    startXRef.current = getTouchEventData(e).clientX;
     const ulElement = getRefValue(ulRef);
     minOffsetXRef.current = ulElement.offsetWidth - ulElement.scrollWidth; //scrollWidth - the whole width of the container
 
     setIsSwiping(true);
 
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousemove', onTouchMove);
+    window.addEventListener('mouseup', onTouchEnd);
+    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('touchend', onTouchEnd);
   };
 
-  const onMouseMove = (e: MouseEvent) => {
-    const currentX = e.clientX;
+  const onTouchMove = (e: MouseEvent | TouchEvent) => {
+    const currentX = getTouchEventData(e).clientX;
     const difference = getRefValue(startXRef) - currentX;
     let newOffsetX = getRefValue(currentOffsetXRef) - difference;
 
@@ -56,7 +59,7 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onMouseUp = () => {
+  const onTouchEnd = () => {
     const ulElement = getRefValue(ulRef);
     const containerWidth = ulElement.clientWidth;
     const currentOffsetX = getRefValue(currentOffsetXRef);
@@ -87,8 +90,10 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
     setOffsetX(newOffsetX);
     setCurrentItemIndex(Math.abs(newOffsetX / containerWidth));
 
-    window.removeEventListener('mouseup', onMouseUp);
-    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onTouchEnd);
+    window.removeEventListener('mousemove', onTouchMove);
+    window.removeEventListener('touchend', onTouchEnd);
+    window.removeEventListener('touchmove', onTouchMove);
   };
 
   const selectItemAtIndex = function (index: number) {
@@ -106,7 +111,8 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
         className={`slider__list ${isSwiping ? 'swiping' : ''}`}
         ref={ulRef}
         style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
-        onMouseDown={onMouseDown}
+        onMouseDown={onTouchStart}
+        onTouchStart={onTouchStart}
       >
         {items.map((item, index) => (
           <SliderItem {...item} index={index} key={index} />
