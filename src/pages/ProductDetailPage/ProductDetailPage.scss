@@ -33,3 +33,14 @@
     color: $color-primary;
   }
 }
+
+.full-price_crossed {
+  text-decoration: line-through;
+  @include font(19px, 500, normal);
+  color: $color-primary;
+  opacity: 0.5;
+  @include media-mobile-only {
+    @include font(12px, 500, normal);
+    padding: 0 10px;
+  }
+}

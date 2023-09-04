@@ -72,9 +72,14 @@ export default function ProductDetailPage() {
           <div className='product-detail__text-content'>
             <h3 className='product-detail__title'>{product?.name['en-US']}</h3>
             <p className='product-detail__description'>{product?.description?.['en-US']}</p>
-            <Button type={ButtonType.contained} color={ButtonBackgroundColor.accented}>{`Buy for $${
-              discountedPrice > 0 ? discountedPrice : fullPrice
-            }`}</Button>
+            <Button type={ButtonType.contained} color={ButtonBackgroundColor.accented}>
+              {`Buy for $${discountedPrice > 0 ? discountedPrice : fullPrice} `}
+              {discountedPrice > 0 ? (
+                <span className='full-price_crossed'>{`$${fullPrice}`}</span>
+              ) : (
+                ''
+              )}
+            </Button>
           </div>
           {slider}
         </div>
