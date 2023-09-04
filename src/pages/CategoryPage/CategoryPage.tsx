@@ -7,13 +7,12 @@ import useProductFilter from '@/components/Filter/useProductFilter';
 import Preloader from '@/components/Preloader/Preloader';
 import CategoryList from '@/features/CategoryList/CategoryList';
 import ProductList from '@/features/ProductList/ProductList';
+import { getProductsList } from '@/pages/CatalogProductPage/helpers';
 import type { ProductItem } from 'types';
-
-import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
-const CatalogProductPage = () => {
+const CategoryPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
   const {
@@ -27,6 +26,7 @@ const CatalogProductPage = () => {
 
   const { url } = useParams();
   const category = url ? url : '';
+
   interface ActiveItem {
     id: string;
     name: string;
@@ -41,7 +41,7 @@ const CatalogProductPage = () => {
     pathid: '',
   });
 
-  const onActiveCategory = (item: ActiveItem) => {
+  const onActiveCategory = (item: ActiveItem): void => {
     setActiveCat(item);
     setActiveId(item.id);
   };
@@ -89,4 +89,4 @@ const CatalogProductPage = () => {
   );
 };
 
-export default CatalogProductPage;
+export default CategoryPage;

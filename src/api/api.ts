@@ -30,6 +30,7 @@ export const getProducts = async (
   sortParam: string,
   sortVal: string,
   word: string,
+  category: string,
 ) => {
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
@@ -67,6 +68,10 @@ export const getProducts = async (
       sort: sortArgs,
       ['text.en-US']: word,
     };
+  }
+
+  if (category && Array.isArray(queryArgs.filter)) {
+    queryArgs.filter.push(`categories.id: "${category}"`);
   }
 
   const response = await apiRootWithProjectKey
