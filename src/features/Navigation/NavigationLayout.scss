@@ -4,6 +4,10 @@
   height: 40px;
   background: url('../../assets/images/logo.svg') no-repeat;
   background-size: cover;
+
+  &:hover {
+    transform: translateY(2px);
+  }
 }
 
 @media (min-width: 650px) {

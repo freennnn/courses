@@ -1,10 +1,10 @@
-import {
-  CustomerSignInResult,
-  ClientResponse,
+import type {
   Attribute,
+  CategoryReference,
+  ClientResponse,
+  CustomerSignInResult,
   Image,
   LocalizedString,
-  CategoryReference,
 } from '@commercetools/platform-sdk';
 
 export interface ApiErrorResponse {
@@ -31,4 +31,13 @@ export interface ProductItem {
 export interface DiscountsType {
   sortOrder: string;
   discount: number;
+}
+
+export interface ProductFilterProps {
+  selectedYear: string;
+  onChangeFilter: (type: string, value: string | string[]) => void;
+}
+
+export interface QueryArgs {
+  [key: string]: string | string[];
 }

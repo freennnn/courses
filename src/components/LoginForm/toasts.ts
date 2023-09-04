@@ -1,6 +1,5 @@
 import { toast } from 'react-toastify';
 
-import { ApiErrorResponse, SignInOrSignUpFunction } from '../../types.ts';
 import {
   TOAST_NO_CONNECTION,
   TOAST_SIGN_IN_PENDING,
@@ -8,6 +7,7 @@ import {
   TOAST_SIGN_UP_PENDING,
   TOAST_SIGN_UP_SUCCESS,
 } from '../../constants.ts';
+import { ApiErrorResponse, SignInOrSignUpFunction } from '../../types.ts';
 
 export const toastForNoConnection = () => {
   if (!navigator.onLine) {
@@ -20,7 +20,7 @@ export const toastSignIn = async (
   onRenderError: (error: ApiErrorResponse) => string,
   signIn: SignInOrSignUpFunction,
 ) => {
-  await toast.promise(signIn(), {
+  const response = await toast.promise(signIn(), {
     pending: TOAST_SIGN_IN_PENDING,
     success: TOAST_SIGN_IN_SUCCESS,
     error: {
@@ -30,13 +30,15 @@ export const toastSignIn = async (
       },
     },
   });
+
+  return response;
 };
 
 export const toastSignUp = async (
   onRenderError: (error: ApiErrorResponse) => string,
   signUp: SignInOrSignUpFunction,
 ) => {
-  await toast.promise(signUp(), {
+  const response = await toast.promise(signUp(), {
     pending: TOAST_SIGN_UP_PENDING,
     success: TOAST_SIGN_UP_SUCCESS,
     error: {
@@ -46,4 +48,5 @@ export const toastSignUp = async (
       },
     },
   });
+  return response;
 };

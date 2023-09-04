@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import LoginForm from '../../components/LoginForm/LoginForm';
-
 import 'react-toastify/dist/ReactToastify.css';
+
+import LoginForm from '../../components/LoginForm/LoginForm';
 import './LoginPage.scss';
 
 function LoginPage() {

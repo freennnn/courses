@@ -1,7 +1,9 @@
 import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+
 import NavigationLayout from '@/features/Navigation/NavigationLayout';
 import LoginPage from '@/pages/LoginPage/LoginPage';
+
+import { AuthContext } from '../../contexts/AuthContext';
 
 export default function MainOrLoginRoute() {
   const { isSignedIn } = useContext(AuthContext);
