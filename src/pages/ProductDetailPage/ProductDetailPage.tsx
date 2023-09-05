@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.types';
 import { customStyles } from '@/components/Modal/Modal.tsx';
 import Slider from '@/components/Slider/Slider';
 import { SliderItemDataSourceType } from '@/components/Slider/SliderItem';
+import { getProduct } from 'api/api';
 import { ProductItem } from 'types';
 
 import ProductDetailBreadcrumbs from './ProductDetailBreadcrumbs';
@@ -15,6 +16,19 @@ import './ProductDetailPage.scss';
 export default function ProductDetailPage() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [selectedModalSliderItemIndex, setSelectedModalSliderItemIndex] = useState(0);
+  const productFromProps = useLocation().state as ProductItem | null;
+  const { id } = useParams();
+  const [product, setProduct] = useState(productFromProps);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const product: ProductItem = await getProduct(id ?? 'c90a86d0-116f-4ad3-af43-ccac737e7493');
+      //console.log(product);
+      setProduct(product);
+    };
+    fetchData().catch(console.error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function openModal(index: number) {
     //console.log(`openModalSlider at index${index}`);
@@ -25,7 +39,6 @@ export default function ProductDetailPage() {
   function closeModal() {
     setIsOpen(false);
   }
-  const product = useLocation().state as ProductItem | null;
   //TODO: if product is null (user typed in browser route instead of clicking in product gallery => then we need to download the product info manually)
 
   //console.log(product);
