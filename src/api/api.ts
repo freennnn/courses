@@ -24,14 +24,14 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
-export const getProducts = async (
+export const composeQueryArgs = (
   year: string,
   price: string[],
   sortParam: string,
   sortVal: string,
   word: string,
   category: string,
-) => {
+): QueryArgs => {
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
 
@@ -73,6 +73,19 @@ export const getProducts = async (
   if (category && Array.isArray(queryArgs.filter)) {
     queryArgs.filter.push(`categories.id: "${category}"`);
   }
+
+  return queryArgs;
+};
+
+export const getProducts = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+) => {
+  const queryArgs = composeQueryArgs(year, price, sortParam, sortVal, word, category);
 
   const response = await apiRootWithProjectKey
     .productProjections()
