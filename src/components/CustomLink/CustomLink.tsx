@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useMatch, useResolvedPath } from 'react-router-dom';
+import { Link, useLocation, useMatch, useResolvedPath } from 'react-router-dom';
 
 import Button from '@/components/Button/Button';
 import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.types';
@@ -19,8 +19,19 @@ export default function CustomLink({
   let type = ButtonType.text;
   let color = ButtonBackgroundColor.transparent;
 
+  const location = useLocation();
   const resolvedPath = useResolvedPath(pathTo);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+  //console.log(`location = ${location.pathname} and resolvedPath ${resolvedPath.pathname}`);
+  const pathMatch = useMatch({ path: resolvedPath.pathname, end: true });
+  // console.log(pathMatch);
+  let isActive = false;
+  // All product `subroutes` like '/product/catalog' '/product/:id' should show active 'Catalog' Link button
+  if (location.pathname.includes('products') && resolvedPath.pathname.includes('products')) {
+    isActive = true;
+  } else {
+    isActive = !!pathMatch;
+  }
+
   if (isActive) {
     type = ButtonType.contained;
     color = ButtonBackgroundColor.accented;
