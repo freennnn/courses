@@ -129,9 +129,9 @@ export default function Form() {
       setSignUpError(null);
 
       await toastSignUp(onRenderError, () => signUp(customer));
-      await signIn({ email: customer.email, password: customer.password });
+      const response = await signIn({ email: customer.email, password: customer.password });
       reset();
-      updateAuthContext(authContext, { isSignedIn: true });
+      updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
       navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
