@@ -1,6 +1,7 @@
 import { ClientResponse, ProductDiscount, ProductProjection } from '@commercetools/platform-sdk';
-import { getDiscounts, getProducts } from 'api/api';
 import type { DiscountsType } from 'types';
+
+import { getDiscounts, getProducts } from '../../api/api';
 
 export const getProductsList = async (
   year: string,

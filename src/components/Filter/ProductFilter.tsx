@@ -78,8 +78,12 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
     <div className='filters'>
       <div className='filters__container'>
         <div className='filters__item'>
-          <h5 className='filters__subtitle'>Year:</h5>
+          <label className='filters__subtitle' htmlFor='year-select'>
+            Year:
+          </label>
+          {/* <h5 className='filters__subtitle'>Year:</h5> */}
           <select
+            id='year-select'
             className='filters__input'
             value={selectedYear}
             onChange={(e) => handleFilterChange(e.target.value, selectedPriceRangeValue)}

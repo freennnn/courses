@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import type { ProductItem } from 'types';
 
-// import '@/components/ProductCard/ProductCard.scss';
+import './ProductCard.scss';
 
 interface ProductProps {
   product: ProductItem;
@@ -32,7 +32,7 @@ const ProductCard = ({ product }: ProductProps) => {
   });
 
   return (
-    <Link to={`/products/${product.id}`} className='product-card'>
+    <Link to={`/products/${product.id}`} className='product-card' data-testid='product-card'>
       {imgUrl ? (
         <div className='product-card__image'>
           <img src={imgUrl} />

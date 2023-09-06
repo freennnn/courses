@@ -1,21 +1,27 @@
+import { BrowserRouter } from 'react-router-dom';
+
 import ProductList from '@/features/ProductList/ProductList';
-import { jest } from '@jest/globals';
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-jest.mock('@/components/ProductCard/ProductCard', () => ({
-  __esModule: true,
-  ProductCard: jest.fn(() => <>test</>),
-}));
-
-describe('CatalogProductPage', () => {
+describe('ProductList', () => {
   it('renders products when productList is not empty', () => {
-    // Mock the productList with sample data
     const productList = [
       {
         id: '1',
         name: { 'en-US': 'Product 1' },
         categories: [{ typeId: 'category' as const, id: '1' }],
-        description: undefined,
+        description: { 'en-US': 'Product 1 Description' },
+        images: undefined,
+        attributes: undefined,
+        discount: 5,
+        price: 100,
+      },
+      {
+        id: '2',
+        name: { 'en-US': 'Product 2' },
+        categories: [{ typeId: 'category' as const, id: '1' }],
+        description: { 'en-US': 'Product 2 Description' },
         images: undefined,
         attributes: undefined,
         discount: 5,
@@ -23,12 +29,13 @@ describe('CatalogProductPage', () => {
       },
     ];
 
-    render(<ProductList productList={productList} />);
+    render(
+      <BrowserRouter>
+        <ProductList productList={productList} />
+      </BrowserRouter>,
+    );
 
-    // Wait for the component to load (if necessary)
-
-    // Assert that the product names are visible in the rendered component
-    expect(screen.getByText('Product 1')).toBeInTheDocument();
-    expect(screen.getByText('Product 2')).toBeInTheDocument();
+    const productCards = screen.getAllByTestId('product-card');
+    expect(productCards.length).toBe(productList.length);
   });
 });
