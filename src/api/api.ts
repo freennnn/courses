@@ -7,7 +7,7 @@ import type {
 } from '@commercetools/platform-sdk';
 import type { DiscountsType, QueryArgs } from 'types';
 
-import { CURRENCY_USD, projectKey } from './apiConfig';
+import { ACTION_ADD_ITEM, CURRENCY_USD, projectKey } from './apiConfig';
 import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
@@ -157,7 +157,7 @@ export const createUserCart = async () => {
     .withProjectKey({ projectKey })
     .me()
     .carts()
-    .post({ body: { currency: 'USD' } })
+    .post({ body: { currency: `${CURRENCY_USD}` } })
     .execute();
 
   return response;
@@ -168,6 +168,31 @@ export const createAnonymousCart = async () => {
     .me()
     .carts()
     .post({ body: { currency: `${CURRENCY_USD}` } })
+    .execute();
+
+  return response;
+};
+
+export const addItemToCart = async (
+  userId: string,
+  cartId: string,
+  itemId: string,
+  version: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: `${cartId}` })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: ACTION_ADD_ITEM, productId: `${itemId}` }],
+      },
+    })
     .execute();
 
   return response;
