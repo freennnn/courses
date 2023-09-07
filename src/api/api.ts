@@ -1,4 +1,5 @@
 import type {
+  ApiRoot,
   CustomerDraft,
   CustomerSignin,
   Product,
@@ -6,13 +7,16 @@ import type {
 } from '@commercetools/platform-sdk';
 import type { DiscountsType, QueryArgs } from 'types';
 
-import { projectKey } from './apiConfig';
-import { apiRoot, getAuthApiRoot } from './apiHelpers';
+import { CURRENCY_USD, projectKey } from './apiConfig';
+import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
+export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
+
+let authApiRoot: ApiRoot;
 
 export const signIn = async (loginRequest: CustomerSignin) => {
-  const authApiRoot = getAuthApiRoot(loginRequest);
+  authApiRoot = getAuthApiRoot(loginRequest);
 
   const response = await authApiRoot
     .withProjectKey({ projectKey })
@@ -144,6 +148,27 @@ export const getProducts = async (
 
 export const getDiscounts = async () => {
   const response = await apiRootWithProjectKey.productDiscounts().get().execute();
+
+  return response;
+};
+
+export const createUserCart = async () => {
+  const response = await authApiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .post({ body: { currency: 'USD' } })
+    .execute();
+
+  return response;
+};
+
+export const createAnonymousCart = async () => {
+  const response = await anonymousApiRootWithProjectKey
+    .me()
+    .carts()
+    .post({ body: { currency: `${CURRENCY_USD}` } })
+    .execute();
 
   return response;
 };
