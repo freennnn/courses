@@ -1,10 +1,6 @@
 export const HTTP_MIDDLEWARE_HOST = 'https://api.us-central1.gcp.commercetools.com';
 export const AUTH_MIDDLEWARE_HOST = 'https://auth.us-central1.gcp.commercetools.com';
 
-export const CURRENCY_USD = 'USD';
-
-export const ACTION_ADD_ITEM = 'addLineItem';
-
 export const projectKey: string =
   typeof import.meta.env.VITE_CTP_PROJECT_KEY === 'string'
     ? import.meta.env.VITE_CTP_PROJECT_KEY

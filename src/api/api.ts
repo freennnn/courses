@@ -7,8 +7,9 @@ import type {
 } from '@commercetools/platform-sdk';
 import type { DiscountsType, QueryArgs } from 'types';
 
-import { ACTION_ADD_ITEM, CURRENCY_USD, projectKey } from './apiConfig';
+import { projectKey } from './apiConfig';
 import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
+import { ACTION_ADD_ITEM, CURRENCY_USD } from './constants';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
 export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
