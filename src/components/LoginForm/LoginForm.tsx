@@ -8,6 +8,7 @@ import * as z from 'zod';
 import { signIn } from '../../api/api.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { CartContext } from '../../contexts/CartContext.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { LoginFormSchema } from '../../utils/schema.tsx';
 import './LoginForm.scss';
@@ -29,7 +30,9 @@ export default function Form() {
       password: '',
     },
   });
+
   const authContext = useContext(AuthContext);
+  const cartContext = useContext(CartContext);
   const [passStyle, setPassStyle] = useState('password');
   const [signInError, setSignInError] = useState<null | ApiErrorResponse>(null);
 
@@ -51,7 +54,7 @@ export default function Form() {
       }
 
       setSignInError(null);
-      const response = await toastSignIn(onRenderError, () => signIn(data));
+      const response = await toastSignIn(onRenderError, () => signIn(data, cartContext.id));
       reset();
       updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
       navigate('/', { replace: true });

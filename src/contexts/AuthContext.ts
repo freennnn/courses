@@ -12,13 +12,13 @@ interface SetAuthContextFunction {
 type AuthContext = AuthContextValues & SetAuthContextFunction;
 
 // Add new app context variables here
-export const defaultContextValues: AuthContextValues = {
+export const defaultAuthContextValues: AuthContextValues = {
   isSignedIn: false,
   id: '',
 };
 
 export const defaultContext: AuthContext = {
-  ...defaultContextValues,
+  ...defaultAuthContextValues,
   /* eslint-disable-next-line no-console */
   setAuthContext: (data) => console.log(data),
 };
