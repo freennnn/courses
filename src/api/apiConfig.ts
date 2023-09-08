@@ -19,5 +19,5 @@ export const authApiRootscopes = [
 ];
 
 export const apiRootScopes = [
-  `manage_customers:${projectKey} view_products:${projectKey} manage_my_orders:${projectKey}`,
+  `manage_customers:${projectKey} view_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey}`,
 ];

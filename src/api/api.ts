@@ -198,3 +198,12 @@ export const addItemToCart = async (
 
   return response;
 };
+
+export const getActiveCart = async (userId: string) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot.me().activeCart().get().execute();
+
+  return response;
+};
