@@ -26,6 +26,7 @@ export default function ProductDetailPage() {
       //console.log(product);
       setProduct(product);
     };
+    /* eslint-disable-next-line no-console */
     fetchData().catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
