@@ -23,9 +23,9 @@ export default function ProductDetailPage() {
   useEffect(() => {
     const fetchData = async () => {
       const product: ProductItem = await getProduct(id ?? 'c90a86d0-116f-4ad3-af43-ccac737e7493');
-      //console.log(product);
       setProduct(product);
     };
+    /* eslint-disable-next-line no-console */
     fetchData().catch(console.error);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -1,4 +1,5 @@
 import type {
+  ApiRoot,
   CustomerDraft,
   CustomerSignin,
   Product,
@@ -7,12 +8,16 @@ import type {
 import type { DiscountsType, QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
-import { apiRoot, getAuthApiRoot } from './apiHelpers';
+import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
+import { ACTION_ADD_ITEM, CURRENCY_USD } from './constants';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
+export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
+
+let authApiRoot: ApiRoot;
 
 export const signIn = async (loginRequest: CustomerSignin) => {
-  const authApiRoot = getAuthApiRoot(loginRequest);
+  authApiRoot = getAuthApiRoot(loginRequest);
 
   const response = await authApiRoot
     .withProjectKey({ projectKey })
@@ -144,6 +149,61 @@ export const getProducts = async (
 
 export const getDiscounts = async () => {
   const response = await apiRootWithProjectKey.productDiscounts().get().execute();
+
+  return response;
+};
+
+export const createUserCart = async () => {
+  const response = await authApiRoot
+    .withProjectKey({ projectKey })
+    .me()
+    .carts()
+    .post({ body: { currency: `${CURRENCY_USD}` } })
+    .execute();
+
+  return response;
+};
+
+export const createAnonymousCart = async () => {
+  const response = await anonymousApiRootWithProjectKey
+    .me()
+    .carts()
+    .post({ body: { currency: `${CURRENCY_USD}` } })
+    .execute();
+
+  return response;
+};
+
+export const addItemToCart = async (
+  userId: string,
+  cartId: string,
+  itemId: string,
+  version: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: `${cartId}` })
+    .post({
+      body: {
+        version: version,
+        actions: [{ action: ACTION_ADD_ITEM, productId: `${itemId}` }],
+      },
+    })
+    .execute();
+
+  return response;
+};
+
+export const getActiveCart = async (userId: string) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot.me().activeCart().get().execute();
 
   return response;
 };
