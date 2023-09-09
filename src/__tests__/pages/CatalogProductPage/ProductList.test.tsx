@@ -1,8 +1,8 @@
 import { BrowserRouter } from 'react-router-dom';
 
-import ProductList from '@/features/ProductList/ProductList';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import ProductList from 'features/ProductList/ProductList';
 
 describe('ProductList', () => {
   it('renders products when productList is not empty', () => {

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import CustomLink from '@/components/CustomLink/CustomLink';
+import CustomLink from 'components/CustomLink/CustomLink';
 import { MdShoppingCart } from 'react-icons/md';
 
 import { AuthContext } from '../../contexts/AuthContext.ts';
