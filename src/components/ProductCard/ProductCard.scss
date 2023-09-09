@@ -19,7 +19,8 @@
     img {
       display: block;
       width: 100%;
-      border-radius: 15px;
+      border-start-end-radius: 15px;
+      border-start-start-radius: 15px;
       height: 100%;
       object-fit: cover;
       object-position: center;
@@ -39,7 +40,7 @@
   }
 
   &__description {
-    margin: 10px;
+    margin: 10px 50px 10px 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* Number of lines to display */
@@ -74,6 +75,28 @@
 
     &_discounted {
       color: #e91e63;
+    }
+  }
+
+  &__add-btn {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    color: #304ffe;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+
+    &:hover {
+      background: #c5cae9;
+    }
+
+    svg {
+      width: 25px;
+      height: 25px;
     }
   }
 }

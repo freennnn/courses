@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
+import { MdAddShoppingCart } from 'react-icons/md';
 import type { ProductItem } from 'types';
 
 import '@/components/ProductCard/ProductCard.scss';
@@ -10,8 +11,6 @@ interface ProductProps {
 }
 
 const ProductCard = ({ product }: ProductProps) => {
-  const navigate = useNavigate();
-
   let imgUrl = '';
 
   if (product.images && product.images?.length > 0) {
@@ -33,11 +32,12 @@ const ProductCard = ({ product }: ProductProps) => {
     'product-card__price_has-discount': product.discount,
   });
 
+  const handleAddItem = (event: React.MouseEvent) => {
+    event.preventDefault();
+  };
+
   return (
-    <div
-      className='product-card'
-      onClick={() => navigate(`/products/${product.id}`, { state: product })}
-    >
+    <Link to={`/products/${product.id}`} className='product-card'>
       {imgUrl ? (
         <div className='product-card__image'>
           <img src={imgUrl} />
@@ -53,7 +53,10 @@ const ProductCard = ({ product }: ProductProps) => {
           <span className='product-card__price_discounted'>${discountedPrice}</span>
         ) : null}
       </div>
-    </div>
+      <button className='product-card__add-btn' onClick={handleAddItem}>
+        <MdAddShoppingCart />
+      </button>
+    </Link>
   );
 };
 
