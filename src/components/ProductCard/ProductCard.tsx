@@ -1,8 +1,13 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { addItemToCart, createAnonymousCart, createUserCart } from 'api/api.ts';
 import classNames from 'classnames';
 import { MdAddShoppingCart } from 'react-icons/md';
 import type { ProductItem } from 'types';
+
+import { AuthContext } from '../../contexts/AuthContext.ts';
+import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 
 import '@/components/ProductCard/ProductCard.scss';
 
@@ -11,6 +16,9 @@ interface ProductProps {
 }
 
 const ProductCard = ({ product }: ProductProps) => {
+  const cartContext = useContext(CartContext);
+  const authContext = useContext(AuthContext);
+
   let imgUrl = '';
 
   if (product.images && product.images?.length > 0) {
@@ -32,8 +40,69 @@ const ProductCard = ({ product }: ProductProps) => {
     'product-card__price_has-discount': product.discount,
   });
 
-  const handleAddItem = (event: React.MouseEvent) => {
+  const handleAddItem = async (event: React.MouseEvent) => {
     event.preventDefault();
+
+    try {
+      if (!cartContext.id) {
+        if (authContext.id) {
+          const { body: cart } = await createUserCart();
+          updateCartContext(cartContext, (prev) => ({
+            ...prev,
+            id: cart.id,
+            version: cart.version,
+          }));
+
+          const { body: updatedCart } = await addItemToCart(
+            authContext.id,
+            cart.id,
+            product.id,
+            cart.version,
+          );
+          updateCartContext(cartContext, (prev) => ({
+            ...prev,
+            id: updatedCart.id,
+            version: updatedCart.version,
+            quantity: updatedCart.totalLineItemQuantity,
+          }));
+        } else {
+          const { body: cart } = await createAnonymousCart();
+          updateCartContext(cartContext, (prev) => ({
+            ...prev,
+            id: cart.id,
+            version: cart.version,
+          }));
+
+          const { body: updatedCart } = await addItemToCart(
+            authContext.id,
+            cart.id,
+            product.id,
+            cart.version,
+          );
+          updateCartContext(cartContext, (prev) => ({
+            ...prev,
+            id: updatedCart.id,
+            version: updatedCart.version,
+            quantity: updatedCart.totalLineItemQuantity,
+          }));
+        }
+      } else {
+        const { body: updatedCart } = await addItemToCart(
+          authContext.id,
+          cartContext.id,
+          product.id,
+          cartContext.version,
+        );
+        updateCartContext(cartContext, (prev) => ({
+          ...prev,
+          version: updatedCart.version,
+          quantity: updatedCart.totalLineItemQuantity,
+        }));
+      }
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
+    }
   };
 
   return (

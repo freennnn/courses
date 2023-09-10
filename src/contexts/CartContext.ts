@@ -3,6 +3,7 @@ import { createContext } from 'react';
 interface CartContextValues {
   id: string;
   quantity: number;
+  version: number;
 }
 
 interface SetCartContextFunction {
@@ -15,6 +16,7 @@ type CartContext = CartContextValues & SetCartContextFunction;
 export const defaultCartContextValues: CartContextValues = {
   id: '',
   quantity: 0,
+  version: 1,
 };
 
 export const defaultContext: CartContext = {
@@ -28,11 +30,17 @@ export const CartContext = createContext(defaultContext);
 /**
  * Updates global application context
  * @param {CartContext} cartContext - global application context
- * @param {Partial<CartContextValues>} values - context fields which we want to update
+ * @param {Function} updateCallback - A callback function that receives the previous cart context and returns the changes to apply.
  */
-export const updateCartContext = (cartContext: CartContext, values: Partial<CartContextValues>) => {
+
+export const updateCartContext = (
+  cartContext: CartContext,
+  updateCallback: (prev: CartContextValues) => Partial<CartContextValues>,
+) => {
+  const updatedValues = updateCallback(cartContext); // Call the callback with the current context
+
   cartContext.setCartContext({
     ...cartContext,
-    ...values,
+    ...updatedValues, // Spread the updated values into the context
   });
 };
