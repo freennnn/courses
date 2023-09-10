@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { signIn } from '../../api/api.ts';
+import { getActiveCart, signIn } from '../../api/api.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_IN_ERROR } from '../../constants.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
-import { CartContext } from '../../contexts/CartContext.ts';
+import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { LoginFormSchema } from '../../utils/schema.tsx';
 import './LoginForm.scss';
@@ -57,6 +57,15 @@ export default function Form() {
       const response = await toastSignIn(onRenderError, () => signIn(data, cartContext.id));
       reset();
       updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
+
+      const { body: cart } = await getActiveCart(response.body.customer.id);
+      updateCartContext(cartContext, (prev) => ({
+        ...prev,
+        id: cart.id,
+        version: cart.version,
+        quantity: cart.totalLineItemQuantity ?? 0,
+      }));
+
       navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;
