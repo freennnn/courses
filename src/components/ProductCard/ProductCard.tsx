@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { addItemToCart, createAnonymousCart, createUserCart } from 'api/api.ts';
 import classNames from 'classnames';
@@ -44,6 +45,8 @@ const ProductCard = ({ product }: ProductProps) => {
     event.preventDefault();
 
     try {
+      toast.info('Adding to cart...', { autoClose: false }); // Display adding to cart toast
+
       if (!cartContext.id) {
         if (authContext.id) {
           const { body: cart } = await createUserCart();
@@ -102,6 +105,8 @@ const ProductCard = ({ product }: ProductProps) => {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.log(error);
+    } finally {
+      toast.dismiss(); // Close the loading toast when adding to cart is complete
     }
   };
 
