@@ -67,6 +67,7 @@ const ProductCard = ({ product }: ProductProps) => {
             id: updatedCart.id,
             version: updatedCart.version,
             quantity: updatedCart.totalLineItemQuantity,
+            items: updatedCart.lineItems,
           }));
         } else {
           const { body: cart } = await createAnonymousCart();
@@ -87,6 +88,7 @@ const ProductCard = ({ product }: ProductProps) => {
             id: updatedCart.id,
             version: updatedCart.version,
             quantity: updatedCart.totalLineItemQuantity,
+            items: updatedCart.lineItems,
           }));
         }
       } else {
@@ -100,6 +102,7 @@ const ProductCard = ({ product }: ProductProps) => {
           ...prev,
           version: updatedCart.version,
           quantity: updatedCart.totalLineItemQuantity,
+          items: updatedCart.lineItems,
         }));
       }
     } catch (error) {
@@ -109,6 +112,8 @@ const ProductCard = ({ product }: ProductProps) => {
       toast.dismiss(); // Close the loading toast when adding to cart is complete
     }
   };
+
+  const itemExistsInCart = cartContext.items.some((item) => item.productId === product.id);
 
   return (
     <Link to={`/products/${product.id}`} className='product-card'>
@@ -127,7 +132,7 @@ const ProductCard = ({ product }: ProductProps) => {
           <span className='product-card__price_discounted'>${discountedPrice}</span>
         ) : null}
       </div>
-      <button className='product-card__add-btn' onClick={handleAddItem}>
+      <button disabled={itemExistsInCart} className='product-card__add-btn' onClick={handleAddItem}>
         <MdAddShoppingCart />
       </button>
     </Link>

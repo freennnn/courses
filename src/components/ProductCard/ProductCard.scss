@@ -90,8 +90,15 @@
     border: none;
     border-radius: 50%;
 
-    &:hover {
-      background: #c5cae9;
+    &:not(:disabled) {
+      &:hover {
+        background: #c5cae9;
+      }
+    }
+
+    &:disabled {
+      color: #888;
+      cursor: not-allowed;
     }
 
     svg {

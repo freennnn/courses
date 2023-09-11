@@ -1,9 +1,12 @@
 import { createContext } from 'react';
 
+import { LineItem } from '@commercetools/platform-sdk';
+
 interface CartContextValues {
   id: string;
   quantity: number;
   version: number;
+  items: LineItem[];
 }
 
 interface SetCartContextFunction {
@@ -17,6 +20,7 @@ export const defaultCartContextValues: CartContextValues = {
   id: '',
   quantity: 0,
   version: 1,
+  items: [],
 };
 
 export const defaultContext: CartContext = {
