@@ -58,13 +58,19 @@ export default function Form() {
       reset();
       updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
 
-      const { body: cart } = await getActiveCart(response.body.customer.id);
-      updateCartContext(cartContext, (prev) => ({
-        ...prev,
-        id: cart.id,
-        version: cart.version,
-        quantity: cart.totalLineItemQuantity ?? 0,
-      }));
+      try {
+        const { body: cart } = await getActiveCart(response.body.customer.id);
+        updateCartContext(cartContext, (prev) => ({
+          ...prev,
+          id: cart.id,
+          version: cart.version,
+          quantity: cart.totalLineItemQuantity ?? 0,
+        }));
+      } catch (error) {
+        const apiError = error as ApiErrorResponse;
+        /* eslint-disable-next-line no-console */
+        console.error(apiError);
+      }
 
       navigate('/', { replace: true });
     } catch (error) {
