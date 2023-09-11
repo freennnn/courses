@@ -2,7 +2,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import ProductCard from 'components/ProductCard/ProductCard';
+
+import ProductCard from '../../../components/ProductCard/ProductCard';
 
 describe('ProductCard', () => {
   it('renders properties correctly', () => {

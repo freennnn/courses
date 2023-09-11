@@ -7,7 +7,8 @@ import { jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
-import CatalogProductPage from 'pages/CatalogProductPage/CatalogProductPage';
+
+import CatalogProductPage from '../../../pages/CatalogProductPage/CatalogProductPage';
 
 //https://github.com/sodatea/vite-jest/tree/main/packages/vite-jest#limitations-and-differences-with-commonjs-tests
 
@@ -15,14 +16,14 @@ import CatalogProductPage from 'pages/CatalogProductPage/CatalogProductPage';
 // @ts-ignore
 var getProductsListMock;
 
-jest.mock('pages/CatalogProductPage/helpers.ts', () => {
+jest.mock('../../../pages/CatalogProductPage/helpers.ts', () => {
   getProductsListMock = jest.fn(() => Promise.resolve());
   return {
     getProductsList: getProductsListMock,
   };
 });
 
-jest.mock('features/CategoryList/CategoryList', () => () => 'CategoryList');
+jest.mock('../../../features/CategoryList/CategoryList.tsx', () => () => 'CategoryList');
 
 describe('CatalogProductPage', () => {
   beforeEach(() => {

@@ -37,9 +37,9 @@ module.exports = {
   //   'd.ts' 
   // ],
   moduleNameMapper: {
-    '^pages/(.*)$': '<rootDir>/src/pages/$1',
-    '^components/(.*)$': '<rootDir>/src/components/$1',
-    '^features/(.*)$': '<rootDir>/src/features/$1',
+    '^@/components/(.*)$': '<rootDir>/src/components/$1',
+    '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
+    '^@/features/(.*)$': '<rootDir>/src/features/$1',
     '\\.scss$': '<rootDir>/src/__tests__/empty-module.ts',
   },
   // coverageReporters: ['json', 'lcov', 'text', 'clover'],

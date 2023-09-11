@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Breadcrumbs from 'components/Breadcrumbs/Breadcrumbs';
-import ProductFilter from 'components/Filter/ProductFilter';
-import useProductFilter from 'components/Filter/useProductFilter';
-import Preloader from 'components/Preloader/Preloader';
-import CategoryList from 'features/CategoryList/CategoryList';
-import ProductList from 'features/ProductList/ProductList';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import ProductFilter from '@/components/Filter/ProductFilter';
+import useProductFilter from '@/components/Filter/useProductFilter';
+import Preloader from '@/components/Preloader/Preloader';
+import CategoryList from '@/features/CategoryList/CategoryList';
+import ProductList from '@/features/ProductList/ProductList';
 import type { ProductItem } from 'types';
 
 import '../CatalogProductPage/CatalogProductPage.scss';
