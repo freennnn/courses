@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
@@ -13,9 +14,13 @@ import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
+const limit = 6;
+const total = 16;
+
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
   const {
     selectedYear,
     selectedPriceRange,
@@ -53,6 +58,7 @@ const CatalogProductPage = () => {
 
   useEffect(() => {
     setLoading(true);
+    setOffset(0);
     getProductsList(
       selectedYear,
       selectedPriceRange,
@@ -60,16 +66,53 @@ const CatalogProductPage = () => {
       sortingOrder,
       searchWord,
       category,
+      limit,
+      0,
     )
       .then((productList) => {
         setProductList(productList ?? []);
-        setLoading(false);
       })
       .catch((error) => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, category]);
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inView && offset < total) {
+      setLoading(true);
+      const offsetNew = offset + limit;
+      setOffset(offsetNew);
+      getProductsList(
+        selectedYear,
+        selectedPriceRange,
+        sortingParam,
+        sortingOrder,
+        searchWord,
+        category,
+        limit,
+        offsetNew,
+      )
+        .then((productList) => {
+          if (productList && productList.length > 0) {
+            setProductList((prevProductList) => [...prevProductList, ...productList]);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          /* eslint-disable-next-line no-console */
+          console.error('Error fetching products:', error);
+        });
+    }
+    // eslint-disable-next-line
+  }, [inView]);
 
   return (
     <div className='catalog-page'>
@@ -85,6 +128,7 @@ const CatalogProductPage = () => {
           <p className='no-products-message'> No movies match the selected filters.</p>
         )}
       </div>
+      <div ref={ref}></div>
     </div>
   );
 };

@@ -39,5 +39,5 @@ export interface ProductFilterProps {
 }
 
 export interface QueryArgs {
-  [key: string]: string | string[];
+  [key: string]: string | string[] | number;
 }

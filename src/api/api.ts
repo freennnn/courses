@@ -99,6 +99,8 @@ export const getProducts = async (
   sortVal: string,
   word: string,
   category: string,
+  limit: number,
+  offset: number,
 ) => {
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
@@ -117,24 +119,32 @@ export const getProducts = async (
       ],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else if (year) {
     queryArgs = {
       filter: [`variants.attributes.year: ${year}`],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else if (price.length > 0) {
     queryArgs = {
       filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else {
     queryArgs = {
       filter: [],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   }
 
