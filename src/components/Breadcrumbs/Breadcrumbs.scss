@@ -1,0 +1,24 @@
+.breadcrumbs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  color: white;
+  margin-bottom: 2rem;
+  @media (max-width: 650px) {
+    justify-content: right;
+    font-size: 0.8rem;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+    &:hover {
+      color: red;
+    }
+  }
+  .active {
+    color: red;
+    & ~ a {
+      font-size: 0;
+    }
+  }
+}

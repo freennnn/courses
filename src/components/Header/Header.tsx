@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Navigation from '@/features/Navigation/Navigation';
+
 import './Header.scss';
 
 interface HeaderPropsType {
@@ -8,7 +10,7 @@ interface HeaderPropsType {
 
 export default function Header({ children }: HeaderPropsType) {
   return (
-    <div className='header'>
+    <div className='header container'>
       <Navigation />
       {children}
     </div>

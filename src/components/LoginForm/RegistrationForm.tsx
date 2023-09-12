@@ -1,83 +1,21 @@
 import React from 'react';
-import { useState, useContext } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useContext, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import countries from './CountryData';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
 import { signIn, signUp } from '../../api/api.ts';
-import { ApiErrorResponse } from '../../types.ts';
-import { toastForNoConnection, toastSignUp } from './toasts.ts';
-import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
-
+import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { ApiErrorResponse } from '../../types.ts';
+import { RegistrationFormSchema } from '../../utils/schema.tsx';
+import countries from './CountryData';
 import './LoginForm.scss';
+import { toastForNoConnection, toastSignUp } from './toasts.ts';
 
-const FormSchema = z
-  .object({
-    firstName: z
-      .string()
-      .trim()
-      .min(1, { message: '  must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
-    lastName: z
-      .string()
-      .trim()
-      .min(1, { message: ' must contain at least one character' })
-      .regex(/^[a-zA-Z]+$/, ' must contain only letters of the Latin alphabet'),
-    email: z.string().nonempty(' is required to complete').email({
-      message: ' is invalid. Please enter a valid email address(e.g., user@example.com)',
-    }),
-    isChecked: z.boolean(),
-    street: z.string().trim().nonempty(' is required to complete'),
-    street2: z.string().trim().nonempty(' is required to complete'),
-    city: z
-      .string()
-      .trim()
-      .min(1, { message: ' must contain at least one character' })
-      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
-    city2: z
-      .string()
-      .trim()
-      .min(1, { message: ' must contain at least one character' })
-      .regex(/^(([a-zA-Z])(\s[a-zA-Z])?)+$/, ' must contain only letters of the Latin alphabet'),
-    country: z.string().nonempty('Country is required to complete'),
-    country2: z.string().nonempty('Country is required to complete'),
-    zip: z.string().trim().nonempty(' is required to complete'),
-    zip2: z.string().trim().nonempty(' is required to complete'),
-    addressDefault: z.boolean(),
-    addressDefault2: z.boolean(),
-    dateOfBirth: z.coerce
-      .date()
-      .min(new Date(1920, 0, 1), {
-        message: ' cannot go past January 1 1923',
-      })
-      .max(new Date(), { message: ' must be in the past' })
-      .refine(
-        (date: Date) => {
-          const ageTime = new Date(Date.now() - date.getTime());
-          const age = Math.abs(ageTime.getUTCFullYear() - 1970);
-          return age >= 18;
-        },
-        { message: 'You must be 18 years or older' },
-      ),
-    password: z
-      .string()
-      .trim()
-      .min(8, 'Password must have at least 8 characters')
-      .regex(/[0-9]/, 'Password must have at least 1 digit character')
-      .regex(/[a-z]/, 'Password must have at least 1 lowercase character')
-      .regex(/[A-Z]/, 'Password must have at least 1 uppercase character'),
-
-    confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
-  });
-
-type FormRegistr = z.infer<typeof FormSchema>;
+type FormRegistr = z.infer<typeof RegistrationFormSchema>;
 
 interface Country {
   id: string;
@@ -115,7 +53,7 @@ export default function Form() {
     formState: { errors },
   } = useForm<FormRegistr>({
     mode: 'onChange',
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(RegistrationFormSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -191,9 +129,9 @@ export default function Form() {
       setSignUpError(null);
 
       await toastSignUp(onRenderError, () => signUp(customer));
-      await signIn({ email: customer.email, password: customer.password });
+      const response = await signIn({ email: customer.email, password: customer.password });
       reset();
-      updateAuthContext(authContext, { isSignedIn: true });
+      updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
       navigate('/', { replace: true });
     } catch (error) {
       const apiError = error as ApiErrorResponse;

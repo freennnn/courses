@@ -1,24 +1,24 @@
 import {
-  ClientBuilder,
-  Client,
-  HttpMiddlewareOptions,
-  AuthMiddlewareOptions,
-  PasswordAuthMiddlewareOptions,
-} from '@commercetools/sdk-client-v2';
-import {
-  createApiBuilderFromCtpClient,
   ApiRoot,
   CustomerSignin,
+  createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
+import { ClientBuilder } from '@commercetools/sdk-client-v2';
+import type {
+  AuthMiddlewareOptions,
+  Client,
+  HttpMiddlewareOptions,
+  PasswordAuthMiddlewareOptions,
+} from '@commercetools/sdk-client-v2';
 
 import {
   AUTH_MIDDLEWARE_HOST,
   HTTP_MIDDLEWARE_HOST,
-  projectKey,
+  apiRootScopes,
+  authApiRootscopes,
   clientId,
   clientSecret,
-  manageCustomersScope,
-  scopes,
+  projectKey,
 } from './apiConfig';
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
@@ -33,7 +33,7 @@ const authMiddlewareOptions: AuthMiddlewareOptions = {
     clientId,
     clientSecret,
   },
-  scopes: manageCustomersScope,
+  scopes: apiRootScopes,
   fetch,
 };
 
@@ -56,7 +56,7 @@ export const getAuthApiRoot = (loginRequest: CustomerSignin) => {
         password: loginRequest.password,
       },
     },
-    scopes,
+    scopes: authApiRootscopes,
     fetch,
   };
 

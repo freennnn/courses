@@ -1,17 +1,18 @@
-import { NavigationState } from './Navigation.types';
-import CustomLink from '@/components/CustomLink/CustomLink';
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import CustomLink from '@/components/CustomLink/CustomLink';
+import { MdShoppingCart } from 'react-icons/md';
+
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import './Navigation.scss';
+import { NavigationState } from './Navigation.types';
 
 function getPathForState(state: NavigationState): string {
   switch (state) {
-    case NavigationState.Featured:
+    case NavigationState.Home:
       return '/';
-    case NavigationState.TopCategories:
-      return '/products';
-    case NavigationState.Sale:
+    case NavigationState.Catalog:
       return '/products';
     case NavigationState.SignIn:
       return '/login';
@@ -29,31 +30,26 @@ function getPathForState(state: NavigationState): string {
 export default function Navigation() {
   const user = { name: 'Friend' }; // TODO: add basic user information to Auth Context
   const { isSignedIn } = useContext(AuthContext);
-  // console.log(`isSignedIn in Navigation: ${isSignedIn}`);
 
   let states: NavigationState[] = [];
   if (!isSignedIn) {
     states = [
-      NavigationState.Featured,
-      // NavigationState.TopCategories,
-      // NavigationState.Sale,
+      NavigationState.Home,
+      NavigationState.Catalog,
       NavigationState.SignIn,
       NavigationState.SignUp,
-      NavigationState.Basket,
     ];
   } else {
     states = [
-      NavigationState.Featured,
-      // NavigationState.TopCategories,
-      // NavigationState.Sale,
+      NavigationState.Home,
+      NavigationState.Catalog,
       NavigationState.UserProfile,
       NavigationState.LogOut,
-      NavigationState.Basket,
     ];
   }
 
   function isLayoutGroupOneLink(state: NavigationState) {
-    if (state === NavigationState.Featured) {
+    if (state === NavigationState.Home || state === NavigationState.Catalog) {
       return true;
     }
     return false;
@@ -77,32 +73,17 @@ export default function Navigation() {
   const layoutGroupOneStates = states.filter((state) => isLayoutGroupOneLink(state));
   const layoutGroupTwoStates = states.filter((state) => !isLayoutGroupOneLink(state));
 
-  const navigate = useNavigate();
-
-  const handleLoginClick = () => {
-    if (isSignedIn) {
-      navigate('/');
-    } else {
-      navigate('/login');
-    }
-  };
-
   return (
     <nav className='navigation'>
       <div className='navigation__group-one'>
+        <Link className='logo' to='/' />
         {layoutGroupOneStates.map((state) => customLinkForState(state))}
       </div>
-      <hr className='navigation__divider'></hr>
       <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
-        {isSignedIn ? (
-          <button
-            className='button button_text button_medium button_transparent'
-            onClick={handleLoginClick}
-          >
-            Sign In
-          </button>
-        ) : null}
+        <Link className='basket-icon' to='/basket'>
+          <MdShoppingCart />
+        </Link>
       </div>
     </nav>
   );

@@ -1,0 +1,15 @@
+.catalog-page {
+  background-color: #303030;
+  padding-top: 100px;
+
+  &__content {
+    min-height: 100vh;
+    background-image: url('../../assets/images/Rectangle.png');
+    background-size: cover;
+  }
+
+  .no-products-message {
+    text-align: center;
+    color: white;
+  }
+}

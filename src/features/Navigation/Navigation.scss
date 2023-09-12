@@ -1,24 +1,33 @@
 .navigation {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-}
+  justify-content: space-between;
 
-.navigation__divider {
-  height: 20px;
-  width: 0px;
-  border-left: 1px solid $color-primary;
-  //border-right:1px solid #16222c;
-  margin: 0 20px 0 40px;
+  &__group-one {
+    display: flex;
+    align-items: center;
+  }
 
-  @include media-tablet-and_down {
-    margin: 0 5px 0 20px;
+  &__group-two {
+    display: flex;
+    align-items: center;
+    @include media-mobile-only {
+      margin-right: 5px;
+    }
   }
 }
 
-.navigation__group-two {
-  margin-right: 20px;
-  @include media-mobile-only {
-    margin-right: 5px;
+.basket-icon {
+  align-self: center;
+  color: white;
+
+  &:hover {
+    transform: translateY(2px);
+  }
+
+  svg {
+    display: block;
+    width: 25px;
+    height: 25px;
   }
 }
