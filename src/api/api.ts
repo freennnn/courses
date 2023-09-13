@@ -227,3 +227,32 @@ export const mergeAnonymousCart = async (email: string, password: string) => {
 
   return response;
 };
+
+export const removeItem = async (
+  userId: string,
+  cartsId: string,
+  lineItemId: string,
+  version: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineItemId,
+          },
+        ],
+      },
+    })
+    .execute();
+
+  return response;
+};

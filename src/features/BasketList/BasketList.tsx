@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 import type { CentPrecisionMoney, LineItem } from '@commercetools/platform-sdk';
 
-import { getActiveCart } from '../../api/api.ts';
+import { getActiveCart, removeItem } from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
-import { CartContext } from '../../contexts/CartContext.ts';
+import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import './BasketList.scss';
 
 export default function BasketList() {
@@ -40,6 +40,17 @@ export default function BasketList() {
       setAnswer(`The cart is empty. Please, go to`);
     }
   }
+
+  const removeLine = async (lineItemId: string) => {
+    const { body: cart } = await removeItem(userId, cartId, lineItemId, version);
+    setVersion(cart.version);
+    updateCartContext(cartContext, (response) => ({
+      ...response,
+      version: cart.version,
+      quantity: cart.totalLineItemQuantity,
+      items: cart.lineItems,
+    }));
+  };
 
   useEffect((): void => {
     cartContext.id ? void findCart(userId) : setAnswer(`The cart is empty.Please, go to`);
@@ -84,7 +95,7 @@ export default function BasketList() {
                 Total price:{' '}
                 {(item.totalPrice.centAmount / 100).toFixed(item.price.value.fractionDigits)}
               </div>
-              <button>Remove</button>
+              <button onClick={() => removeLine(item.id)}>Remove</button>
             </div>
           ))}
           <div>
