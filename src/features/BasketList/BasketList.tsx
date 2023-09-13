@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import type { CentPrecisionMoney, LineItem } from '@commercetools/platform-sdk';
 
-import { getActiveCart, removeItem } from '../../api/api.ts';
+import { deleteCart, getActiveCart, removeItem } from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import './BasketList.scss';
@@ -59,6 +59,21 @@ export default function BasketList() {
       version: newVersion,
       quantity: newQuantity,
     }));
+  };
+
+  const removeCart = async (userId: string, cartId: string, version: number) => {
+    await deleteCart(userId, cartId, version);
+    setVersion(1);
+    setAnswer(`The cart is empty.Please, go to`);
+    updateCartContext(cartContext, (responce) => ({
+      ...responce,
+      id: '',
+      quantity: 0,
+      version: 1,
+      items: [],
+    }));
+    setItems([]);
+    setTotal(undefined);
   };
 
   useEffect((): void => {
@@ -119,6 +134,14 @@ export default function BasketList() {
             <p>Total sum</p>
             {(total && (total.centAmount / 100).toFixed(total.fractionDigits)) ?? 0}
           </div>
+          <button
+            onClick={() => {
+              if (window.confirm('Are you sure you wish to delete this cart?'))
+                void removeCart(userId, cartId, version);
+            }}
+          >
+            Clear Cart
+          </button>
         </div>
       </div>
     </>

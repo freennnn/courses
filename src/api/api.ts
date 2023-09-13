@@ -287,3 +287,21 @@ export const updateQuantity = async (
 
   return response;
 };
+
+export const deleteCart = async (userId: string, cartId: string, version: number) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .delete({
+      queryArgs: {
+        version: version,
+      },
+    })
+    .execute();
+
+  return response;
+};
