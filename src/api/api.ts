@@ -305,3 +305,39 @@ export const deleteCart = async (userId: string, cartId: string, version: number
 
   return response;
 };
+
+export const addDiscount = async (
+  userId: string,
+  cartsId: string,
+  version: number,
+  code: string,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code: code,
+          },
+        ],
+      },
+    })
+    .execute();
+  return response;
+};
+
+export const cartDiscounts = async (userId: string) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot.cartDiscounts().get().execute();
+  return response;
+};

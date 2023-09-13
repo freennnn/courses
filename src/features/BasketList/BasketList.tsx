@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom';
 
 import type { CentPrecisionMoney, LineItem } from '@commercetools/platform-sdk';
 
-import { deleteCart, getActiveCart, removeItem } from '../../api/api.ts';
+import {
+  addDiscount,
+  cartDiscounts,
+  deleteCart,
+  getActiveCart,
+  removeItem,
+} from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import './BasketList.scss';
@@ -76,6 +82,32 @@ export default function BasketList() {
     setTotal(undefined);
   };
 
+  const [promo, setPromo] = useState('');
+
+  const handleChange = (event: HTMLInputElement) => {
+    setPromo(event.value);
+  };
+
+  const checkDiscount = async () => {
+    const response = await cartDiscounts(userId);
+    const arr = response.body.results.map((item) => item.key);
+    if (arr.includes(promo)) {
+      const { body: cart } = await addDiscount(userId, cartId, version, promo);
+      setVersion(cart.version);
+      updateCartContext(cartContext, (response) => ({
+        ...response,
+        version: cart.version,
+      }));
+    }
+  };
+
+  const oldPrice = (() => {
+    if (items) {
+      return items.reduce((sum, item) => sum + item.price.value.centAmount * item.quantity, 0);
+    }
+    return 0;
+  })();
+
   useEffect((): void => {
     cartContext.id ? void findCart(userId) : setAnswer(`The cart is empty.Please, go to`);
   }, [cartContext, cartContext.id, userId]);
@@ -132,8 +164,24 @@ export default function BasketList() {
           ))}
           <div>
             <p>Total sum</p>
+            {oldPrice && (
+              <span className='basket__item-oldprice'>
+                {total && (oldPrice / 100).toFixed(total.fractionDigits)}
+              </span>
+            )}
             {(total && (total.centAmount / 100).toFixed(total.fractionDigits)) ?? 0}
           </div>
+          <form>
+            <input
+              type='text'
+              id='discount'
+              name='discount'
+              onChange={(e) => handleChange(e.currentTarget)}
+            />
+            <button type='button' onClick={checkDiscount}>
+              Apply
+            </button>
+          </form>
           <button
             onClick={() => {
               if (window.confirm('Are you sure you wish to delete this cart?'))
