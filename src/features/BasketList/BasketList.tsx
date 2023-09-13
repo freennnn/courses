@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import type { CentPrecisionMoney, LineItem } from '@commercetools/platform-sdk';
+import { MdRestoreFromTrash } from 'react-icons/md';
 
 import {
   addDiscount,
@@ -23,7 +24,7 @@ export default function BasketList() {
   const [items, setItems] = useState<LineItem[]>();
   const [answer, setAnswer] = useState<string>('');
   const [total, setTotal] = useState<CentPrecisionMoney>();
-  const [discount, setDiscount] = useState(true);
+  const [discount, setDiscount] = useState(false);
   const cartContext = useContext(CartContext);
 
   async function findCart(userId: string): Promise<void> {
@@ -160,11 +161,13 @@ export default function BasketList() {
               <div className='basket__item-totalprice'>
                 {(item.totalPrice.centAmount / 100).toFixed(item.price.value.fractionDigits)}
               </div>
-              <button onClick={() => removeLine(item.id)}>Remove</button>
+              <button className='basket__btn' onClick={() => removeLine(item.id)}>
+                <MdRestoreFromTrash />
+              </button>
             </div>
           ))}
           <div>
-            <p>Total sum</p>
+            <b>Total sum: </b>
             {oldPrice && (
               <span
                 className={
@@ -174,20 +177,23 @@ export default function BasketList() {
                 {total && (oldPrice / 100).toFixed(total.fractionDigits)}
               </span>
             )}
-            {(total && (total.centAmount / 100).toFixed(total.fractionDigits)) ?? 0}
+            {(total && (total.centAmount / 100).toFixed(total.fractionDigits)) ?? ''}
           </div>
           <form>
+            <label htmlFor='discount'>Enter your promo</label>
             <input
+              className='basket__input'
               type='text'
               id='discount'
               name='discount'
               onChange={(e) => handleChange(e.currentTarget)}
             />
-            <button type='button' onClick={checkDiscount}>
+            <button className='basket__btn' type='button' onClick={checkDiscount}>
               Apply
             </button>
           </form>
           <button
+            className='basket__btn'
             onClick={() => {
               if (window.confirm('Are you sure you wish to delete this cart?'))
                 void removeCart(userId, cartId, version);

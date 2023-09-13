@@ -39,14 +39,14 @@ const Quantity = ({ userId, cartsId, lineItemId, version, quantity, handlerQuant
   };
 
   return (
-    <div>
-      <button disabled={disabled} onClick={decrementHandler}>
+    <div className='basket__inline-flex'>
+      <button className='basket__btn' disabled={disabled} onClick={decrementHandler}>
         -
       </button>
-
       <span>{count}</span>
-
-      <button onClick={incrementHandler}>+</button>
+      <button className='basket__btn' onClick={incrementHandler}>
+        +
+      </button>
     </div>
   );
 };

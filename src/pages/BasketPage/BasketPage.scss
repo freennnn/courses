@@ -5,6 +5,7 @@
   width: 100%;
   padding: 2.5rem;
   padding-top: 100px;
+
   @media (max-width: 680px) {
     padding: 1rem;
   }
@@ -125,6 +126,13 @@
     }
   }
 
+  &__inline-flex {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 12%;
+  }
+
   &__col {
     width: 50%;
 
@@ -140,9 +148,6 @@
     color: white;
     background-color: #304ffe;
     text-transform: capitalize;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: none;
     border-radius: 0.5rem;
     transition: all ease-in-out 0.3s;
@@ -154,30 +159,6 @@
 
     @media (max-width: 768px) {
       font-size: 0.75rem;
-    }
-  }
-
-  &__default {
-    color: #e91e63;
-  }
-
-  &__default ~ p > span {
-    color: #e91e63;
-  }
-
-  &__address {
-    border: 1px solid lightgray;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  &__text {
-    color: #fff;
-    font-size: 1.5rem;
-
-    @media (max-width: 1024px) {
-      font-size: 1rem;
     }
   }
 
@@ -196,13 +177,6 @@
     }
   }
 
-  select {
-    width: 100%;
-    border-radius: 0.3125rem;
-    padding: 0.6rem;
-    margin: 0.6rem 0;
-  }
-
   &__flex {
     display: flex;
     gap: 0.6rem;
@@ -213,31 +187,12 @@
       flex-direction: column;
     }
   }
-}
-
-.user-form {
-  text-align: left;
-  width: 50%;
-
-  @media (max-width: 1200px) {
-    width: 70%;
-  }
-
-  @media (max-width: 980px) {
-    width: 90%;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-    width: 100%;
-  }
 
   &__input {
-    width: 100%;
     padding: 0.6rem;
     border-radius: 0.3125rem;
     border: 1px solid rgba(0, 0, 0, 0.4);
-    margin: 0.6rem 0;
+    margin: 0.6rem;
 
     &:placeholder {
       color: rgba(0, 0, 0, 0.6);
@@ -248,92 +203,4 @@
       outline: 1px solid #304ffe;
     }
   }
-
-  .user-form__error--zip {
-    display: none;
-    color: red;
-  }
-
-  input:invalid {
-    border-color: red;
-    outline: 1px solid red;
-  }
-
-  .user-form__error ~ input {
-    border: 1px solid red;
-  }
-
-  input:invalid + .user-form__error--zip {
-    display: block;
-  }
-
-  select {
-    width: 100%;
-    border-radius: 0.3125rem;
-    padding: 0.6rem;
-    margin: 0.6rem 0;
-  }
-
-  &__flex {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: space-between;
-    margin: 0.6rem 0;
-
-    @media (max-width: 768px) {
-      flex-direction: column;
-    }
-  }
-
-  &__error {
-    color: red;
-    position: relative;
-  }
-
-  &__label-pass {
-    position: relative;
-  }
-
-  &__view {
-    position: absolute;
-    bottom: 0;
-    right: 5px;
-    cursor: pointer;
-  }
-
-  input[type='text'] + .user-form__view:before {
-    content: '';
-    border-bottom: 2px solid #000;
-    position: absolute;
-    width: 1.5rem;
-    height: 50%;
-    top: 2px;
-    left: -4px;
-    transform: rotate(-45deg);
-
-    @media (max-width: 768px) {
-      width: 1.2rem;
-      height: 40%;
-      top: 4px;
-      left: -2px;
-    }
-  }
-
-  input[type='password'] + .user-form__view:before {
-    display: none;
-  }
-
-  input[type='checkbox'] {
-    margin-right: 0.6rem;
-  }
-
-  fieldset {
-    width: 100%;
-    border-radius: 0.3125rem;
-    margin: 0.6rem 0;
-  }
-}
-
-.server-error {
-  border: 1px solid red;
 }
