@@ -9,14 +9,18 @@ import type { DiscountsType, QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
 import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
-import { ACTION_ADD_ITEM, CURRENCY_USD } from './constants';
+import { ACTION_ADD_ITEM, CURRENCY_USD, MERGE_CART_MODE } from './constants';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
 export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
 
 let authApiRoot: ApiRoot;
 
-export const signIn = async (loginRequest: CustomerSignin) => {
+export const signIn = async (loginRequest: CustomerSignin, cartId: string) => {
+  if (cartId) {
+    await mergeAnonymousCart(loginRequest.email, loginRequest.password);
+  }
+
   authApiRoot = getAuthApiRoot(loginRequest);
 
   const response = await authApiRoot
@@ -204,6 +208,22 @@ export const getActiveCart = async (userId: string) => {
     ? authApiRoot.withProjectKey({ projectKey })
     : anonymousApiRootWithProjectKey;
   const response = await apiRoot.me().activeCart().get().execute();
+
+  return response;
+};
+
+export const mergeAnonymousCart = async (email: string, password: string) => {
+  const response = await anonymousApiRootWithProjectKey
+    .me()
+    .login()
+    .post({
+      body: {
+        email,
+        password,
+        activeCartSignInMode: `${MERGE_CART_MODE}`,
+      },
+    })
+    .execute();
 
   return response;
 };

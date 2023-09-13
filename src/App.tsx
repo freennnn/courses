@@ -15,33 +15,44 @@ import RegistrationPage from '@/pages/RegistrationPage/RegistrationPage';
 import UserProfilePage from '@/pages/UserProfilePage/UserProfilePage';
 
 import './App.scss';
-import { AuthContext, defaultContextValues } from './contexts/AuthContext';
+import { AuthContext, defaultAuthContextValues } from './contexts/AuthContext';
+import { CartContext, defaultCartContextValues } from './contexts/CartContext';
 
 const App = () => {
-  const [appContext, setAuthContext] = useState(defaultContextValues);
+  const [authData, setAuthData] = useState(defaultAuthContextValues);
+  const [cartData, setCartData] = useState(defaultCartContextValues);
+
   Modal.setAppElement('#root');
+
   return (
     <>
       <ToastContainer />
       <AuthContext.Provider
         value={{
-          ...appContext,
-          setAuthContext,
+          ...authData,
+          setAuthData,
         }}
       >
-        <Routes>
-          <Route path='/' element={<NavigationLayout />}>
-            <Route path='basket' element={<BasketPage />} />
-            <Route index element={<MainPage />} />
-            <Route path='products' element={<CatalogProductPage />} />
-            <Route path='products/:id' element={<ProductDetailPage />} />
-            <Route path='products/category/:url' element={<CategoryPage />} />
-          </Route>
-          <Route path='profile' element={<UserProfilePage />} />
-          <Route path='login' element={<MainOrLoginRoute />} />
-          <Route path='register' element={<RegistrationPage />} />
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
+        <CartContext.Provider
+          value={{
+            ...cartData,
+            setCartData,
+          }}
+        >
+          <Routes>
+            <Route path='/' element={<NavigationLayout />}>
+              <Route path='basket' element={<BasketPage />} />
+              <Route index element={<MainPage />} />
+              <Route path='products' element={<CatalogProductPage />} />
+              <Route path='products/:id' element={<ProductDetailPage />} />
+              <Route path='products/category/:url' element={<CategoryPage />} />
+            </Route>
+            <Route path='profile' element={<UserProfilePage />} />
+            <Route path='login' element={<MainOrLoginRoute />} />
+            <Route path='register' element={<RegistrationPage />} />
+            <Route path='*' element={<NotFoundPage />} />
+          </Routes>
+        </CartContext.Provider>
       </AuthContext.Provider>
     </>
   );

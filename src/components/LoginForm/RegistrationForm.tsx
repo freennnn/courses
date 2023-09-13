@@ -9,6 +9,7 @@ import * as z from 'zod';
 import { signIn, signUp } from '../../api/api.ts';
 import { TOAST_INTERNAL_SERVER_ERROR, TOAST_SIGN_UP_ERROR } from '../../constants.ts';
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { CartContext } from '../../contexts/CartContext.ts';
 import { ApiErrorResponse } from '../../types.ts';
 import { RegistrationFormSchema } from '../../utils/schema.tsx';
 import countries from './CountryData';
@@ -76,6 +77,7 @@ export default function Form() {
   });
 
   const authContext = useContext(AuthContext);
+  const cartContext = useContext(CartContext);
 
   type PasswordView = 'text' | 'password';
 
@@ -129,7 +131,10 @@ export default function Form() {
       setSignUpError(null);
 
       await toastSignUp(onRenderError, () => signUp(customer));
-      const response = await signIn({ email: customer.email, password: customer.password });
+      const response = await signIn(
+        { email: customer.email, password: customer.password },
+        cartContext.id,
+      );
       reset();
       updateAuthContext(authContext, { isSignedIn: true, id: response.body.customer.id });
       navigate('/', { replace: true });
