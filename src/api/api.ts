@@ -256,3 +256,34 @@ export const removeItem = async (
 
   return response;
 };
+
+export const updateQuantity = async (
+  userId: string,
+  cartsId: string,
+  lineItemId: string,
+  version: number,
+  quantity: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: lineItemId,
+            quantity: quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+  return response;
+};

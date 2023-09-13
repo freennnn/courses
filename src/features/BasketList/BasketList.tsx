@@ -8,6 +8,7 @@ import { getActiveCart, removeItem } from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import './BasketList.scss';
+import Quantity from './Quantity';
 
 export default function BasketList() {
   const { id: userId } = useContext(AuthContext);
@@ -52,6 +53,14 @@ export default function BasketList() {
     }));
   };
 
+  const handlerQuantity = (newVersion: number, newQuantity: number) => {
+    updateCartContext(cartContext, (response) => ({
+      ...response,
+      version: newVersion,
+      quantity: newQuantity,
+    }));
+  };
+
   useEffect((): void => {
     cartContext.id ? void findCart(userId) : setAnswer(`The cart is empty.Please, go to`);
   }, [cartContext, cartContext.id, userId]);
@@ -91,6 +100,14 @@ export default function BasketList() {
                   {(item.price.value.centAmount / 100).toFixed(item.price.value.fractionDigits)}
                 </span>
               </div>
+              <Quantity
+                userId={userId}
+                cartsId={cartId}
+                lineItemId={item.id}
+                version={version}
+                quantity={item.quantity}
+                handlerQuantity={handlerQuantity}
+              />
               <div className='basket__item-totalprice'>
                 Total price:{' '}
                 {(item.totalPrice.centAmount / 100).toFixed(item.price.value.fractionDigits)}
