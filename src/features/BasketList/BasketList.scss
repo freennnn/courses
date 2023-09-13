@@ -1,0 +1,41 @@
+.basket__item {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+
+  &-box {
+    width: 20%;
+
+    &--lg {
+      flex-grow: 2;
+    }
+  }
+
+  &-img {
+    width: 100%;
+  }
+
+  &-oldprice {
+    display: none;
+
+    &--active {
+      display: inline-block;
+      position: relative;
+      margin-right: 10px;
+
+      color: red;
+
+      &:before {
+        content: '';
+        border-bottom: 2px solid #000;
+        position: absolute;
+        width: 3rem;
+        height: 100%;
+        top: -8px;
+        left: -4px;
+        transform: rotate(-30deg);
+      }
+    }
+  }
+}

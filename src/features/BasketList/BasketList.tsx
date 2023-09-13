@@ -23,6 +23,7 @@ export default function BasketList() {
   const [items, setItems] = useState<LineItem[]>();
   const [answer, setAnswer] = useState<string>('');
   const [total, setTotal] = useState<CentPrecisionMoney>();
+  const [discount, setDiscount] = useState(true);
   const cartContext = useContext(CartContext);
 
   async function findCart(userId: string): Promise<void> {
@@ -39,6 +40,9 @@ export default function BasketList() {
         }
         if (body?.version) {
           setVersion(body.version);
+        }
+        if (body?.discountCodes.length === 0) {
+          setDiscount(false);
         }
       });
     } catch (err) {
@@ -94,6 +98,7 @@ export default function BasketList() {
     if (arr.includes(promo)) {
       const { body: cart } = await addDiscount(userId, cartId, version, promo);
       setVersion(cart.version);
+      setDiscount(true);
       updateCartContext(cartContext, (response) => ({
         ...response,
         version: cart.version,
@@ -110,10 +115,7 @@ export default function BasketList() {
 
   useEffect((): void => {
     cartContext.id ? void findCart(userId) : setAnswer(`The cart is empty.Please, go to`);
-  }, [cartContext, cartContext.id, userId]);
-
-  /* eslint-disable no-console */
-  console.log(cartId, version);
+  }, [cartContext, cartContext.id, userId, version]);
 
   return (
     <>
@@ -129,14 +131,14 @@ export default function BasketList() {
         <div>
           {items?.map((item, key) => (
             <div key={key} className='basket__item'>
-              <div className='basket__col'>
+              <div className='basket__item-box'>
                 <img
                   className='basket__item-img'
                   alt={item.name['en-US']}
                   src={item.variant.images ? item.variant.images[0].url : '../assets/open.png'}
                 />
               </div>
-              <div className='basket__col--lg'>
+              <div className='basket__item-box--lg'>
                 {' '}
                 <Link className='basket__item-name' to={`/products/${item.id}`}>
                   {item.name['en-US']}
@@ -156,7 +158,6 @@ export default function BasketList() {
                 handlerQuantity={handlerQuantity}
               />
               <div className='basket__item-totalprice'>
-                Total price:{' '}
                 {(item.totalPrice.centAmount / 100).toFixed(item.price.value.fractionDigits)}
               </div>
               <button onClick={() => removeLine(item.id)}>Remove</button>
@@ -165,7 +166,11 @@ export default function BasketList() {
           <div>
             <p>Total sum</p>
             {oldPrice && (
-              <span className='basket__item-oldprice'>
+              <span
+                className={
+                  discount === true ? 'basket__item-oldprice--active' : 'basket__item-oldprice'
+                }
+              >
                 {total && (oldPrice / 100).toFixed(total.fractionDigits)}
               </span>
             )}
