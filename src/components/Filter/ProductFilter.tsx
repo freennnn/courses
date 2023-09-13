@@ -78,12 +78,9 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
     <div className='filters'>
       <div className='filters__container'>
         <div className='filters__item'>
-          <label className='filters__subtitle' htmlFor='year-select'>
-            Year:
-          </label>
-          {/* <h5 className='filters__subtitle'>Year:</h5> */}
+          <h5 className='filters__subtitle'>Year:</h5>
           <select
-            id='year-select'
+            data-testid='filter-year'
             className='filters__input'
             value={selectedYear}
             onChange={(e) => handleFilterChange(e.target.value, selectedPriceRangeValue)}
@@ -116,6 +113,7 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
         <h5 className='filters__subtitle'>Sorting:</h5>
         <div className='filters__sorting'>
           <select
+            data-testid='sorting-select-name'
             className='filters__input'
             value={sortingByNameValue}
             onChange={(e) => handleSortingByName(e.target.value)}
@@ -142,8 +140,9 @@ const ProductFilter = ({ selectedYear, onChangeFilter }: ProductFilterProps) => 
           </select>
         </div>
       </div>
-      <form className='filters__container' onSubmit={performSearch}>
+      <form data-testid='search-form' className='filters__container' onSubmit={performSearch}>
         <input
+          data-testid='search-input'
           className='filters__input filters__input_search'
           type='text'
           placeholder='Search...'
