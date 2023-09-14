@@ -35,37 +35,23 @@
   }
 
   &__link {
-    position: relative;
-    color: #304ffe;
+    color: lightblue;
     font-size: 1rem;
     cursor: pointer;
+    text-decoration: none;
 
     @media (max-width: 680px) {
       font-size: 0.75rem;
     }
 
-    &:before {
-      content: '';
-      width: 0.75rem;
-      height: 0.75rem;
-      position: absolute;
-      background-image: url('../../assets/images/shape.svg');
-      background-repeat: no-repeat;
-      background-size: contain;
-      right: 12rem;
-      bottom: 0.3rem;
-
-      @media (max-width: 680px) {
-        display: none;
-      }
+    &:hover {
+      color: #e91e63;
     }
   }
 
   &__main-link {
     position: relative;
-    color: lightblue;
     cursor: pointer;
-
     &:before {
       content: '';
       width: 1.2rem;

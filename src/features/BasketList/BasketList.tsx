@@ -121,7 +121,7 @@ export default function BasketList() {
         {!cartContext.id && (
           <p>
             <span>The cart is empty. Please, go to </span>
-            <Link className='basket__main-link' to={'/products'}>
+            <Link className='basket__link' to={'/products'}>
               catalog
             </Link>
           </p>
