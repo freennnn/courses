@@ -14,13 +14,13 @@ import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
-const limit = 6;
 const total = 16;
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [itemsLimit, setItemsLimit] = useState(6); // Set an initial items limit
   const {
     selectedYear,
     selectedPriceRange,
@@ -56,6 +56,34 @@ const CatalogProductPage = () => {
     setActiveId(id);
   };
 
+  // Update the limit based on screen width
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      let newLimit = 6; // Default limit
+
+      if (screenWidth < 1000) {
+        newLimit = 4; // Adjust the limit for medium-sized screens
+      }
+      if (screenWidth < 700) {
+        newLimit = 2; // Adjust the limit for smaller screens
+      }
+
+      setItemsLimit(newLimit);
+    };
+
+    // Add a window resize event listener
+    window.addEventListener('resize', handleResize);
+
+    // Call the handleResize function initially
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     setOffset(0);
@@ -66,7 +94,7 @@ const CatalogProductPage = () => {
       sortingOrder,
       searchWord,
       category,
-      limit,
+      itemsLimit,
       0,
     )
       .then((productList) => {
@@ -79,6 +107,7 @@ const CatalogProductPage = () => {
       .finally(() => {
         setLoading(false);
       });
+    // eslint-disable-next-line
   }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, category]);
 
   const { ref, inView } = useInView({
@@ -88,7 +117,7 @@ const CatalogProductPage = () => {
   useEffect(() => {
     if (inView && offset < total) {
       setLoading(true);
-      const offsetNew = offset + limit;
+      const offsetNew = offset + itemsLimit;
       setOffset(offsetNew);
       getProductsList(
         selectedYear,
@@ -97,7 +126,7 @@ const CatalogProductPage = () => {
         sortingOrder,
         searchWord,
         category,
-        limit,
+        itemsLimit,
         offsetNew,
       )
         .then((productList) => {
@@ -112,7 +141,7 @@ const CatalogProductPage = () => {
         });
     }
     // eslint-disable-next-line
-  }, [inView]);
+  }, [inView, itemsLimit]);
 
   return (
     <div className='catalog-page'>
