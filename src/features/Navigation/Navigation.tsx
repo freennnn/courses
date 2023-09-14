@@ -14,8 +14,6 @@ function getPathForState(state: NavigationState): string {
       return '/';
     case NavigationState.Catalog:
       return '/products';
-    case NavigationState.Sale:
-      return '/products';
     case NavigationState.SignIn:
       return '/login';
     case NavigationState.SignUp:
