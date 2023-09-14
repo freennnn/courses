@@ -17,4 +17,13 @@
   width: 100%;
   text-align: center;
   padding: 0.5rem;
+
+  span {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  @media (max-width: 680px) {
+    font-size: 0.75rem;
+  }
 }
