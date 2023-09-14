@@ -10,7 +10,7 @@ export default function MainPage() {
           </p>
           <div className='video-frame'>
             <iframe
-              src='https://www.youtube.com/embed/JvNuYOR7b4w?si=keYe2jgSWKqq1k41'
+              src='https://www.youtube-nocookie.com/embed/JvNuYOR7b4w?si=keYe2jgSWKqq1k41'
               title='YouTube video player'
               frameBorder='10'
               allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
