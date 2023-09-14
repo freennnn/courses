@@ -8,8 +8,15 @@ export default function MainPage() {
           <p className='main__banner'>
             Write the magic word ten and get a 10% discount on all products
           </p>
-          <h1>Hello fellow wizards!</h1>
-          <p>Let&#39; sell some courses and movies and get rich fast</p>
+          <div className='video-frame'>
+            <iframe
+              src='https://www.youtube.com/embed/JvNuYOR7b4w?si=keYe2jgSWKqq1k41'
+              title='YouTube video player'
+              frameBorder='10'
+              allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </div>
     </>
