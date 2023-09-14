@@ -22,7 +22,6 @@ export default function BasketList() {
   const [cartId, setCartId] = useState('1');
   const [version, setVersion] = useState(1);
   const [items, setItems] = useState<LineItem[]>();
-  const [answer, setAnswer] = useState<string>('');
   const [total, setTotal] = useState<CentPrecisionMoney>();
   const [discount, setDiscount] = useState(false);
   const cartContext = useContext(CartContext);
@@ -49,7 +48,6 @@ export default function BasketList() {
     } catch (err) {
       /* eslint-disable no-console */
       console.log(`The cart is empty.`);
-      setAnswer(`The cart is empty. Please, go to`);
     }
   }
 
@@ -75,7 +73,6 @@ export default function BasketList() {
   const removeCart = async (userId: string, cartId: string, version: number) => {
     await deleteCart(userId, cartId, version);
     setVersion(1);
-    setAnswer(`The cart is empty.Please, go to`);
     updateCartContext(cartContext, (responce) => ({
       ...responce,
       id: '',
@@ -89,14 +86,14 @@ export default function BasketList() {
 
   const [promo, setPromo] = useState('');
 
-  const handleChange = (event: HTMLInputElement) => {
-    setPromo(event.value);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPromo(event.target.value);
   };
 
   const checkDiscount = async () => {
     const response = await cartDiscounts(userId);
-    const arr = response.body.results.map((item) => item.key);
-    if (arr.includes(promo)) {
+    const isPromo = response.body.results.map((item) => item.key).some((elem) => elem === promo);
+    if (isPromo) {
       const { body: cart } = await addDiscount(userId, cartId, version, promo);
       setVersion(cart.version);
       setDiscount(true);
@@ -114,16 +111,16 @@ export default function BasketList() {
     return 0;
   })();
 
-  useEffect((): void => {
-    cartContext.id ? void findCart(userId) : setAnswer(`The cart is empty.Please, go to`);
+  useEffect(() => {
+    cartContext.id && findCart(userId);
   }, [cartContext, cartContext.id, userId, version]);
 
   return (
     <>
       <div>
-        {answer && (
+        {!cartContext.id && (
           <p>
-            {answer}{' '}
+            <span>The cart is empty. Please, go to </span>
             <Link className='basket__main-link' to={'/products'}>
               catalog
             </Link>
@@ -186,7 +183,7 @@ export default function BasketList() {
               type='text'
               id='discount'
               name='discount'
-              onChange={(e) => handleChange(e.currentTarget)}
+              onChange={(e) => handleChange(e)}
             />
             <button className='basket__btn' type='button' onClick={checkDiscount}>
               Apply
@@ -196,7 +193,7 @@ export default function BasketList() {
             className='basket__btn'
             onClick={() => {
               if (window.confirm('Are you sure you wish to delete this cart?'))
-                void removeCart(userId, cartId, version);
+                removeCart(userId, cartId, version);
             }}
           >
             Clear Cart

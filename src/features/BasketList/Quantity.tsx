@@ -13,38 +13,30 @@ interface Props {
 
 const Quantity = ({ userId, cartsId, lineItemId, version, quantity, handlerQuantity }: Props) => {
   const [count, setCount] = useState<number>(quantity);
-  const [disabled, setDisabled] = useState<boolean>(false);
 
   const changeQuantity = async (count: number) => {
-    const { body: cart } = await updateQuantity(userId, cartsId, lineItemId, version, count);
-    handlerQuantity(cart.version, cart.totalLineItemQuantity ?? 0);
-  };
-
-  const incrementHandler = () => {
-    const data = count + 1;
-    setCount(data);
-    void changeQuantity(data);
-    if (data > 0) {
-      setDisabled(false);
+    try {
+      const { body: cart } = await updateQuantity(userId, cartsId, lineItemId, version, count);
+      handlerQuantity(cart.version, cart.totalLineItemQuantity ?? 0);
+    } catch (err) {
+      /* eslint-disable no-console */
+      console.log(`The quantity is wrong, check your numbers`);
     }
   };
 
-  const decrementHandler = () => {
-    const data = count - 1;
+  const countHandler = (num: number) => {
+    const data = count + num;
     setCount(data);
-    void changeQuantity(data);
-    if (data === 0) {
-      setDisabled(true);
-    }
+    changeQuantity(data);
   };
 
   return (
     <div className='basket__inline-flex'>
-      <button className='basket__btn' disabled={disabled} onClick={decrementHandler}>
+      <button className='basket__btn' onClick={() => countHandler(-1)}>
         -
       </button>
       <span>{count}</span>
-      <button className='basket__btn' onClick={incrementHandler}>
+      <button className='basket__btn' onClick={() => countHandler(1)}>
         +
       </button>
     </div>
