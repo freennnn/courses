@@ -15,8 +15,8 @@ export default function BasketPage() {
           <p className='basket__text'>Check your goods</p>
         </div>
         <section className='basket__inner'>
-          <div className='user__flex user__flex--center'>
-            <h1>Basket</h1>
+          <div className='basket__flex basket__flex--center'>
+            <h1>The shopping cart</h1>
           </div>
           <div className='basket__flex'>
             <BasketList />

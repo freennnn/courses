@@ -3,12 +3,13 @@
   gap: 10px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.5rem;
 
   &-box {
     width: 20%;
 
     &--lg {
-      flex-grow: 2;
+      width: 40%;
     }
   }
 
@@ -27,6 +28,9 @@
 
     &:hover {
       color: #e91e63;
+    }
+    @media (max-width: 680px) {
+      font-size: 0.75rem;
     }
   }
 

@@ -157,8 +157,9 @@
       background-color: #e91e63;
     }
 
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
+    @media (max-width: 576px) {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
     }
   }
 
@@ -174,6 +175,7 @@
 
     @media (max-width: 680px) {
       padding: 1rem;
+      font-size: 0.75rem;
     }
   }
 

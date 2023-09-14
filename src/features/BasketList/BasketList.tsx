@@ -23,7 +23,7 @@ export default function BasketList() {
   const [version, setVersion] = useState(1);
   const [items, setItems] = useState<LineItem[]>();
   const [total, setTotal] = useState<CentPrecisionMoney>();
-  const [discount, setDiscount] = useState(false);
+  const [discount, setDiscount] = useState(true);
   const cartContext = useContext(CartContext);
 
   async function findCart(userId: string): Promise<void> {
