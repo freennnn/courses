@@ -6,4 +6,5 @@ export enum NavigationState {
   UserProfile = 'Hey, ',
   LogOut = 'Log out',
   Basket = 'Basket',
+  About = 'About',
 }

@@ -17,6 +17,7 @@ import UserProfilePage from '@/pages/UserProfilePage/UserProfilePage';
 import './App.scss';
 import { AuthContext, defaultAuthContextValues } from './contexts/AuthContext';
 import { CartContext, defaultCartContextValues } from './contexts/CartContext';
+import AboutUsPage from './pages/AboutUsPage/AboutUsPage';
 
 const App = () => {
   const [authData, setAuthData] = useState(defaultAuthContextValues);
@@ -41,6 +42,7 @@ const App = () => {
         >
           <Routes>
             <Route path='/' element={<NavigationLayout />}>
+              <Route path='about' element={<AboutUsPage />} />
               <Route path='basket' element={<BasketPage />} />
               <Route index element={<MainPage />} />
               <Route path='products' element={<CatalogProductPage />} />

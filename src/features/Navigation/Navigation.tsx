@@ -24,6 +24,8 @@ function getPathForState(state: NavigationState): string {
       return '/profile';
     case NavigationState.Basket:
       return '/basket';
+    case NavigationState.About:
+      return '/about';
   }
 }
 
@@ -38,6 +40,7 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.SignIn,
       NavigationState.SignUp,
+      NavigationState.About,
     ];
   } else {
     states = [
@@ -45,11 +48,16 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.UserProfile,
       NavigationState.LogOut,
+      NavigationState.About,
     ];
   }
 
   function isLayoutGroupOneLink(state: NavigationState) {
-    if (state === NavigationState.Home || state === NavigationState.Catalog) {
+    if (
+      state === NavigationState.Home ||
+      state === NavigationState.Catalog ||
+      state === NavigationState.About
+    ) {
       return true;
     }
     return false;
