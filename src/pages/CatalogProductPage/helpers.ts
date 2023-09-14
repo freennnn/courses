@@ -1,7 +1,14 @@
-import { ClientResponse, ProductDiscount, ProductProjection } from '@commercetools/platform-sdk';
+import {
+  Category,
+  ClientResponse,
+  ProductDiscount,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import type { DiscountsType } from 'types';
 
 import { getDiscounts, getProducts } from '../../api/api';
+import { projectKey } from '../../api/apiConfig';
+import { apiRoot } from '../../api/apiHelpers';
 
 export const getProductsList = async (
   year: string,
@@ -75,4 +82,29 @@ const getFinalDiscountValue = (product: ProductProjection, discounts: ProductDis
   );
 
   return discount;
+};
+
+export const getCategoryList = async () => {
+  let response: ClientResponse<{ results: Category[] }> | null = null;
+
+  try {
+    response = await apiRoot.withProjectKey({ projectKey }).categories().get().execute();
+
+    if (response) {
+      const categoryList = response.body.results.map((category: Category) => {
+        return {
+          id: category.id,
+          name: category.name,
+          url: category.slug,
+          ancestors: category.ancestors,
+          parent: category.parent,
+        };
+      });
+
+      return categoryList;
+    }
+  } catch (error) {
+    /* eslint-disable-next-line no-console */
+    console.log(error);
+  }
 };
