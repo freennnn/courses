@@ -1,0 +1,21 @@
+.about-us-page {
+  padding-top: 100px;
+  background: url('/src/assets/images/Mask.png');
+
+  &__title {
+    text-align: center;
+  }
+
+  .card {
+    width: 30%;
+    background: white;
+
+    &__image {
+      max-width: 400px;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+}
