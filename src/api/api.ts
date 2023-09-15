@@ -170,7 +170,6 @@ export const getProduct = async (id: string) => {
   };
 };
 
-
 export const createUserCart = async () => {
   const response = await authApiRoot
     .withProjectKey({ projectKey })

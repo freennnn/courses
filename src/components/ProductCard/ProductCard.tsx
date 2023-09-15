@@ -7,9 +7,9 @@ import classNames from 'classnames';
 import { MdAddShoppingCart } from 'react-icons/md';
 import type { ProductItem } from 'types';
 
-import './ProductCard.scss';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
+import './ProductCard.scss';
 
 interface ProductProps {
   product: ProductItem;

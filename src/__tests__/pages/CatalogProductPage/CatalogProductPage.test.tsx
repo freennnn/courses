@@ -47,20 +47,32 @@ describe('CatalogProductPage', () => {
     const searchInput = await r.findByTestId('search-input');
     const searchForm = r.getByTestId('search-form');
 
+    // Initial useEffect call on component mount
+    expect(mock).toHaveBeenCalledWith('', [], '', '', '', '');
+
     act(() => {
       // Simulate selecting a year from a dropdown: "2023"
       fireEvent.change(yearDropdown, { target: { value: '2023' } });
-      // Simulate selecting a name order from a dropdown: "A-Z"
+    });
+
+    expect(mock).toHaveBeenCalledWith('2023', [], '', '', '', '');
+
+    act(() => {
+      // Simulate selecting a "name" order from a dropdown: "A-Z" in addition to chosen "year"
       fireEvent.change(sortingSelectName, { target: { value: 'asc' } });
-      // Simulate search a word: "movie"
+    });
+
+    expect(mock).toHaveBeenCalledWith('2023', [], 'name', 'asc', '', '');
+
+    act(() => {
+      // Simulate search a word: "movie" in addition to chosen "name" order and "year"
       fireEvent.change(searchInput, { target: { value: 'movie' } });
       fireEvent.submit(searchForm);
     });
 
-    expect(mock).toHaveBeenCalledWith('', [], '', '', '', '');
-    expect(mock).toHaveBeenCalledWith('2023', [], '', '', '', '');
-    expect(mock).toHaveBeenCalledWith('2023', [], 'name', 'asc', '', '');
     expect(mock).toHaveBeenCalledWith('2023', [], 'name', 'asc', 'movie', '');
+
+    // Number of times mock was called
     expect(mock.mock.calls.length).toBe(4);
   });
 });
