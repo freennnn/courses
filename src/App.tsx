@@ -19,8 +19,8 @@ import { AuthContext, defaultAuthContextValues } from './contexts/AuthContext';
 import { CartContext, defaultCartContextValues } from './contexts/CartContext';
 
 const App = () => {
-  const [authContext, setAuthContext] = useState(defaultAuthContextValues);
-  const [cartContext, setCartContext] = useState(defaultCartContextValues);
+  const [authData, setAuthData] = useState(defaultAuthContextValues);
+  const [cartData, setCartData] = useState(defaultCartContextValues);
 
   Modal.setAppElement('#root');
 
@@ -29,14 +29,14 @@ const App = () => {
       <ToastContainer />
       <AuthContext.Provider
         value={{
-          ...authContext,
-          setAuthContext,
+          ...authData,
+          setAuthData,
         }}
       >
         <CartContext.Provider
           value={{
-            ...cartContext,
-            setCartContext,
+            ...cartData,
+            setCartData,
           }}
         >
           <Routes>

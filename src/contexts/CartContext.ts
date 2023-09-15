@@ -10,7 +10,7 @@ interface CartContextValues {
 }
 
 interface SetCartContextFunction {
-  setCartContext: (data: CartContextValues) => void;
+  setCartData: (data: CartContextValues) => void;
 }
 
 type CartContext = CartContextValues & SetCartContextFunction;
@@ -26,7 +26,7 @@ export const defaultCartContextValues: CartContextValues = {
 export const defaultContext: CartContext = {
   ...defaultCartContextValues,
   /* eslint-disable-next-line no-console */
-  setCartContext: (data) => console.log(data),
+  setCartData: (data) => console.log(data),
 };
 
 export const CartContext = createContext(defaultContext);
@@ -43,7 +43,7 @@ export const updateCartContext = (
 ) => {
   const updatedValues = updateCallback(cartContext); // Call the callback with the current context
 
-  cartContext.setCartContext({
+  cartContext.setCartData({
     ...cartContext,
     ...updatedValues, // Spread the updated values into the context
   });
