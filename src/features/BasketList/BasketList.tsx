@@ -62,11 +62,12 @@ export default function BasketList() {
     }));
   };
 
-  const handlerQuantity = (newVersion: number, newQuantity: number) => {
+  const handlerQuantity = (newVersion: number, newQuantity: number, newLineItems: LineItem[]) => {
     updateCartContext(cartContext, (response) => ({
       ...response,
       version: newVersion,
       quantity: newQuantity,
+      items: newLineItems,
     }));
   };
 
