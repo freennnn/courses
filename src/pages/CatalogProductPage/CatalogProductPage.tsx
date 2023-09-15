@@ -14,13 +14,22 @@ import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
-const total = 16;
+const total = 26;
+let limit: number;
+
+if (window.innerWidth < 700) {
+  limit = 3;
+} else if (window.innerWidth < 1000) {
+  limit = 6;
+} else {
+  limit = 9;
+}
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
-  const [itemsLimit, setItemsLimit] = useState(6); // Set an initial items limit
+  const [itemsLimit, setItemsLimit] = useState(limit); // Set an initial items limit
   const {
     selectedYear,
     selectedPriceRange,
@@ -60,13 +69,13 @@ const CatalogProductPage = () => {
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
-      let newLimit = 6; // Default limit
+      let newLimit = 9; // Default limit
 
       if (screenWidth < 1000) {
-        newLimit = 4; // Adjust the limit for medium-sized screens
+        newLimit = 6; // Adjust the limit for medium-sized screens
       }
       if (screenWidth < 700) {
-        newLimit = 2; // Adjust the limit for smaller screens
+        newLimit = 3; // Adjust the limit for smaller screens
       }
 
       setItemsLimit(newLimit);
