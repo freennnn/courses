@@ -6,15 +6,18 @@ import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.ty
 import { NavigationState } from '@/features/Navigation/Navigation.types';
 
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
+import { CartContext } from '../../contexts/CartContext.ts';
 
 export default function CustomLink({
   state,
   pathTo,
   buttonText,
+  children,
 }: {
   state: NavigationState;
   pathTo: string;
   buttonText: string;
+  children: React.ReactNode;
 }) {
   let type = ButtonType.text;
   let color = ButtonBackgroundColor.transparent;
@@ -46,10 +49,16 @@ export default function CustomLink({
     /*console.log(`${state} navigation button has been clicked`);*/
   }
 
+  const cartContext = useContext(CartContext);
+
   return (
     <Link key={state} to={pathTo}>
       <Button onClick={onClickHandler} key={state} type={type} color={color}>
         {buttonText}
+        {children}
+        {state === NavigationState.Cart && (
+          <span className='notification-badge'>{cartContext.items.length}</span>
+        )}
       </Button>
     </Link>
   );

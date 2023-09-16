@@ -16,6 +16,13 @@
     padding: 0 10px;
   }
 
+  &:has(.notification-badge) {
+    padding: 0 0 0 20px;
+    @include media-mobile-only {
+      padding: 0 0 0 10px;
+    }
+  }
+
   &:hover:not(.button_disabled) {
     transform: translateY(2px);
   }
@@ -48,5 +55,33 @@
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: 'none';
+  }
+
+  svg {
+    //display: block;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    @include media-mobile-only {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .notification-badge {
+    @include font(12px, 500, normal);
+    position: relative;
+    top: -20px;
+    right: 0px;
+    padding: 4px 8px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    @include media-mobile-only {
+      @include font(8px, 500, normal);
+      padding: 2px 4px;
+      top: -15px;
+      right: 0px;
+    }
   }
 }

@@ -22,7 +22,7 @@ export interface ButtonPropsType {
   size?: ButtonSize;
   color?: ButtonBackgroundColor;
   cssClasses?: string[];
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
 }

@@ -6,9 +6,9 @@ export default function Button({
   size = ButtonSize.medium,
   color = ButtonBackgroundColor.transparent,
   cssClasses,
-  disabled = false,
   onClick,
   children,
+  disabled = false,
 }: ButtonPropsType) {
   return (
     <button
