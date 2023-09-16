@@ -48,7 +48,13 @@ export default function CustomLink({
 
   return (
     <Link key={state} to={pathTo}>
-      <Button onClick={onClickHandler} key={state} type={type} color={color}>
+      <Button
+        onClick={onClickHandler}
+        key={state}
+        type={type}
+        color={color}
+        location={location.pathname}
+      >
         {buttonText}
       </Button>
     </Link>
