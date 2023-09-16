@@ -166,7 +166,7 @@ const CatalogProductPage = () => {
           <p className='no-products-message'> No movies match the selected filters.</p>
         )}
       </div>
-      <div className='ref' ref={ref}></div>
+      <div ref={ref}></div>
     </div>
   );
 };
