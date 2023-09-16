@@ -14,7 +14,6 @@ import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
-const total = 26;
 let limit: number;
 
 if (window.innerWidth < 700) {
@@ -30,6 +29,7 @@ const CatalogProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [itemsLimit, setItemsLimit] = useState(limit); // Set an initial items limit
+  const [isAllLoaded, setIsAllLoaded] = useState(false); // To track if there is no products to load
   const {
     selectedYear,
     selectedPriceRange,
@@ -107,6 +107,10 @@ const CatalogProductPage = () => {
       0,
     )
       .then((productList) => {
+        if (productList && productList.length < itemsLimit) {
+          setIsAllLoaded(true);
+        }
+
         setProductList(productList ?? []);
       })
       .catch((error) => {
@@ -124,7 +128,7 @@ const CatalogProductPage = () => {
   });
 
   useEffect(() => {
-    if (inView && offset < total) {
+    if (inView && !isAllLoaded) {
       setLoading(true);
       const offsetNew = offset + itemsLimit;
       setOffset(offsetNew);
@@ -140,6 +144,10 @@ const CatalogProductPage = () => {
       )
         .then((productList) => {
           if (productList && productList.length > 0) {
+            if (productList.length < itemsLimit) {
+              setIsAllLoaded(true);
+            }
+
             setProductList((prevProductList) => [...prevProductList, ...productList]);
           }
           setLoading(false);
