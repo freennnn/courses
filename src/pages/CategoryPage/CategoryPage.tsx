@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
@@ -12,9 +13,22 @@ import type { ProductItem } from 'types';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
 
+const total = 26;
+let limit: number;
+
+if (window.innerWidth < 700) {
+  limit = 3;
+} else if (window.innerWidth < 1000) {
+  limit = 6;
+} else {
+  limit = 9;
+}
+
 const CategoryPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [itemsLimit, setItemsLimit] = useState(limit); // Set an initial items limit
   const {
     selectedYear,
     selectedPriceRange,
@@ -51,6 +65,34 @@ const CategoryPage = () => {
     setActiveId(id);
   };
 
+  // Update the limit based on screen width
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      let newLimit = 9; // Default limit
+
+      if (screenWidth < 1000) {
+        newLimit = 6; // Adjust the limit for medium-sized screens
+      }
+      if (screenWidth < 700) {
+        newLimit = 3; // Adjust the limit for smaller screens
+      }
+
+      setItemsLimit(newLimit);
+    };
+
+    // Add a window resize event listener
+    window.addEventListener('resize', handleResize);
+
+    // Call the handleResize function initially
+    handleResize();
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     getProductsList(
@@ -60,6 +102,8 @@ const CategoryPage = () => {
       sortingOrder,
       searchWord,
       category,
+      itemsLimit,
+      0,
     )
       .then((productList) => {
         setProductList(productList ?? []);
@@ -69,7 +113,41 @@ const CategoryPage = () => {
         /* eslint-disable-next-line no-console */
         console.error('Error fetching products:', error);
       });
+    /* eslint-disable-next-line*/
   }, [selectedPriceRange, selectedYear, sortingOrder, sortingParam, searchWord, category]);
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inView && offset < total) {
+      setLoading(true);
+      const offsetNew = offset + itemsLimit;
+      setOffset(offsetNew);
+      getProductsList(
+        selectedYear,
+        selectedPriceRange,
+        sortingParam,
+        sortingOrder,
+        searchWord,
+        category,
+        itemsLimit,
+        offsetNew,
+      )
+        .then((productList) => {
+          if (productList && productList.length > 0) {
+            setProductList((prevProductList) => [...prevProductList, ...productList]);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          /* eslint-disable-next-line no-console */
+          console.error('Error fetching products:', error);
+        });
+    }
+    // eslint-disable-next-line
+  }, [inView, itemsLimit]);
 
   return (
     <div className='catalog-page'>
@@ -85,6 +163,7 @@ const CategoryPage = () => {
           <p className='no-products-message'> No movies match the selected filters.</p>
         )}
       </div>
+      <div ref={ref}></div>
     </div>
   );
 };
