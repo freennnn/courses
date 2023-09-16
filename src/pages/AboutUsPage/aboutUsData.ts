@@ -3,7 +3,7 @@ export const aboutUsData = [
     id: '1',
     image: '/src/assets/images/Irina_About.jpg',
     name: 'Irina Isakzhanova',
-    role: 'Software Developer, Team Lead',
+    role: 'Team Lead, Software Developer',
     bio: 'A passionate React developer with experience in crafting responsive and user-friendly web applications.',
     contribution:
       'Project Planning and Coordination, Task Assignment and Tracking, Collaboration with team members, Providing guidance and support as needed, Crosscheck reviews and negotiations, Setup of Git Repository and CommerceTools API Client, Development Environment and Jest Configuration, Integration of the Login, Registration form and Basket with commercetools, Implementation of Routing and Pages: Catalog, About Us, Not Found, Improvement of Header',
@@ -12,7 +12,7 @@ export const aboutUsData = [
   },
   {
     id: '2',
-    image: '',
+    image: '/src/assets/images/Katsiaryna_About.jpeg',
     name: 'Katsiaryna Tatarynava',
     role: 'Software Developer',
     bio: 'An enthusiastic and dedicated developer who has excelled in the JS course and demonstrates eagerness for continuous improvement.',

@@ -7,24 +7,34 @@ const AboutCard = (data: AboutCardPersonData) => {
   return (
     <div className='card'>
       <div className='card__image'>
-        <img src={data.image} />
+        {data.image ? (
+          <img src={data.image} />
+        ) : (
+          <img className='not-avalable' src='/src/assets/images/photo-not-available.jpg' />
+        )}
       </div>
       <div className='card__description'>
         <h3 className='card__description__name'>{data.name}</h3>
         <p className='card__description__role'>{data.role}</p>
-        <p>{data.bio}</p>
-        <p>
-          <span>Significal contributions: </span>
+        <p className='card__description__bio'>{data.bio}</p>
+        <p className='card__description__contribution'>
+          <span>Significant contribution: </span>
           {data.contribution}
         </p>
-        <Link to={data.github} target='_blank'>
-          <FaGithub />
-        </Link>
-        {data.linkedIn ? (
-          <Link to={data.linkedIn} target='_blank'>
-            <FaLinkedin />
+        <div className='card__description__social-media'>
+          <Link className='card__description__social-media_link' to={data.github} target='_blank'>
+            <FaGithub />
           </Link>
-        ) : null}
+          {data.linkedIn ? (
+            <Link
+              className='card__description__social-media_link'
+              to={data.linkedIn}
+              target='_blank'
+            >
+              <FaLinkedin />
+            </Link>
+          ) : null}
+        </div>
       </div>
     </div>
   );
