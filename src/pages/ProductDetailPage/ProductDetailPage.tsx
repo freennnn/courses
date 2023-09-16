@@ -11,7 +11,7 @@ import { SliderItemDataSourceType } from '@/components/Slider/SliderItem';
 import { getProduct } from 'api/api';
 import { ProductItem } from 'types';
 
-import { addItem as addProductToCart } from '../../businessLogic/cartLogic.ts';
+import { addProductToCart, removeProductFromCart } from '../../businessLogic/cartLogic.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import ProductDetailBreadcrumbs from './ProductDetailBreadcrumbs';
@@ -25,12 +25,12 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(productFromProps);
   const cartContext = useContext(CartContext);
   const authContext = useContext(AuthContext);
-  const defaultProductID = 'c90a86d0-116f-4ad3-af43-ccac737e7493';
+  const defaultProductId = 'c90a86d0-116f-4ad3-af43-ccac737e7493';
   const [isProductInCart, setIsProductInCart] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const product: ProductItem = await getProduct(id ?? defaultProductID);
+      const product: ProductItem = await getProduct(id ?? defaultProductId);
       setProduct(product);
     };
     /* eslint-disable-next-line no-console */
@@ -54,6 +54,10 @@ export default function ProductDetailPage() {
 
   function closeModal() {
     setIsOpen(false);
+  }
+
+  function cartLineItemIdForProductId(productId: string) {
+    return cartContext.items.find((element) => element.productId === productId)?.id;
   }
 
   //console.log(product);
@@ -102,57 +106,100 @@ export default function ProductDetailPage() {
             {product ? (
               <ProductDetailBreadcrumbs
                 productName={product.name['en-US']}
-                productID={product.id}
+                productId={product.id}
               ></ProductDetailBreadcrumbs>
             ) : (
               ''
             )}
             <h3 className='product-detail__title'>{product?.name['en-US']}</h3>
             <p className='product-detail__description'>{product?.description?.['en-US']}</p>
-            <Button
-              type={ButtonType.contained}
-              color={ButtonBackgroundColor.accented}
-              disabled={isProductInCart}
-              cssClasses={isProductInCart ? ['button_disabled'] : ['']}
-              onClick={() => {
-                try {
-                  product &&
-                    addProductToCart({
-                      productID: product.id,
-                      userID: authContext.id,
-                      cartID: cartContext.id,
-                      cartVersion: cartContext.version,
-                      onAddProductToCart: ({
-                        cartVersion,
-                        cartItems,
-                        cartItemsQuantity,
-                        cartID,
-                      }) => {
-                        updateCartContext(cartContext, (prev) => ({
-                          ...prev,
-                          id: cartID,
-                          version: cartVersion,
-                          quantity: cartItemsQuantity,
-                          items: cartItems,
-                        }));
-                        console.log(`isProductInCart ${checkIfProductInCart()}`);
-                        //setIsProductInCart(checkIfProductInCart());
-                      },
-                    });
-                } catch (error) {
-                  /* eslint-disable-next-line no-console */
-                  console.log(error);
-                  toast.error('Ups, something went wrong!');
-                }
-              }}
-            >
-              {`Add to Cart for $${discountedPrice > 0 ? discountedPrice : fullPrice} `}
-              {discountedPrice > 0 ? (
-                <span className='full-price_crossed'>{`$${fullPrice}`}</span>
-              ) : (
-                ''
-              )}
-            </Button>
+            <div className='product-detail__cart-buttons-container'>
+              <Button
+                type={ButtonType.contained}
+                color={ButtonBackgroundColor.accented}
+                disabled={isProductInCart}
+                cssClasses={isProductInCart ? ['button_disabled'] : ['']}
+                key='Add to cart'
+                onClick={() => {
+                  try {
+                    product &&
+                      addProductToCart({
+                        productId: product.id,
+                        userId: authContext.id,
+                        cartId: cartContext.id,
+                        cartVersion: cartContext.version,
+                        onAddProductToCart: ({
+                          cartVersion,
+                          cartItems,
+                          cartItemsQuantity,
+                          cartId,
+                        }) => {
+                          updateCartContext(cartContext, (prev) => ({
+                            ...prev,
+                            id: cartId,
+                            version: cartVersion,
+                            quantity: cartItemsQuantity,
+                            items: cartItems,
+                          }));
+                          // console.log(`isProductInCart ${checkIfProductInCart()}`);
+                        },
+                      });
+                  } catch (error) {
+                    /* eslint-disable-next-line no-console */
+                    console.log(error);
+                    toast.error('Ups, something went wrong!');
+                  }
+                }}
+              >
+                {`Add to Cart for $${discountedPrice > 0 ? discountedPrice : fullPrice} `}
+                {discountedPrice > 0 ? (
+                  <span className='full-price_crossed'>{`$${fullPrice}`}</span>
+                ) : (
+                  ''
+                )}
+              </Button>
+              <Button
+                type={ButtonType.contained}
+                color={ButtonBackgroundColor.accented}
+                disabled={!isProductInCart}
+                cssClasses={!isProductInCart ? ['button_disabled'] : ['']}
+                key='Remove from cart'
+                onClick={() => {
+                  try {
+                    let lineItemId: string | undefined;
+                    if (product) {
+                      lineItemId = cartLineItemIdForProductId(product.id);
+                    }
+                    lineItemId &&
+                      removeProductFromCart({
+                        lineItemId: lineItemId,
+                        userId: authContext.id,
+                        cartId: cartContext.id,
+                        cartVersion: cartContext.version,
+                        onRemoveProductFromCart: ({
+                          cartVersion,
+                          cartItems,
+                          cartItemsQuantity,
+                        }) => {
+                          updateCartContext(cartContext, (prev) => ({
+                            ...prev,
+                            version: cartVersion,
+                            quantity: cartItemsQuantity,
+                            items: cartItems,
+                          }));
+                          // console.log(`isProductInCart ${checkIfProductInCart()}`);
+                        },
+                      });
+                  } catch (error) {
+                    /* eslint-disable-next-line no-console */
+                    console.log(error);
+                    toast.error('Ups, something went wrong!');
+                  }
+                }}
+              >
+                Remove from Cart
+              </Button>
+            </div>
           </div>
           {slider}
         </div>
