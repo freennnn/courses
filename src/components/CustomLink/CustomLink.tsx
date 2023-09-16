@@ -6,7 +6,11 @@ import { ButtonBackgroundColor, ButtonType } from '@/components/Button/Button.ty
 import { NavigationState } from '@/features/Navigation/Navigation.types';
 
 import { AuthContext, updateAuthContext } from '../../contexts/AuthContext.ts';
-import { CartContext } from '../../contexts/CartContext.ts';
+import {
+  CartContext,
+  defaultCartContextValues,
+  updateCartContext,
+} from '../../contexts/CartContext.ts';
 
 export default function CustomLink({
   state,
@@ -44,7 +48,11 @@ export default function CustomLink({
 
   function onClickHandler() {
     if (state === NavigationState.LogOut) {
-      updateAuthContext(authContext, { isSignedIn: false });
+      updateAuthContext(authContext, { isSignedIn: false, id: '' });
+      updateCartContext(cartContext, (prev) => ({
+        ...prev,
+        ...defaultCartContextValues,
+      }));
     }
     /*console.log(`${state} navigation button has been clicked`);*/
   }
