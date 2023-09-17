@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import AboutCard from '@/components/AboutCard/AboutCard';
 
 import './AboutUs.scss';
@@ -33,6 +35,23 @@ const AboutUsPage = () => {
           {aboutUsData.map((item) => (
             <AboutCard key={item.id} {...item} />
           ))}
+        </div>
+        <div className='thanks-block'>
+          <h3 className='thanks-block__title'>Special thanks to: </h3>
+          <Link className='thanks-block__link_school' to='https://rs.school/js/' target='_blank'>
+            <img src='https://rs.school/images/rs_school_js.svg' alt='RSSchool' />
+          </Link>
+          <p>and</p>
+          <p>
+            <span>Our mentor </span>
+            <Link
+              className='thanks-block__link'
+              to='https://github.com/vladpoltorin'
+              target='_blank'
+            >
+              Vlad Poltorin
+            </Link>
+          </p>
         </div>
       </div>
     </div>
