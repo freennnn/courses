@@ -18,7 +18,7 @@ const AboutCard = (data: AboutCardPersonData) => {
         <p className='card__description__role'>{data.role}</p>
         <p className='card__description__bio'>{data.bio}</p>
         <p className='card__description__contribution'>
-          <span>Significant contribution: </span>
+          <span>Contribution: </span>
           {data.contribution}
         </p>
         <div className='card__description__social-media'>

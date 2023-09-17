@@ -6,6 +6,18 @@
     text-align: center;
   }
 
+  &__subtitle {
+    text-align: center;
+    font-style: italic;
+    color: #8a8888;
+  }
+
+  &__description {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    text-align: justify;
+  }
+
   .cards-list {
     display: flex;
     padding-bottom: 50px;
@@ -31,8 +43,6 @@
         display: block;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-        border-top: 2px solid transparent;
-        border-bottom: 2px solid transparent;
       }
 
       .not-avalable {
@@ -58,10 +68,12 @@
         }
 
         &__bio {
+          margin-top: 0;
           font-weight: 600;
         }
 
         &__contribution {
+          font-family: 'Roboto', sans-serif;
           margin-top: 0;
           text-align: justify;
 
