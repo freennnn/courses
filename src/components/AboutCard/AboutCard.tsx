@@ -10,7 +10,7 @@ const AboutCard = (data: AboutCardPersonData) => {
         {data.image ? (
           <img src={data.image} />
         ) : (
-          <img className='not-avalable' src='/src/assets/images/photo-not-available.jpg' />
+          <img className='not-avalable' src='/photo-not-available.jpg' />
         )}
       </div>
       <div className='card__description'>

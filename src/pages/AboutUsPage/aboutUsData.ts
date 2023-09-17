@@ -1,7 +1,7 @@
 export const aboutUsData = [
   {
     id: '1',
-    image: '/src/assets/images/Irina_About.jpg',
+    image: '/Irina_About.jpg',
     name: 'Irina Isakzhanova',
     role: 'Team Lead, Software Developer',
     bio: 'A passionate React developer with experience in crafting responsive and user-friendly web applications.',
@@ -12,7 +12,7 @@ export const aboutUsData = [
   },
   {
     id: '2',
-    image: '/src/assets/images/Katsiaryna_About.jpeg',
+    image: '/Katsiaryna_About.jpeg',
     name: 'Katsiaryna Tatarynava',
     role: 'Software Developer',
     bio: 'An enthusiastic and dedicated developer who has excelled in the JS course and demonstrates eagerness for continuous improvement.',
