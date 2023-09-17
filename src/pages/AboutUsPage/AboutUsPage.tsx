@@ -5,6 +5,8 @@ import AboutCard from '@/components/AboutCard/AboutCard';
 import './AboutUs.scss';
 import { aboutUsData } from './aboutUsData';
 
+import '@/components/AboutCard/AboutCard.scss';
+
 const AboutUsPage = () => {
   return (
     <div className='about-us-page'>

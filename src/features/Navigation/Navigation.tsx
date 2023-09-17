@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import CustomLink from '@/components/CustomLink/CustomLink';
 import { MdShoppingCart } from 'react-icons/md';
@@ -81,6 +81,8 @@ export default function Navigation() {
   const layoutGroupOneStates = states.filter((state) => isLayoutGroupOneLink(state));
   const layoutGroupTwoStates = states.filter((state) => !isLayoutGroupOneLink(state));
 
+  const location = useLocation();
+
   return (
     <nav className='navigation'>
       <div className='navigation__group-one'>
@@ -89,7 +91,12 @@ export default function Navigation() {
       </div>
       <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
-        <Link className='basket-icon' to='/basket'>
+        <Link
+          className={
+            location.pathname === '/about' ? 'basket-icon basket-icon_black' : 'basket-icon'
+          }
+          to='/basket'
+        >
           <MdShoppingCart />
         </Link>
       </div>
