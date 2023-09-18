@@ -8,12 +8,36 @@ describe('composeQueryArgs', () => {
   });
 
   test('All arguments present', () => {
-    const queryArgs = composeQueryArgs('2022', ['100', '300'], 'price', 'asc', 'test input', '25');
+    const year = '2022';
+    const priceRange = ['100', '300'];
+    const sortBy = 'price';
+    const sortOrder = 'asc';
+    const searchInput = 'test input';
+    const categoryId = '25';
+    const itemsLimit = 3;
+    const offset = 0;
 
-    expect(queryArgs.filter[0]).toBe('variants.price.centAmount:range (100 to 300)');
-    expect(queryArgs.filter[1]).toBe('variants.attributes.year: 2022');
-    expect(queryArgs.filter[2]).toBe('categories.id: "25"');
-    expect(queryArgs.sort[0]).toBe('price asc');
-    expect(queryArgs['text.en-US']).toBe('test input');
+    const queryArgs = composeQueryArgs(
+      year,
+      priceRange,
+      sortBy,
+      sortOrder,
+      searchInput,
+      categoryId,
+      itemsLimit,
+      offset,
+    );
+
+    expect(queryArgs).toEqual({
+      filter: [
+        'variants.price.centAmount:range (100 to 300)',
+        'variants.attributes.year: 2022',
+        'categories.id: "25"',
+      ],
+      sort: ['price asc'],
+      'text.en-US': 'test input',
+      limit: 3,
+      offset: 0,
+    });
   });
 });

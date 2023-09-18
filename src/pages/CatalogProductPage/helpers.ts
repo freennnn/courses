@@ -17,12 +17,14 @@ export const getProductsList = async (
   sortVal: string,
   word: string,
   category: string,
+  limit: number,
+  offset: number,
 ) => {
   let response: ClientResponse<{ results: ProductProjection[] }> | null = null;
   let discounts: ProductDiscount[] = [];
 
   try {
-    response = await getProducts(year, price, sortParam, sortVal, word, category);
+    response = await getProducts(year, price, sortParam, sortVal, word, category, limit, offset);
     const discountsResponse = await getDiscounts();
     discounts = discountsResponse.body.results;
 

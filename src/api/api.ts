@@ -45,7 +45,9 @@ export const composeQueryArgs = (
   sortVal: string,
   word: string,
   category: string,
-): QueryArgs => {
+  limit: number,
+  offset: number,
+) => {
   let sortArgs: string[] = [];
   let queryArgs: QueryArgs = {};
 
@@ -63,24 +65,32 @@ export const composeQueryArgs = (
       ],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else if (year) {
     queryArgs = {
       filter: [`variants.attributes.year: ${year}`],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else if (price.length > 0) {
     queryArgs = {
       filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   } else {
     queryArgs = {
       filter: [],
       sort: sortArgs,
       ['text.en-US']: word,
+      limit,
+      offset,
     };
   }
 
@@ -98,8 +108,19 @@ export const getProducts = async (
   sortVal: string,
   word: string,
   category: string,
+  limit: number,
+  offset: number,
 ) => {
-  const queryArgs = composeQueryArgs(year, price, sortParam, sortVal, word, category);
+  const queryArgs = composeQueryArgs(
+    year,
+    price,
+    sortParam,
+    sortVal,
+    word,
+    category,
+    limit,
+    offset,
+  );
 
   const response = await apiRootWithProjectKey
     .productProjections()
