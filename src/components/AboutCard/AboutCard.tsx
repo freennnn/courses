@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
 
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import type { AboutCardPersonData } from 'types';
+
+export interface AboutCardPersonData {
+  id: string;
+  image: string;
+  name: string;
+  role: string;
+  bio: string;
+  contribution: string;
+  github: string;
+  linkedIn?: string;
+}
 
 const AboutCard = (data: AboutCardPersonData) => {
   return (

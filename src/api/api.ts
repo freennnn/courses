@@ -334,6 +334,6 @@ export const addDiscount = async (
 export const cartDiscounts = async (userId: string) => {
   const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot.withProjectKey({ projectKey }).cartDiscounts().get().execute();
-  
+
   return response;
 };

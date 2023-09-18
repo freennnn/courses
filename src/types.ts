@@ -41,14 +41,3 @@ export interface ProductFilterProps {
 export interface QueryArgs {
   [key: string]: string | string[];
 }
-
-export interface AboutCardPersonData {
-  id: string;
-  image: string;
-  name: string;
-  role: string;
-  bio: string;
-  contribution: string;
-  github: string;
-  linkedIn?: string;
-}

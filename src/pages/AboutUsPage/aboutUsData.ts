@@ -27,7 +27,7 @@ export const aboutUsData = [
     role: 'Software Developer',
     bio: 'A diligent developer who performs well and is dedicated to achieving success.',
     contribution:
-      'Creation of the project in commercetools, Jira Task Board Setup, Discord server creation, Implementation of Centralized Navigation, Header and Detailed Product Page',
+      'Creation of the project in commercetools, Jira Task Board Setup, Discord server creation, Tests setup, Implementation of Centralized Navigation, Header and Detailed Product Page',
     github: 'https://github.com/freennnn',
   },
 ];

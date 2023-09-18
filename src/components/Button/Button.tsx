@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import './Button.scss';
 import { ButtonBackgroundColor, ButtonPropsType, ButtonSize, ButtonType } from './Button.types';
 
@@ -9,13 +11,16 @@ export default function Button({
   onClick,
   children,
 }: ButtonPropsType) {
+  const buttonClasses = classNames(
+    'button',
+    `button_${type}`,
+    `button_${size}`,
+    `button_${color}`,
+    { 'about-button': location === '/about' },
+  );
+
   return (
-    <button
-      className={`button button_${type} button_${size} button_${color} ${
-        location === '/about' ? 'about-button' : ''
-      }`}
-      onClick={onClick}
-    >
+    <button className={buttonClasses} onClick={onClick}>
       {children}
     </button>
   );
