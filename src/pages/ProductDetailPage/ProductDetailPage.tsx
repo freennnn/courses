@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-modal';
 import { useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -26,7 +26,6 @@ export default function ProductDetailPage() {
   const cartContext = useContext(CartContext);
   const authContext = useContext(AuthContext);
   const defaultProductId = 'c90a86d0-116f-4ad3-af43-ccac737e7493';
-  const [isProductInCart, setIsProductInCart] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,13 +37,9 @@ export default function ProductDetailPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const checkIfProductInCart = useCallback(() => {
+  const isProductInCart = useMemo(() => {
     return product ? cartContext.items.some((item) => item.productId === product.id) : false;
-  }, [cartContext, product]);
-
-  useEffect(() => {
-    setIsProductInCart(checkIfProductInCart());
-  }, [product, cartContext, checkIfProductInCart]);
+  }, [product, cartContext]);
 
   function openModal(index: number) {
     //console.log(`openModalSlider at index${index}`);
@@ -76,7 +71,6 @@ export default function ProductDetailPage() {
               quantity: cartItemsQuantity,
               items: cartItems,
             }));
-            // console.log(`isProductInCart ${checkIfProductInCart()}`);
           },
         });
     } catch (error) {
@@ -105,7 +99,6 @@ export default function ProductDetailPage() {
               quantity: cartItemsQuantity,
               items: cartItems,
             }));
-            // console.log(`isProductInCart ${checkIfProductInCart()}`);
           },
         });
     } catch (error) {

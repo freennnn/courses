@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 import './Button.scss';
 import { ButtonBackgroundColor, ButtonPropsType, ButtonSize, ButtonType } from './Button.types';
 
@@ -12,7 +14,13 @@ export default function Button({
 }: ButtonPropsType) {
   return (
     <button
-      className={`button button_${type} button_${size} button_${color} ${cssClasses?.join(' ')}`}
+      className={classNames(
+        'button',
+        `button_${type}`,
+        `button_${size}`,
+        `button_${color}`,
+        cssClasses?.join(' '),
+      )}
       onClick={onClick}
       disabled={disabled}
     >
