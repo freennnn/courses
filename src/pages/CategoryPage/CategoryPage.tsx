@@ -5,10 +5,10 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import ProductFilter from '@/components/Filter/ProductFilter';
 import useProductFilter from '@/components/Filter/useProductFilter';
-import Preloader from '@/components/Preloader/Preloader';
 import CategoryList from '@/features/CategoryList/CategoryList';
 import ProductList from '@/features/ProductList/ProductList';
 import { getProductsList } from '@/pages/CatalogProductPage/helpers';
+import CircularProgress from '@mui/joy/CircularProgress';
 import type { ProductItem } from 'types';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
@@ -163,13 +163,16 @@ const CategoryPage = () => {
         <CategoryList handleActiveCategory={onActiveCategory} newId={activeId} />
         <Breadcrumbs data={activeCat} onActiveId={onActiveId} />
         <ProductFilter selectedYear={selectedYear} onChangeFilter={handleFilterChange} />
-        {loading ? (
-          <Preloader />
-        ) : productList.length > 0 ? (
+        {productList.length > 0 ? (
           <ProductList productList={productList} />
         ) : (
           <p className='no-products-message'> No movies match the selected filters.</p>
         )}
+        {loading ? (
+          <div className='circular-progress'>
+            <CircularProgress variant='soft' size='sm' />
+          </div>
+        ) : null}
       </div>
       <div ref={ref}></div>
     </div>
