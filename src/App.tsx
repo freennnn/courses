@@ -49,10 +49,11 @@ const App = () => {
               <Route path='products' element={<CatalogProductPage />} />
               <Route path='products/:id' element={<ProductDetailPage />} />
               <Route path='products/category/:url' element={<CategoryPage />} />
+              <Route path='profile' element={<UserProfilePage />} />
+              <Route path='login' element={<MainOrLoginRoute />} />
+              <Route path='register' element={<RegistrationPage />} />
             </Route>
-            <Route path='profile' element={<UserProfilePage />} />
-            <Route path='login' element={<MainOrLoginRoute />} />
-            <Route path='register' element={<RegistrationPage />} />
+
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
           <Footer />
