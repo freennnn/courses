@@ -108,8 +108,19 @@ export const getProducts = async (
   sortVal: string,
   word: string,
   category: string,
+  limit: number,
+  offset: number,
 ) => {
-  const queryArgs = composeQueryArgs(year, price, sortParam, sortVal, word, category);
+  const queryArgs = composeQueryArgs(
+    year,
+    price,
+    sortParam,
+    sortVal,
+    word,
+    category,
+    limit,
+    offset,
+  );
 
   const response = await apiRootWithProjectKey
     .productProjections()

@@ -13,8 +13,6 @@ import type { ProductItem } from 'types';
 import '../CatalogProductPage/CatalogProductPage.scss';
 import { getProductsList } from './helpers';
 
-import '@/pages/CatalogProductPage/CatalogProductPage.scss';
-
 let limit: number;
 
 if (window.innerWidth < 700) {
