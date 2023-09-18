@@ -57,6 +57,10 @@
     pointer-events: 'none';
   }
 
+  &_light-theme:not(.button_contained) {
+    color: #000000de;
+  }
+
   svg {
     //display: block;
     width: 25px;
@@ -84,12 +88,4 @@
       right: 0px;
     }
   }
-}
-
-.about-button {
-  color: #000000de;
-}
-
-.button_accented.about-button {
-  color: white;
 }

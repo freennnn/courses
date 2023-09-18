@@ -1,7 +1,13 @@
 import classNames from 'classnames';
 
 import './Button.scss';
-import { ButtonBackgroundColor, ButtonPropsType, ButtonSize, ButtonType } from './Button.types';
+import {
+  ButtonBackgroundColor,
+  ButtonPropsType,
+  ButtonSize,
+  ButtonTheme,
+  ButtonType,
+} from './Button.types';
 
 export default function Button({
   type = ButtonType.text,
@@ -11,6 +17,7 @@ export default function Button({
   onClick,
   children,
   disabled = false,
+  theme = ButtonTheme.dark,
 }: ButtonPropsType) {
   return (
     <button
@@ -19,6 +26,7 @@ export default function Button({
         `button_${type}`,
         `button_${size}`,
         `button_${color}`,
+        `button_${theme}`,
         cssClasses?.join(' '),
       )}
       onClick={onClick}
