@@ -1,4 +1,4 @@
-const { defaultsESM: tsjPreset } = require('ts-jest/presets')
+// const { defaultsESM: tsjPreset } = require('ts-jest/presets')
 // console.log(tsjPreset);
 // {
 //   extensionsToTreatAsEsm: [ '.ts', '.tsx', '.mts' ],
@@ -39,7 +39,8 @@ module.exports = {
   moduleNameMapper: {
     '^@/components/(.*)$': '<rootDir>/src/components/$1',
     '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
-    '^@/features/(.*)$': '<rootDir>/scr/features/$1',
+    '^@/features/(.*)$': '<rootDir>/src/features/$1',
+    '\\.scss$': '<rootDir>/src/__tests__/empty-module.ts',
   },
   coverageReporters: ['json', 'lcov', 'text', 'clover'],
   coverageThreshold: {

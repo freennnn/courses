@@ -45,6 +45,7 @@ export default function CustomLink({
   }
 
   const authContext = useContext(AuthContext);
+  const cartContext = useContext(CartContext);
 
   function onClickHandler() {
     if (state === NavigationState.LogOut) {
@@ -56,8 +57,6 @@ export default function CustomLink({
     }
     /*console.log(`${state} navigation button has been clicked`);*/
   }
-
-  const cartContext = useContext(CartContext);
 
   return (
     <Link key={state} to={pathTo}>

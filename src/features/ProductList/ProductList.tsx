@@ -1,7 +1,7 @@
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { ProductItem } from 'types';
 
-import '@/features/ProductList/ProductList.scss';
+import './ProductList.scss';
 
 interface ProductListProps {
   productList: ProductItem[];

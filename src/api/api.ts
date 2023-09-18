@@ -8,12 +8,12 @@ import type {
 import type { DiscountsType, QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
-import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
+import { apiRoot, getAnonymousApiRoot, getAuthApiRoot } from './apiHelpers';
 import { ACTION_ADD_ITEM, CURRENCY_USD, MERGE_CART_MODE } from './constants';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
-export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
 
+let anonymousApiRoot: ApiRoot;
 let authApiRoot: ApiRoot;
 
 export const signIn = async (loginRequest: CustomerSignin, cartId: string) => {
@@ -34,6 +34,105 @@ export const signIn = async (loginRequest: CustomerSignin, cartId: string) => {
 
 export const signUp = async (customer: CustomerDraft) => {
   const response = await apiRootWithProjectKey.customers().post({ body: customer }).execute();
+
+  return response;
+};
+
+export const composeQueryArgs = (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+  limit: number,
+  offset: number,
+) => {
+  let sortArgs: string[] = [];
+  let queryArgs: QueryArgs = {};
+
+  if (sortParam === 'name') {
+    sortArgs = [`name.en-US ${sortVal}`];
+  } else if (sortParam === 'price') {
+    sortArgs = [`price ${sortVal}`];
+  }
+
+  if (year && price.length > 0) {
+    queryArgs = {
+      filter: [
+        `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
+        `variants.attributes.year: ${year}`,
+      ],
+      sort: sortArgs,
+      ['text.en-US']: word,
+      limit,
+      offset,
+    };
+  } else if (year) {
+    queryArgs = {
+      filter: [`variants.attributes.year: ${year}`],
+      sort: sortArgs,
+      ['text.en-US']: word,
+      limit,
+      offset,
+    };
+  } else if (price.length > 0) {
+    queryArgs = {
+      filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
+      sort: sortArgs,
+      ['text.en-US']: word,
+      limit,
+      offset,
+    };
+  } else {
+    queryArgs = {
+      filter: [],
+      sort: sortArgs,
+      ['text.en-US']: word,
+      limit,
+      offset,
+    };
+  }
+
+  if (category && Array.isArray(queryArgs.filter)) {
+    queryArgs.filter.push(`categories.id: "${category}"`);
+  }
+
+  return queryArgs;
+};
+
+export const getProducts = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+  limit: number,
+  offset: number,
+) => {
+  const queryArgs = composeQueryArgs(
+    year,
+    price,
+    sortParam,
+    sortVal,
+    word,
+    category,
+    limit,
+    offset,
+  );
+
+  const response = await apiRootWithProjectKey
+    .productProjections()
+    .search()
+    .get({ queryArgs })
+    .execute();
+
+  return response;
+};
+
+export const getDiscounts = async () => {
+  const response = await apiRootWithProjectKey.productDiscounts().get().execute();
 
   return response;
 };
@@ -92,71 +191,6 @@ export const getProduct = async (id: string) => {
   };
 };
 
-export const getProducts = async (
-  year: string,
-  price: string[],
-  sortParam: string,
-  sortVal: string,
-  word: string,
-  category: string,
-) => {
-  let sortArgs: string[] = [];
-  let queryArgs: QueryArgs = {};
-
-  if (sortParam === 'name') {
-    sortArgs = [`name.en-US ${sortVal}`];
-  } else if (sortParam === 'price') {
-    sortArgs = [`price ${sortVal}`];
-  }
-
-  if (year && price.length > 0) {
-    queryArgs = {
-      filter: [
-        `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
-        `variants.attributes.year: ${year}`,
-      ],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else if (year) {
-    queryArgs = {
-      filter: [`variants.attributes.year: ${year}`],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else if (price.length > 0) {
-    queryArgs = {
-      filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else {
-    queryArgs = {
-      filter: [],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  }
-
-  if (category && Array.isArray(queryArgs.filter)) {
-    queryArgs.filter.push(`categories.id: "${category}"`);
-  }
-
-  const response = await apiRootWithProjectKey
-    .productProjections()
-    .search()
-    .get({ queryArgs })
-    .execute();
-
-  return response;
-};
-
-export const getDiscounts = async () => {
-  const response = await apiRootWithProjectKey.productDiscounts().get().execute();
-
-  return response;
-};
-
 export const createUserCart = async () => {
   const response = await authApiRoot
     .withProjectKey({ projectKey })
@@ -169,7 +203,10 @@ export const createUserCart = async () => {
 };
 
 export const createAnonymousCart = async () => {
-  const response = await anonymousApiRootWithProjectKey
+  anonymousApiRoot = getAnonymousApiRoot();
+
+  const response = await anonymousApiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .post({ body: { currency: `${CURRENCY_USD}` } })
@@ -184,11 +221,10 @@ export const addItemToCart = async (
   itemId: string,
   version: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
 
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: `${cartId}` })
@@ -204,16 +240,15 @@ export const addItemToCart = async (
 };
 
 export const getActiveCart = async (userId: string) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
-  const response = await apiRoot.me().activeCart().get().execute();
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
+  const response = await apiRoot.withProjectKey({ projectKey }).me().activeCart().get().execute();
 
   return response;
 };
 
 export const mergeAnonymousCart = async (email: string, password: string) => {
-  const response = await anonymousApiRootWithProjectKey
+  const response = await anonymousApiRoot
+    .withProjectKey({ projectKey })
     .me()
     .login()
     .post({
@@ -234,10 +269,9 @@ export const removeItem = async (
   lineItemId: string,
   version: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -264,10 +298,9 @@ export const updateQuantity = async (
   version: number,
   quantity: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -289,10 +322,9 @@ export const updateQuantity = async (
 };
 
 export const deleteCart = async (userId: string, cartId: string, version: number) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartId })
@@ -312,10 +344,9 @@ export const addDiscount = async (
   version: number,
   code: string,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -335,9 +366,8 @@ export const addDiscount = async (
 };
 
 export const cartDiscounts = async (userId: string) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
-  const response = await apiRoot.cartDiscounts().get().execute();
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
+  const response = await apiRoot.withProjectKey({ projectKey }).cartDiscounts().get().execute();
+
   return response;
 };

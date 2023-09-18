@@ -15,8 +15,10 @@ import RegistrationPage from '@/pages/RegistrationPage/RegistrationPage';
 import UserProfilePage from '@/pages/UserProfilePage/UserProfilePage';
 
 import './App.scss';
+import Footer from './components/Footer/Footer';
 import { AuthContext, defaultAuthContextValues } from './contexts/AuthContext';
 import { CartContext, defaultCartContextValues } from './contexts/CartContext';
+import AboutUsPage from './pages/AboutUsPage/AboutUsPage';
 
 const App = () => {
   const [authData, setAuthData] = useState(defaultAuthContextValues);
@@ -41,6 +43,7 @@ const App = () => {
         >
           <Routes>
             <Route path='/' element={<NavigationLayout />}>
+              <Route path='about' element={<AboutUsPage />} />
               <Route path='basket' element={<BasketPage />} />
               <Route index element={<MainPage />} />
               <Route path='products' element={<CatalogProductPage />} />
@@ -53,6 +56,7 @@ const App = () => {
 
             <Route path='*' element={<NotFoundPage />} />
           </Routes>
+          <Footer />
         </CartContext.Provider>
       </AuthContext.Provider>
     </>
