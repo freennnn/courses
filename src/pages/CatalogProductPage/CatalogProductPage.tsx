@@ -10,24 +10,15 @@ import ProductList from '@/features/ProductList/ProductList';
 import CircularProgress from '@mui/joy/CircularProgress';
 import type { ProductItem } from 'types';
 
+import { getLimit } from '../../utils/getLimit';
 import '../CatalogProductPage/CatalogProductPage.scss';
 import { getProductsList } from './helpers';
-
-let limit: number;
-
-if (window.innerWidth < 700) {
-  limit = 3;
-} else if (window.innerWidth < 1000) {
-  limit = 6;
-} else {
-  limit = 9;
-}
 
 const CatalogProductPage = () => {
   const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
-  const [itemsLimit, setItemsLimit] = useState(limit); // Set an initial items limit
+  const [itemsLimit, setItemsLimit] = useState(getLimit()); // Set an initial items limit
   const [isAllLoaded, setIsAllLoaded] = useState(false); // To track if there is no products to load
   const {
     selectedYear,
@@ -67,16 +58,7 @@ const CatalogProductPage = () => {
   // Update the limit based on screen width
   useEffect(() => {
     const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      let newLimit = 9; // Default limit
-
-      if (screenWidth < 1000) {
-        newLimit = 6; // Adjust the limit for medium-sized screens
-      }
-      if (screenWidth < 700) {
-        newLimit = 3; // Adjust the limit for smaller screens
-      }
-
+      const newLimit = getLimit();
       setItemsLimit(newLimit);
     };
 
