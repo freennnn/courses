@@ -1,11 +1,17 @@
 import { BrowserRouter } from 'react-router-dom';
 
+import { jest } from '@jest/globals';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import fetchMock from 'jest-fetch-mock';
 
 import ProductCard from '../../../components/ProductCard/ProductCard';
 
 describe('ProductCard', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks(); // Reset fetch mocks before each test
+    jest.clearAllMocks(); // Reset all mocks before each test
+  });
   it('renders properties correctly', () => {
     const product = {
       id: '1',

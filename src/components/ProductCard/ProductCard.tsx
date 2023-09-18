@@ -2,11 +2,11 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { addItemToCart, createAnonymousCart, createUserCart } from 'api/api.ts';
 import classNames from 'classnames';
 import { MdAddShoppingCart } from 'react-icons/md';
 import type { ProductItem } from 'types';
 
+import { addItemToCart, createAnonymousCart, createUserCart } from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import './ProductCard.scss';
