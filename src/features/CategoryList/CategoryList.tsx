@@ -1,15 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import type {
-  Category,
-  CategoryReference,
-  ClientResponse,
-  LocalizedString,
-} from '@commercetools/platform-sdk';
+import type { CategoryReference, LocalizedString } from '@commercetools/platform-sdk';
 
-import { projectKey } from '../../api/apiConfig';
-import { apiRoot } from '../../api/apiHelpers';
+import { getCategoryList } from '../../pages/CatalogProductPage/helpers';
 import './CategoryList.scss';
 
 interface CategoryItem {
@@ -25,31 +19,6 @@ interface ActiveItem {
   path?: string;
   pathid?: string;
 }
-
-const getCategoryList = async () => {
-  let response: ClientResponse<{ results: Category[] }> | null = null;
-
-  try {
-    response = await apiRoot.withProjectKey({ projectKey }).categories().get().execute();
-
-    if (response) {
-      const categoryList = response.body.results.map((category: Category) => {
-        return {
-          id: category.id,
-          name: category.name,
-          url: category.slug,
-          ancestors: category.ancestors,
-          parent: category.parent,
-        };
-      });
-
-      return categoryList;
-    }
-  } catch (error) {
-    /* eslint-disable-next-line no-console */
-    console.log(error);
-  }
-};
 
 interface Props {
   handleActiveCategory: (item: ActiveItem) => void;

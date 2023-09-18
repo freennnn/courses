@@ -38,6 +38,84 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
+export const composeQueryArgs = (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+): QueryArgs => {
+  let sortArgs: string[] = [];
+  let queryArgs: QueryArgs = {};
+
+  if (sortParam === 'name') {
+    sortArgs = [`name.en-US ${sortVal}`];
+  } else if (sortParam === 'price') {
+    sortArgs = [`price ${sortVal}`];
+  }
+
+  if (year && price.length > 0) {
+    queryArgs = {
+      filter: [
+        `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
+        `variants.attributes.year: ${year}`,
+      ],
+      sort: sortArgs,
+      ['text.en-US']: word,
+    };
+  } else if (year) {
+    queryArgs = {
+      filter: [`variants.attributes.year: ${year}`],
+      sort: sortArgs,
+      ['text.en-US']: word,
+    };
+  } else if (price.length > 0) {
+    queryArgs = {
+      filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
+      sort: sortArgs,
+      ['text.en-US']: word,
+    };
+  } else {
+    queryArgs = {
+      filter: [],
+      sort: sortArgs,
+      ['text.en-US']: word,
+    };
+  }
+
+  if (category && Array.isArray(queryArgs.filter)) {
+    queryArgs.filter.push(`categories.id: "${category}"`);
+  }
+
+  return queryArgs;
+};
+
+export const getProducts = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+) => {
+  const queryArgs = composeQueryArgs(year, price, sortParam, sortVal, word, category);
+
+  const response = await apiRootWithProjectKey
+    .productProjections()
+    .search()
+    .get({ queryArgs })
+    .execute();
+
+  return response;
+};
+
+export const getDiscounts = async () => {
+  const response = await apiRootWithProjectKey.productDiscounts().get().execute();
+
+  return response;
+};
+
 export const getProduct = async (id: string) => {
   const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
     if (
@@ -90,71 +168,6 @@ export const getProduct = async (id: string) => {
     price,
     discount: getFinalDiscountValue(product, discounts),
   };
-};
-
-export const getProducts = async (
-  year: string,
-  price: string[],
-  sortParam: string,
-  sortVal: string,
-  word: string,
-  category: string,
-) => {
-  let sortArgs: string[] = [];
-  let queryArgs: QueryArgs = {};
-
-  if (sortParam === 'name') {
-    sortArgs = [`name.en-US ${sortVal}`];
-  } else if (sortParam === 'price') {
-    sortArgs = [`price ${sortVal}`];
-  }
-
-  if (year && price.length > 0) {
-    queryArgs = {
-      filter: [
-        `variants.price.centAmount:range (${price[0]} to ${price[1]})`,
-        `variants.attributes.year: ${year}`,
-      ],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else if (year) {
-    queryArgs = {
-      filter: [`variants.attributes.year: ${year}`],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else if (price.length > 0) {
-    queryArgs = {
-      filter: [`variants.price.centAmount:range (${price[0]} to ${price[1]})`],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  } else {
-    queryArgs = {
-      filter: [],
-      sort: sortArgs,
-      ['text.en-US']: word,
-    };
-  }
-
-  if (category && Array.isArray(queryArgs.filter)) {
-    queryArgs.filter.push(`categories.id: "${category}"`);
-  }
-
-  const response = await apiRootWithProjectKey
-    .productProjections()
-    .search()
-    .get({ queryArgs })
-    .execute();
-
-  return response;
-};
-
-export const getDiscounts = async () => {
-  const response = await apiRootWithProjectKey.productDiscounts().get().execute();
-
-  return response;
 };
 
 export const createUserCart = async () => {
