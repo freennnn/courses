@@ -21,6 +21,10 @@
   align-self: center;
   color: white;
 
+  &_black {
+    color: #000000de;
+  }
+
   &:hover {
     transform: translateY(2px);
   }

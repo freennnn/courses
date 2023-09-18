@@ -8,12 +8,12 @@ import type {
 import type { DiscountsType, QueryArgs } from 'types';
 
 import { projectKey } from './apiConfig';
-import { anonymousApiRoot, apiRoot, getAuthApiRoot } from './apiHelpers';
+import { apiRoot, getAnonymousApiRoot, getAuthApiRoot } from './apiHelpers';
 import { ACTION_ADD_ITEM, CURRENCY_USD, MERGE_CART_MODE } from './constants';
 
 export const apiRootWithProjectKey = apiRoot.withProjectKey({ projectKey });
-export const anonymousApiRootWithProjectKey = anonymousApiRoot.withProjectKey({ projectKey });
 
+let anonymousApiRoot: ApiRoot;
 let authApiRoot: ApiRoot;
 
 export const signIn = async (loginRequest: CustomerSignin, cartId: string) => {
@@ -203,7 +203,10 @@ export const createUserCart = async () => {
 };
 
 export const createAnonymousCart = async () => {
-  const response = await anonymousApiRootWithProjectKey
+  anonymousApiRoot = getAnonymousApiRoot();
+
+  const response = await anonymousApiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .post({ body: { currency: `${CURRENCY_USD}` } })
@@ -218,11 +221,10 @@ export const addItemToCart = async (
   itemId: string,
   version: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
 
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: `${cartId}` })
@@ -238,16 +240,15 @@ export const addItemToCart = async (
 };
 
 export const getActiveCart = async (userId: string) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
-  const response = await apiRoot.me().activeCart().get().execute();
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
+  const response = await apiRoot.withProjectKey({ projectKey }).me().activeCart().get().execute();
 
   return response;
 };
 
 export const mergeAnonymousCart = async (email: string, password: string) => {
-  const response = await anonymousApiRootWithProjectKey
+  const response = await anonymousApiRoot
+    .withProjectKey({ projectKey })
     .me()
     .login()
     .post({
@@ -268,10 +269,9 @@ export const removeItem = async (
   lineItemId: string,
   version: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -298,10 +298,9 @@ export const updateQuantity = async (
   version: number,
   quantity: number,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -323,10 +322,9 @@ export const updateQuantity = async (
 };
 
 export const deleteCart = async (userId: string, cartId: string, version: number) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartId })
@@ -346,10 +344,9 @@ export const addDiscount = async (
   version: number,
   code: string,
 ) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
   const response = await apiRoot
+    .withProjectKey({ projectKey })
     .me()
     .carts()
     .withId({ ID: cartsId })
@@ -369,9 +366,8 @@ export const addDiscount = async (
 };
 
 export const cartDiscounts = async (userId: string) => {
-  const apiRoot = userId
-    ? authApiRoot.withProjectKey({ projectKey })
-    : anonymousApiRootWithProjectKey;
-  const response = await apiRoot.cartDiscounts().get().execute();
+  const apiRoot = userId ? authApiRoot : anonymousApiRoot;
+  const response = await apiRoot.withProjectKey({ projectKey }).cartDiscounts().get().execute();
+
   return response;
 };
