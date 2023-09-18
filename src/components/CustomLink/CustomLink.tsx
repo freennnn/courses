@@ -65,7 +65,7 @@ export default function CustomLink({
         {buttonText}
         {children}
         {state === NavigationState.Cart && (
-          <span className='notification-badge'>{cartContext.items.length}</span>
+          <span className='notification-badge'>{cartContext.quantity}</span>
         )}
       </Button>
     </Link>
