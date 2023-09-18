@@ -26,7 +26,8 @@
       "@/pages/*": ["pages/*"],
       "@/components/*": ["components/*"],
       "@/features/*": ["features/*"],
-    }
+    },
+    "esModuleInterop": true,
   },
   "include": ["src"],
   //"exclude": ["src/__tests__/"],

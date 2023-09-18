@@ -38,61 +38,7 @@ export const signUp = async (customer: CustomerDraft) => {
   return response;
 };
 
-export const getProduct = async (id: string) => {
-  const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
-    if (
-      discount.references[0]?.typeId === 'category' &&
-      discount.references[0]?.id === product.masterData.current.categories?.[0]?.id
-    ) {
-      return {
-        sortOrder: discount.sortOrder,
-        discount: discount.value.type == 'absolute' ? discount.value.money[0]?.centAmount : 0,
-      };
-    }
-    return { sortOrder: '0', discount: 0 };
-  };
-  const getFinalDiscountValue = (product: Product, discounts: ProductDiscount[]) => {
-    const { discount } = discounts.reduce(
-      (acc: DiscountsType, val: ProductDiscount): DiscountsType => {
-        const { sortOrder, discount } = getSingleDiscountValue(product, val);
-        if (Number(sortOrder) > Number(acc.sortOrder)) {
-          return { sortOrder, discount };
-        }
-        return acc;
-      },
-      { sortOrder: '0', discount: 0 },
-    );
-
-    return discount;
-  };
-
-  const response = await apiRootWithProjectKey.products().withId({ ID: id }).get().execute();
-  const discountsResponse = await getDiscounts();
-  let discounts: ProductDiscount[] = [];
-  discounts = discountsResponse.body.results;
-
-  const product: Product = response.body;
-
-  let price: number | undefined = undefined;
-  if (product.masterData.current.masterVariant.prices) {
-    if (product.masterData.current.masterVariant.prices[0]) {
-      price = product.masterData.current.masterVariant.prices[0].value.centAmount;
-    }
-  }
-
-  return {
-    id: product.id,
-    name: product.masterData.current.name,
-    categories: product.masterData.current.categories,
-    description: product.masterData.current.description,
-    images: product.masterData.current.masterVariant.images,
-    attributes: product.masterData.current.masterVariant.attributes,
-    price,
-    discount: getFinalDiscountValue(product, discounts),
-  };
-};
-
-export const getProducts = async (
+export const composeQueryArgs = (
   year: string,
   price: string[],
   sortParam: string,
@@ -152,6 +98,19 @@ export const getProducts = async (
     queryArgs.filter.push(`categories.id: "${category}"`);
   }
 
+  return queryArgs;
+};
+
+export const getProducts = async (
+  year: string,
+  price: string[],
+  sortParam: string,
+  sortVal: string,
+  word: string,
+  category: string,
+) => {
+  const queryArgs = composeQueryArgs(year, price, sortParam, sortVal, word, category);
+
   const response = await apiRootWithProjectKey
     .productProjections()
     .search()
@@ -165,6 +124,60 @@ export const getDiscounts = async () => {
   const response = await apiRootWithProjectKey.productDiscounts().get().execute();
 
   return response;
+};
+
+export const getProduct = async (id: string) => {
+  const getSingleDiscountValue = (product: Product, discount: ProductDiscount) => {
+    if (
+      discount.references[0]?.typeId === 'category' &&
+      discount.references[0]?.id === product.masterData.current.categories?.[0]?.id
+    ) {
+      return {
+        sortOrder: discount.sortOrder,
+        discount: discount.value.type == 'absolute' ? discount.value.money[0]?.centAmount : 0,
+      };
+    }
+    return { sortOrder: '0', discount: 0 };
+  };
+  const getFinalDiscountValue = (product: Product, discounts: ProductDiscount[]) => {
+    const { discount } = discounts.reduce(
+      (acc: DiscountsType, val: ProductDiscount): DiscountsType => {
+        const { sortOrder, discount } = getSingleDiscountValue(product, val);
+        if (Number(sortOrder) > Number(acc.sortOrder)) {
+          return { sortOrder, discount };
+        }
+        return acc;
+      },
+      { sortOrder: '0', discount: 0 },
+    );
+
+    return discount;
+  };
+
+  const response = await apiRootWithProjectKey.products().withId({ ID: id }).get().execute();
+  const discountsResponse = await getDiscounts();
+  let discounts: ProductDiscount[] = [];
+  discounts = discountsResponse.body.results;
+
+  const product: Product = response.body;
+
+  let price: number | undefined = undefined;
+  if (product.masterData.current.masterVariant.prices) {
+    if (product.masterData.current.masterVariant.prices[0]) {
+      price = product.masterData.current.masterVariant.prices[0].value.centAmount;
+    }
+  }
+
+  return {
+    id: product.id,
+    name: product.masterData.current.name,
+    categories: product.masterData.current.categories,
+    description: product.masterData.current.description,
+    images: product.masterData.current.masterVariant.images,
+    attributes: product.masterData.current.masterVariant.attributes,
+    price,
+    discount: getFinalDiscountValue(product, discounts),
+  };
 };
 
 export const createUserCart = async () => {
@@ -235,5 +248,119 @@ export const mergeAnonymousCart = async (email: string, password: string) => {
     })
     .execute();
 
+  return response;
+};
+
+export const removeItem = async (
+  userId: string,
+  cartsId: string,
+  lineItemId: string,
+  version: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId: lineItemId,
+          },
+        ],
+      },
+    })
+    .execute();
+
+  return response;
+};
+
+export const updateQuantity = async (
+  userId: string,
+  cartsId: string,
+  lineItemId: string,
+  version: number,
+  quantity: number,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: lineItemId,
+            quantity: quantity,
+          },
+        ],
+      },
+    })
+    .execute();
+
+  return response;
+};
+
+export const deleteCart = async (userId: string, cartId: string, version: number) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartId })
+    .delete({
+      queryArgs: {
+        version: version,
+      },
+    })
+    .execute();
+
+  return response;
+};
+
+export const addDiscount = async (
+  userId: string,
+  cartsId: string,
+  version: number,
+  code: string,
+) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot
+    .me()
+    .carts()
+    .withId({ ID: cartsId })
+    .post({
+      body: {
+        version: version,
+        actions: [
+          {
+            action: 'addDiscountCode',
+            code: code,
+          },
+        ],
+      },
+    })
+    .execute();
+  return response;
+};
+
+export const cartDiscounts = async (userId: string) => {
+  const apiRoot = userId
+    ? authApiRoot.withProjectKey({ projectKey })
+    : anonymousApiRootWithProjectKey;
+  const response = await apiRoot.cartDiscounts().get().execute();
   return response;
 };

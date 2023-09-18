@@ -40,13 +40,21 @@
   }
 
   &__description {
-    margin: 10px 50px 10px 10px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2; /* Number of lines to display */
-    overflow: hidden;
-    text-align: justify;
-    color: #303030;
+    &_wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &_inner {
+      margin: 10px 5px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      max-height: 2.4em; /* height of 2 lines */
+      overflow: hidden;
+      text-align: justify;
+      color: #303030;
+    }
   }
 
   &__price {
@@ -79,12 +87,10 @@
   }
 
   &__add-btn {
-    padding: 0;
+    padding: 10px;
     width: 40px;
     height: 40px;
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
+    margin-right: 5px;
     color: #304ffe;
     background: transparent;
     border: none;

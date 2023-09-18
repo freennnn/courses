@@ -10,6 +10,7 @@ import CategoryList from '@/features/CategoryList/CategoryList';
 import ProductList from '@/features/ProductList/ProductList';
 import type { ProductItem } from 'types';
 
+import '../CatalogProductPage/CatalogProductPage.scss';
 import { getProductsList } from './helpers';
 
 import '@/pages/CatalogProductPage/CatalogProductPage.scss';
@@ -165,7 +166,11 @@ const CatalogProductPage = () => {
       <div className='container catalog-page__content'>
         <CategoryList handleActiveCategory={onActiveCategory} newId={activeId} />
         <Breadcrumbs data={activeCat} onActiveId={onActiveId} />
-        <ProductFilter selectedYear={selectedYear} onChangeFilter={handleFilterChange} />
+        <ProductFilter
+          data-testid='product-filter'
+          selectedYear={selectedYear}
+          onChangeFilter={handleFilterChange}
+        />
         {loading ? (
           <Preloader />
         ) : productList.length > 0 ? (

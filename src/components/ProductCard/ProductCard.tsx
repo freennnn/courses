@@ -2,15 +2,14 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { addItemToCart, createAnonymousCart, createUserCart } from 'api/api.ts';
 import classNames from 'classnames';
 import { MdAddShoppingCart } from 'react-icons/md';
 import type { ProductItem } from 'types';
 
+import { addItemToCart, createAnonymousCart, createUserCart } from '../../api/api.ts';
 import { AuthContext } from '../../contexts/AuthContext.ts';
 import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
-
-import '@/components/ProductCard/ProductCard.scss';
+import './ProductCard.scss';
 
 interface ProductProps {
   product: ProductItem;
@@ -45,17 +44,11 @@ const ProductCard = ({ product }: ProductProps) => {
     event.preventDefault();
 
     try {
-      toast.info('Adding to cart...', { autoClose: false }); // Display adding to cart toast
+      toast.info('Adding to cart...'); // Display adding to cart toast
 
       if (!cartContext.id) {
         if (authContext.id) {
           const { body: cart } = await createUserCart();
-          updateCartContext(cartContext, (prev) => ({
-            ...prev,
-            id: cart.id,
-            version: cart.version,
-          }));
-
           const { body: updatedCart } = await addItemToCart(
             authContext.id,
             cart.id,
@@ -71,12 +64,6 @@ const ProductCard = ({ product }: ProductProps) => {
           }));
         } else {
           const { body: cart } = await createAnonymousCart();
-          updateCartContext(cartContext, (prev) => ({
-            ...prev,
-            id: cart.id,
-            version: cart.version,
-          }));
-
           const { body: updatedCart } = await addItemToCart(
             authContext.id,
             cart.id,
@@ -108,33 +95,39 @@ const ProductCard = ({ product }: ProductProps) => {
     } catch (error) {
       /* eslint-disable-next-line no-console */
       console.log(error);
-    } finally {
-      toast.dismiss(); // Close the loading toast when adding to cart is complete
+      toast.error('Ups, something went wrong!');
     }
   };
 
   const itemExistsInCart = cartContext.items.some((item) => item.productId === product.id);
 
   return (
-    <Link to={`/products/${product.id}`} className='product-card'>
+    <Link to={`/products/${product.id}`} className='product-card' data-testid='product-card'>
       {imgUrl ? (
         <div className='product-card__image'>
           <img src={imgUrl} />
         </div>
       ) : null}
       <h3 className='product-card__title'>{product.name['en-US']}</h3>
-      {product.description ? (
-        <p className='product-card__description'>{product.description['en-US']}</p>
-      ) : null}
+      <div className='product-card__description_wrapper'>
+        {product.description ? (
+          <p className='product-card__description_inner'>{product.description['en-US']}</p>
+        ) : null}
+        <button
+          disabled={itemExistsInCart}
+          className='product-card__add-btn'
+          onClick={handleAddItem}
+        >
+          <MdAddShoppingCart />
+        </button>
+      </div>
+
       <div className='product-card__price'>
         <span className={productFullPriceClasses}>${fullPrice}</span>
         {product.discount ? (
           <span className='product-card__price_discounted'>${discountedPrice}</span>
         ) : null}
       </div>
-      <button disabled={itemExistsInCart} className='product-card__add-btn' onClick={handleAddItem}>
-        <MdAddShoppingCart />
-      </button>
     </Link>
   );
 };
