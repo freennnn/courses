@@ -1,4 +1,4 @@
-import { Cart, LineItem } from '@commercetools/platform-sdk';
+import type { Cart, LineItem } from '@commercetools/platform-sdk';
 import { addItemToCart, createAnonymousCart, createUserCart, removeItem } from 'api/api.ts';
 
 // Item (aka LineItem) - variant of Product in Cart

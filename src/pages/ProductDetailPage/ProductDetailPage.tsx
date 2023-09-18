@@ -60,6 +60,61 @@ export default function ProductDetailPage() {
     return cartContext.items.find((element) => element.productId === productId)?.id;
   }
 
+  function addProductToCartHandler() {
+    try {
+      product &&
+        addProductToCart({
+          productId: product.id,
+          userId: authContext.id,
+          cartId: cartContext.id,
+          cartVersion: cartContext.version,
+          onAddProductToCart: ({ cartVersion, cartItems, cartItemsQuantity, cartId }) => {
+            updateCartContext(cartContext, (prev) => ({
+              ...prev,
+              id: cartId,
+              version: cartVersion,
+              quantity: cartItemsQuantity,
+              items: cartItems,
+            }));
+            // console.log(`isProductInCart ${checkIfProductInCart()}`);
+          },
+        });
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
+      toast.error('Ups, something went wrong!');
+    }
+  }
+
+  function removeProductFromCartHandler() {
+    try {
+      let lineItemId: string | undefined;
+      if (product) {
+        lineItemId = cartLineItemIdForProductId(product.id);
+      }
+      lineItemId &&
+        removeProductFromCart({
+          lineItemId: lineItemId,
+          userId: authContext.id,
+          cartId: cartContext.id,
+          cartVersion: cartContext.version,
+          onRemoveProductFromCart: ({ cartVersion, cartItems, cartItemsQuantity }) => {
+            updateCartContext(cartContext, (prev) => ({
+              ...prev,
+              version: cartVersion,
+              quantity: cartItemsQuantity,
+              items: cartItems,
+            }));
+            // console.log(`isProductInCart ${checkIfProductInCart()}`);
+          },
+        });
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.log(error);
+      toast.error('Ups, something went wrong!');
+    }
+  }
+
   //console.log(product);
   const sliderItems: SliderItemDataSourceType[] | undefined = product?.images?.map((image) => {
     return { imgSrc: image.url, onClickHandler: openModal };
@@ -120,36 +175,7 @@ export default function ProductDetailPage() {
                 disabled={isProductInCart}
                 cssClasses={isProductInCart ? ['button_disabled'] : ['']}
                 key='Add to cart'
-                onClick={() => {
-                  try {
-                    product &&
-                      addProductToCart({
-                        productId: product.id,
-                        userId: authContext.id,
-                        cartId: cartContext.id,
-                        cartVersion: cartContext.version,
-                        onAddProductToCart: ({
-                          cartVersion,
-                          cartItems,
-                          cartItemsQuantity,
-                          cartId,
-                        }) => {
-                          updateCartContext(cartContext, (prev) => ({
-                            ...prev,
-                            id: cartId,
-                            version: cartVersion,
-                            quantity: cartItemsQuantity,
-                            items: cartItems,
-                          }));
-                          // console.log(`isProductInCart ${checkIfProductInCart()}`);
-                        },
-                      });
-                  } catch (error) {
-                    /* eslint-disable-next-line no-console */
-                    console.log(error);
-                    toast.error('Ups, something went wrong!');
-                  }
-                }}
+                onClick={addProductToCartHandler}
               >
                 {`Add to Cart for $${discountedPrice > 0 ? discountedPrice : fullPrice} `}
                 {discountedPrice > 0 ? (
@@ -164,38 +190,7 @@ export default function ProductDetailPage() {
                 disabled={!isProductInCart}
                 cssClasses={!isProductInCart ? ['button_disabled'] : ['']}
                 key='Remove from cart'
-                onClick={() => {
-                  try {
-                    let lineItemId: string | undefined;
-                    if (product) {
-                      lineItemId = cartLineItemIdForProductId(product.id);
-                    }
-                    lineItemId &&
-                      removeProductFromCart({
-                        lineItemId: lineItemId,
-                        userId: authContext.id,
-                        cartId: cartContext.id,
-                        cartVersion: cartContext.version,
-                        onRemoveProductFromCart: ({
-                          cartVersion,
-                          cartItems,
-                          cartItemsQuantity,
-                        }) => {
-                          updateCartContext(cartContext, (prev) => ({
-                            ...prev,
-                            version: cartVersion,
-                            quantity: cartItemsQuantity,
-                            items: cartItems,
-                          }));
-                          // console.log(`isProductInCart ${checkIfProductInCart()}`);
-                        },
-                      });
-                  } catch (error) {
-                    /* eslint-disable-next-line no-console */
-                    console.log(error);
-                    toast.error('Ups, something went wrong!');
-                  }
-                }}
+                onClick={removeProductFromCartHandler}
               >
                 Remove from Cart
               </Button>
