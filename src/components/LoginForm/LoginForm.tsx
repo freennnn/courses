@@ -65,6 +65,7 @@ export default function Form() {
           id: cart.id,
           version: cart.version,
           quantity: cart.totalLineItemQuantity ?? 0,
+          items: cart.lineItems,
         }));
       } catch (error) {
         const apiError = error as ApiErrorResponse;

@@ -71,20 +71,24 @@ export const getAuthApiRoot = (loginRequest: CustomerSignin) => {
   return apiRoot;
 };
 
-const anonymousMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
-  host: AUTH_MIDDLEWARE_HOST,
-  projectKey: projectKey,
-  credentials: {
-    clientId,
-    clientSecret,
-  },
-  scopes: apiRootScopes,
-  fetch,
+export const getAnonymousApiRoot = () => {
+  const anonymousMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
+    host: AUTH_MIDDLEWARE_HOST,
+    projectKey: projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+    },
+    scopes: apiRootScopes,
+    fetch,
+  };
+
+  const anonymousClient: Client = new ClientBuilder()
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withAnonymousSessionFlow(anonymousMiddlewareOptions)
+    .build();
+
+  const ApiRoot: ApiRoot = createApiBuilderFromCtpClient(anonymousClient);
+
+  return ApiRoot;
 };
-
-const anonymousClient: Client = new ClientBuilder()
-  .withHttpMiddleware(httpMiddlewareOptions)
-  .withAnonymousSessionFlow(anonymousMiddlewareOptions)
-  .build();
-
-export const anonymousApiRoot: ApiRoot = createApiBuilderFromCtpClient(anonymousClient);
