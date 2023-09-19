@@ -5,12 +5,14 @@ import {
 } from '@commercetools/platform-sdk';
 import { ClientBuilder } from '@commercetools/sdk-client-v2';
 import type {
+  AnonymousAuthMiddlewareOptions,
   AuthMiddlewareOptions,
   Client,
   HttpMiddlewareOptions,
   PasswordAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
 
+// import {createAuthMiddlewareForAnonymousSessionFlow, createClient, httpMiddleware} from '@commercetools/sdk-middleware-auth'
 import {
   AUTH_MIDDLEWARE_HOST,
   HTTP_MIDDLEWARE_HOST,
@@ -67,4 +69,26 @@ export const getAuthApiRoot = (loginRequest: CustomerSignin) => {
 
   const apiRoot: ApiRoot = createApiBuilderFromCtpClient(authClient);
   return apiRoot;
+};
+
+export const getAnonymousApiRoot = () => {
+  const anonymousMiddlewareOptions: AnonymousAuthMiddlewareOptions = {
+    host: AUTH_MIDDLEWARE_HOST,
+    projectKey: projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+    },
+    scopes: apiRootScopes,
+    fetch,
+  };
+
+  const anonymousClient: Client = new ClientBuilder()
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withAnonymousSessionFlow(anonymousMiddlewareOptions)
+    .build();
+
+  const ApiRoot: ApiRoot = createApiBuilderFromCtpClient(anonymousClient);
+
+  return ApiRoot;
 };

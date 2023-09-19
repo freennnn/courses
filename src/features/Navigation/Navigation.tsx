@@ -22,8 +22,10 @@ function getPathForState(state: NavigationState): string {
       return '/login';
     case NavigationState.UserProfile:
       return '/profile';
-    case NavigationState.Basket:
+    case NavigationState.Cart:
       return '/basket';
+    case NavigationState.About:
+      return '/about';
   }
 }
 
@@ -38,6 +40,8 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.SignIn,
       NavigationState.SignUp,
+      NavigationState.Cart,
+      NavigationState.About,
     ];
   } else {
     states = [
@@ -45,11 +49,17 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.UserProfile,
       NavigationState.LogOut,
+      NavigationState.Cart,
+      NavigationState.About,
     ];
   }
 
   function isLayoutGroupOneLink(state: NavigationState) {
-    if (state === NavigationState.Home || state === NavigationState.Catalog) {
+    if (
+      state === NavigationState.Home ||
+      state === NavigationState.Catalog ||
+      state === NavigationState.About
+    ) {
       return true;
     }
     return false;
@@ -61,12 +71,9 @@ export default function Navigation() {
       buttonText += user.name;
     }
     return (
-      <CustomLink
-        key={state}
-        state={state}
-        pathTo={getPathForState(state)}
-        buttonText={buttonText}
-      />
+      <CustomLink key={state} state={state} pathTo={getPathForState(state)} buttonText={buttonText}>
+        {state === NavigationState.Cart && <MdShoppingCart />}
+      </CustomLink>
     );
   }
 
@@ -81,9 +88,6 @@ export default function Navigation() {
       </div>
       <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
-        <Link className='basket-icon' to='/basket'>
-          <MdShoppingCart />
-        </Link>
       </div>
     </nav>
   );

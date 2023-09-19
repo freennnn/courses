@@ -5,5 +5,6 @@ export enum NavigationState {
   SignUp = 'Sign Up',
   UserProfile = 'Hey, ',
   LogOut = 'Log out',
-  Basket = 'Basket',
+  Cart = ' ',
+  About = 'About',
 }

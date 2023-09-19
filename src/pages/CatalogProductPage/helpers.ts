@@ -1,6 +1,14 @@
-import { ClientResponse, ProductDiscount, ProductProjection } from '@commercetools/platform-sdk';
-import { getDiscounts, getProducts } from 'api/api';
+import {
+  Category,
+  ClientResponse,
+  ProductDiscount,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
 import type { DiscountsType } from 'types';
+
+import { getDiscounts, getProducts } from '../../api/api';
+import { projectKey } from '../../api/apiConfig';
+import { apiRoot } from '../../api/apiHelpers';
 
 export const getProductsList = async (
   year: string,
@@ -9,12 +17,14 @@ export const getProductsList = async (
   sortVal: string,
   word: string,
   category: string,
+  limit: number,
+  offset: number,
 ) => {
   let response: ClientResponse<{ results: ProductProjection[] }> | null = null;
   let discounts: ProductDiscount[] = [];
 
   try {
-    response = await getProducts(year, price, sortParam, sortVal, word, category);
+    response = await getProducts(year, price, sortParam, sortVal, word, category, limit, offset);
     const discountsResponse = await getDiscounts();
     discounts = discountsResponse.body.results;
 
@@ -74,4 +84,29 @@ const getFinalDiscountValue = (product: ProductProjection, discounts: ProductDis
   );
 
   return discount;
+};
+
+export const getCategoryList = async () => {
+  let response: ClientResponse<{ results: Category[] }> | null = null;
+
+  try {
+    response = await apiRoot.withProjectKey({ projectKey }).categories().get().execute();
+
+    if (response) {
+      const categoryList = response.body.results.map((category: Category) => {
+        return {
+          id: category.id,
+          name: category.name,
+          url: category.slug,
+          ancestors: category.ancestors,
+          parent: category.parent,
+        };
+      });
+
+      return categoryList;
+    }
+  } catch (error) {
+    /* eslint-disable-next-line no-console */
+    console.log(error);
+  }
 };

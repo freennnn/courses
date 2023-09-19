@@ -1,6 +1,7 @@
 .catalog-page {
   background-color: #303030;
   padding-top: 100px;
+  padding-bottom: 50px;
 
   &__content {
     min-height: 100vh;
@@ -11,5 +12,10 @@
   .no-products-message {
     text-align: center;
     color: white;
+  }
+
+  .circular-progress {
+    width: 25px;
+    margin: 0 auto;
   }
 }
