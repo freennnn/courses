@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-modal';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import Button from '@/components/Button/Button';
@@ -17,6 +17,11 @@ import { CartContext, updateCartContext } from '../../contexts/CartContext.ts';
 import ProductDetailBreadcrumbs from './ProductDetailBreadcrumbs';
 import './ProductDetailPage.scss';
 
+interface ApiError {
+  statusCode: number;
+  message: string;
+}
+
 export default function ProductDetailPage() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [selectedModalSliderItemIndex, setSelectedModalSliderItemIndex] = useState(0);
@@ -25,15 +30,24 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(productFromProps);
   const cartContext = useContext(CartContext);
   const authContext = useContext(AuthContext);
-  const defaultProductId = 'c90a86d0-116f-4ad3-af43-ccac737e7493';
+  const navigate = useNavigate();
+
+  function onGetProductError(error: ApiError) {
+    if (error.statusCode === 404) {
+      navigate('/notFound', { replace: true });
+    }
+    /* eslint-disable-next-line no-console */
+    console.error(error);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const product: ProductItem = await getProduct(id ?? defaultProductId);
-      setProduct(product);
+      if (id) {
+        const product: ProductItem = await getProduct(id);
+        setProduct(product);
+      }
     };
-    /* eslint-disable-next-line no-console */
-    fetchData().catch(console.error);
+    fetchData().catch(onGetProductError);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
