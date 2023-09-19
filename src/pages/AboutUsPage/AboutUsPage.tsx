@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 
 import AboutCard from '@/components/AboutCard/AboutCard';
 
+import '../../components/AboutCard/AboutCard.scss';
 import './AboutUs.scss';
 import { aboutUsData } from './aboutUsData';
-
-import '@/components/AboutCard/AboutCard.scss';
 
 const AboutUsPage = () => {
   return (
