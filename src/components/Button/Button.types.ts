@@ -17,11 +17,18 @@ export enum ButtonBackgroundColor {
   tertiary = 'tertiary',
 }
 
+export enum ButtonTheme {
+  dark = 'dark-theme',
+  light = 'light-theme',
+}
+
 export interface ButtonPropsType {
   type?: ButtonType;
   size?: ButtonSize;
   color?: ButtonBackgroundColor;
-  location?: string;
+  theme?: ButtonTheme;
+  cssClasses?: string[];
+  disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
 }

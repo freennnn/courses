@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import CustomLink from '@/components/CustomLink/CustomLink';
 import { MdShoppingCart } from 'react-icons/md';
@@ -22,7 +22,7 @@ function getPathForState(state: NavigationState): string {
       return '/login';
     case NavigationState.UserProfile:
       return '/profile';
-    case NavigationState.Basket:
+    case NavigationState.Cart:
       return '/basket';
     case NavigationState.About:
       return '/about';
@@ -40,6 +40,7 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.SignIn,
       NavigationState.SignUp,
+      NavigationState.Cart,
       NavigationState.About,
     ];
   } else {
@@ -48,6 +49,7 @@ export default function Navigation() {
       NavigationState.Catalog,
       NavigationState.UserProfile,
       NavigationState.LogOut,
+      NavigationState.Cart,
       NavigationState.About,
     ];
   }
@@ -69,19 +71,14 @@ export default function Navigation() {
       buttonText += user.name;
     }
     return (
-      <CustomLink
-        key={state}
-        state={state}
-        pathTo={getPathForState(state)}
-        buttonText={buttonText}
-      />
+      <CustomLink key={state} state={state} pathTo={getPathForState(state)} buttonText={buttonText}>
+        {state === NavigationState.Cart && <MdShoppingCart />}
+      </CustomLink>
     );
   }
 
   const layoutGroupOneStates = states.filter((state) => isLayoutGroupOneLink(state));
   const layoutGroupTwoStates = states.filter((state) => !isLayoutGroupOneLink(state));
-
-  const location = useLocation();
 
   return (
     <nav className='navigation'>
@@ -91,14 +88,6 @@ export default function Navigation() {
       </div>
       <div className='navigation__group-two'>
         {layoutGroupTwoStates.map((state) => customLinkForState(state))}
-        <Link
-          className={
-            location.pathname === '/about' ? 'basket-icon basket-icon_black' : 'basket-icon'
-          }
-          to='/basket'
-        >
-          <MdShoppingCart />
-        </Link>
       </div>
     </nav>
   );

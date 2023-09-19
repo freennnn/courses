@@ -16,22 +16,3 @@
     }
   }
 }
-
-.basket-icon {
-  align-self: center;
-  color: white;
-
-  &_black {
-    color: #000000de;
-  }
-
-  &:hover {
-    transform: translateY(2px);
-  }
-
-  svg {
-    display: block;
-    width: 25px;
-    height: 25px;
-  }
-}

@@ -63,7 +63,11 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
     if (newOffsetX < minOffsetX) {
       newOffsetX = minOffsetX;
     }
-    setIsSwiping(true);
+
+    // console.log(`onTouchMove with difference ${difference}`);
+    // not considering a gesture a swipe, if touchMove got triggered way too sensitive, with 0 position change
+    if (difference > 0) setIsSwiping(true);
+
     //re-render to scroll slider
     setOffsetX(newOffsetX);
     //console.log(`touch Move with newOffSet ${newOffsetX} and isSwiping ${getRefValue(isSwipingRef)}`);
@@ -93,6 +97,7 @@ export default function Slider({ items, selectedIndex = 0 }: SliderType) {
 
     // difference could be zero in case out of bounds swipe (we check max/min offset boundaries
     // in touchMove). So additinal check for isSwiping (again Ref counterpart isntead of State)
+    //console.log(`touchEnd with difference ${difference} and isSwiping ${isSwiping} and isSwipingRef ${getRefValue(isSwipingRef)} `);
     if (difference === 0 && !getRefValue(isSwipingRef)) {
       //console.log(`click with difference ${difference} and isSwiping ${isSwiping} `);
       items[currentItemIndex].onClickHandler?.(currentItemIndex);
